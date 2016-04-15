@@ -1,11 +1,40 @@
 import React from 'react';
 import {render} from 'react-dom';
+import * as StoreHelpers from '../shared/StoreHelpers.es6';
+import {Treebeard} from 'react-treebeard';
 
 console.log('Hello From Index.es6!');
 
 class App extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = { data: StoreHelpers.getProducts() };
+        this.onToggle = this.onToggle.bind(this);
+    }
+
+    onToggle(node, toggled){
+        console.log(`==== got onToggle with toggled = ${toggled} loading = ${node.loading} and node = `, node);
+        if(this.state.cursor){this.state.cursor.active = false;}
+        node.active = true;
+        if(node.children){ console.log("==== children found!"); node.toggled = toggled; }
+        this.setState({ cursor: node });
+    }
+
+    componentWillUpdate(_, nextState) {
+        console.log("==== app nextState = ", nextState)
+    }
+
     render () {
-        return <p> Hello React-Tonic, from index.es6!</p>;
+        return (
+            <div>
+                <p>TONICMART</p>
+                <div>PRODUCTS</div>
+                <Treebeard
+                    data={this.state.data}
+                    onToggle={this.onToggle}
+                />
+            </div>
+        )
     }
 }
 
