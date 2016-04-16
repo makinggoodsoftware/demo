@@ -1,9 +1,12 @@
 import React from 'react';
 import {render} from 'react-dom';
-import * as StoreHelpers from '../shared/StoreHelpers.es6';
+import StoreHelpers from '../shared/StoreHelpers.es6';
 import {Treebeard} from 'react-treebeard';
 
 console.log('Hello From Index.es6!');
+
+// http://stackoverflow.com/questions/29223071/how-do-i-require-from-the-console-using-webpack
+window['i'] = require('immutable'); // for use in console
 
 class App extends React.Component {
     constructor(props){
