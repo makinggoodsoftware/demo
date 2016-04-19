@@ -1,0 +1,11 @@
+.product-tree {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.product-detail {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+}
