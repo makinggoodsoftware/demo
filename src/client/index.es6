@@ -39,6 +39,29 @@ NodeViewer.propTypes = {
     node: React.PropTypes.object
 };
 
+class Header extends React.Component {
+    render () {
+        return (
+                <div>
+                    <p> TONICMART </p>
+                    <div><Link to="/catalog">Catalog</Link></div>
+                    {this.props.children}
+                </div>
+        )
+    }
+}
+
+class Home extends React.Component {
+    render () {
+        return (
+            <div>
+                <p> HOME! </p>
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
 class Catalog extends React.Component {
     constructor(props){
         super(props);
@@ -61,7 +84,6 @@ class Catalog extends React.Component {
     render () {
         return (
             <StyleRoot>
-                <p>TONICMART</p>
                 <div>PRODUCTS</div>
                 <div style={styles.component}>
                     <Treebeard
@@ -80,6 +102,11 @@ class Catalog extends React.Component {
 
 render((
     <Router history={browserHistory}>
-        <Route path="/" component={Catalog} />
+        <Route component={Header}>
+            <Route path="/">
+                <IndexRoute component={Home} />
+                <Route path="catalog" component={Catalog} />
+            </Route>
+        </Route>
     </Router>
 ), document.getElementById('content'));
