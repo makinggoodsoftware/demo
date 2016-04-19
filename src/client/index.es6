@@ -4,6 +4,7 @@ import StoreHelpers from '../shared/StoreHelpers.es6';
 import {Treebeard} from 'react-treebeard';
 import { StyleRoot } from 'radium';
 import styles from './styles.es6';
+import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 
 console.log('Hello From Index.es6!');
 
@@ -38,7 +39,7 @@ NodeViewer.propTypes = {
     node: React.PropTypes.object
 };
 
-class App extends React.Component {
+class Catalog extends React.Component {
     constructor(props){
         super(props);
         this.state = { data: StoreHelpers.getProducts(), cursor: null };
@@ -77,4 +78,8 @@ class App extends React.Component {
     }
 }
 
-render(<App/>, document.getElementById('content'));
+render((
+    <Router history={browserHistory}>
+        <Route path="/" component={Catalog} />
+    </Router>
+), document.getElementById('content'));

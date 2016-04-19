@@ -1,7 +1,7 @@
 {
   "name": "tonicmart",
   "version": "0.0.0",
-  "description": "The medical products marketplace.",
+  "description": "Medical product marketplace - open to all.",
   "main": "server.js",
   "dependencies": {
     "babel-loader": "6.2.4",
@@ -11,6 +11,7 @@
     "immutable": "3.8.0",
     "react": "15.0.1",
     "react-dom": "15.0.1",
+    "react-router": "2.3.0",
     "react-treebeard": "1.1.1",
     "webpack": "1.12.15"
   },
