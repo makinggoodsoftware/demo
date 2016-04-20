@@ -1,10 +1,14 @@
 import React from 'react';
 import {render} from 'react-dom';
-import StoreHelpers from '../shared/StoreHelpers.es6';
+import StoreHelpers from '../shared/storeHelpers.es6';
 import {Treebeard} from 'react-treebeard';
 import { StyleRoot } from 'radium';
 import styles from './styles.es6';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import Home from '../components/home.es6';
+import reducers from '../shared/reducers.es6';
 
 console.log('Hello From Index.es6!');
 
@@ -51,17 +55,6 @@ class Header extends React.Component {
     }
 }
 
-class Home extends React.Component {
-    render () {
-        return (
-            <div>
-                <p> HOME! </p>
-                {this.props.children}
-            </div>
-        )
-    }
-}
-
 class Catalog extends React.Component {
     constructor(props){
         super(props);
@@ -100,13 +93,17 @@ class Catalog extends React.Component {
     }
 }
 
+let store = createStore(reducers); // second arg here would be initial store, ie, rehydrated from server in a univeral app
+
 render((
-    <Router history={browserHistory}>
-        <Route component={Header}>
-            <Route path="/">
-                <IndexRoute component={Home} />
-                <Route path="catalog" component={Catalog} />
+    <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route component={Header}>
+                <Route path="/">
+                    <IndexRoute component={Home} />
+                    <Route path="catalog" component={Catalog} />
+                </Route>
             </Route>
-        </Route>
-    </Router>
+        </Router>
+    </Provider>
 ), document.getElementById('content'));

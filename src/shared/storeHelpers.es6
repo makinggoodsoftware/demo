@@ -1,4 +1,4 @@
-import immutable from 'immutable';
+import Immutable from 'immutable';
 
 let storeHelpers = {
     beardedNode: function (node) {
@@ -122,7 +122,7 @@ let storeHelpers = {
 
     productTree: function () {
         const products = this.productData();
-        let tree = immutable.Map({});
+        let tree = Immutable.Map({});
         products.forEach((product, index) => {
             const attrs = product.splice(-2);
             product.push(index);
