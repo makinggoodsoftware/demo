@@ -1,15 +1,24 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { logOutUser } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ logOutUser }, dispatch)
+}
+
 class Header extends React.Component {
+    logOut() {
+        this.props.logOutUser();
+    }
+    
     render () {
         const currentUser = this.props.currentUser;
-        const currentUserName = currentUser ? `Welcome, ${currentUser.fullName}` : '';
 
         const links = [];
         if(currentUser && currentUser.type == 'buyer') {
@@ -17,16 +26,19 @@ class Header extends React.Component {
         }
         console.log("==== rendering Header, links = ", links);
 
+        let currentUserName, logOutButton = '';
+        if (currentUser && currentUser.fullName) {
+            currentUserName = `Welcome, ${currentUser.fullName}`;
+            logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
+        }
+
         return (
             <div>
-                <div><div className='logo'>TONICMART</div><div className='username'>{ currentUserName }</div></div>
-                <div>
-                    { links }
-                </div>
+                <div><span className='logo'>TONICMART</span><span className='links'>{ links }</span><span className='username'>{ currentUserName }{ logOutButton }</span></div>
                 { this.props.children }
             </div>
         )
     }
 }
 
-export default connect(mapStateToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

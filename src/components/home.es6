@@ -14,7 +14,7 @@ function mapDispatchToProps(dispatch) {
 class Home extends React.Component {
     constructor() {
         super();
-        this.state = {value: 'Hello!'};
+        this.state = {value: ''};
     }
 
     handleChange(event) {
@@ -23,31 +23,40 @@ class Home extends React.Component {
 
     logIn(userName) {
         console.log("==== log in click!, props.actions = ");
+        userName = userName == '' ? 'Buyer One' : userName;
         this.props.logInUser(userName);
     }
 
     render () {
         console.log("==== props = ", this.props);
+        let home;
+        if (this.props.currentUser && this.props.currentUser.fullName) {
+            home = <div>WELCOME</div>
+        } else {
+            home = (
+                <div className='login'>
+                    <div className='label'>
+                        Username:
+                        <input
+                            type="text"
+                            value={this.state.value}
+                            onChange={this.handleChange.bind(this)}
+                        />
+                    </div>
+                    <div className='label'>
+                        Password:
+                        <input
+                            type="text"
+                            value=''
+                        />
+                    </div>
+                    <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
+                    {this.props.children}
+                </div> )
+        }
 
-        return (
-            <div>
-                <p> HOME! </p>
-                Username:
-                <input
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange.bind(this)}
-                />
-                Password:
-                <input
-                    type="text"
-                    value=''
-                />
-
-                <button onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
-                {this.props.children}
-            </div>
-        )
+        console.log("==== home = ", home);
+        return home
     }
 }
 

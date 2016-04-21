@@ -11,7 +11,9 @@ function visibilityFilter(state = 'SHOW_ALL', action) {
     }
 }
 
-function currentUser(state = null, action) {  // here state is just the currentUsers value of the store object
+// here state is just the currentUsers value of the store object
+// how does it know what part of the store to pass in?  based on the mapStateToProps in the component?
+function currentUser(state = null, action) {
     const user = {};
     switch (action.type) {
         case 'LOG_IN_USER':
@@ -23,6 +25,8 @@ function currentUser(state = null, action) {  // here state is just the currentU
             }
             user.fullName = action.userName;
             return user;
+        case 'LOG_OUT_USER':
+            return {};
         default:
             return state
     }

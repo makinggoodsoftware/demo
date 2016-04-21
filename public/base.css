@@ -6,11 +6,57 @@
     text-align: left;
 }
 
+.links {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 24px;
+    position: absolute;
+    left: 250px;
+}
+
+.links a {
+    position: absolute;
+    bottom: -28px
+}
+
 .username {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 24px;
     position: absolute;
     right: 30px;
+    top: 15px;
+}
+
+.log-out-btn {
+    margin-left: 20px;
+}
+
+.login {
+    /*text-align: center;*/
+    height: 125px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 22px;
+    position: absolute;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: 40px;
+}
+
+.login .label {
+    margin-top: 15px;
+    /*position: absolute;*/
+}
+
+.login input {
+    /*position: absolute;*/
+    /*right: 0px;*/
+    margin-left: 20px;
+}
+
+.login button.label {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -25px;
 }
 
 .product-tree {
