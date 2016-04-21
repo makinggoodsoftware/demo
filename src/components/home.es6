@@ -12,9 +12,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Home extends React.Component {
-    logIn() {
+    constructor() {
+        super();
+        this.state = {value: 'Hello!'};
+    }
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    logIn(userName) {
         console.log("==== log in click!, props.actions = ");
-        this.props.logInUser('TestUser');
+        this.props.logInUser(userName);
     }
 
     render () {
@@ -23,7 +32,19 @@ class Home extends React.Component {
         return (
             <div>
                 <p> HOME! </p>
-                <button onClick={this.logIn.bind(this)}>Log In</button>
+                Username:
+                <input
+                    type="text"
+                    value={this.state.value}
+                    onChange={this.handleChange.bind(this)}
+                />
+                Password:
+                <input
+                    type="text"
+                    value=''
+                />
+
+                <button onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
                 {this.props.children}
             </div>
         )

@@ -12,9 +12,17 @@ function visibilityFilter(state = 'SHOW_ALL', action) {
 }
 
 function currentUser(state = null, action) {  // here state is just the currentUsers value of the store object
+    const user = {};
     switch (action.type) {
         case 'LOG_IN_USER':
-            return 'tempName';
+            if(action.userName.toLowerCase().startsWith('buyer')) {
+                user.type = 'buyer'
+            }
+            if(action.userName.toLowerCase().startsWith('supplier')) {
+                user.type = 'supplier'
+            }
+            user.fullName = action.userName;
+            return user;
         default:
             return state
     }

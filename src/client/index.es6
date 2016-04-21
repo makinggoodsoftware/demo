@@ -7,6 +7,7 @@ import styles from './styles.es6';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import Header from '../components/header.es6';
 import Home from '../components/home.es6';
 import reducers from '../shared/reducers.es6';
 
@@ -43,18 +44,6 @@ NodeViewer.propTypes = {
     node: React.PropTypes.object
 };
 
-class Header extends React.Component {
-    render () {
-        return (
-                <div>
-                    <p> TONICMART </p>
-                    <div><Link to="/catalog">Catalog</Link></div>
-                    {this.props.children}
-                </div>
-        )
-    }
-}
-
 class Catalog extends React.Component {
     constructor(props){
         super(props);
@@ -80,6 +69,7 @@ class Catalog extends React.Component {
                 <div>PRODUCTS</div>
                 <div style={styles.component}>
                     <Treebeard
+                        style={styles}
                         className='product-tree'
                         data={this.state.data}
                         onToggle={this.onToggle}
