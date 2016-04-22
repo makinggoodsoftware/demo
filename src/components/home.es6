@@ -28,7 +28,7 @@ class Home extends React.Component {
     }
 
     render () {
-        console.log("==== props = ", this.props);
+        // console.log("==== props for home = ", this.props);
         let home;
         if (this.props.currentUser && this.props.currentUser.fullName) {
             home = <div>WELCOME</div>

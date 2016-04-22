@@ -26,7 +26,23 @@ function currentUser(state = null, action) {
             user.fullName = action.userName;
             return user;
         case 'LOG_OUT_USER':
-            return {};
+            return {}; //TODO: this and default arg value should be the same
+        default:
+            return state
+    }
+}
+
+function bidRequests(state = {}, action) {
+    switch (action.type) {
+        case 'BID_REQUEST':
+            // all of this simpler with Immutable.js ?
+            const bidsThisProduct = state[action.productKey] || {};
+            bidsThisProduct[action.userKey] = action.qty;
+            const bidsThisProductWithKey = {};
+            bidsThisProductWithKey[action.productKey] = bidsThisProduct;
+            const newState = Object.assign({}, state, bidsThisProductWithKey);
+            console.log("==== bidRquests returning newState, ", newState);
+            return newState;
         default:
             return state
     }
@@ -36,7 +52,8 @@ function currentUser(state = null, action) {
 // so, passing 'currentUsers' to combineReducers will cause the currentUsers reducer to be called with the value at the currentUser key of the store object
 const reducers = combineReducers({
     visibilityFilter,
-    currentUser
+    currentUser,
+    bidRequests
 });
 
 export default reducers

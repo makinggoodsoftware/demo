@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { logOutUser } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
@@ -15,6 +15,7 @@ function mapDispatchToProps(dispatch) {
 class Header extends React.Component {
     logOut() {
         this.props.logOutUser();
+        browserHistory.push('/');
     }
     
     render () {
