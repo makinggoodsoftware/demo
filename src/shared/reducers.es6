@@ -1,6 +1,7 @@
 // based on https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md
 
 import { combineReducers } from 'redux';
+import Immutable from 'immutable';
 
 function visibilityFilter(state = 'SHOW_ALL', action) {
     switch (action.type) {
@@ -48,14 +49,10 @@ function bidRequests(state = {}, action) {
     }
 }
 
-function bids(state = {}, action) {
+function bids(state = Immutable.Map({}), action) {
     switch (action.type) {
         case 'BID':
-            const productBid = {};
-            productBid[action.productKey] = action.price;
-            const userProductBid = {};
-            userProductBid[action.userKey] = productBid;
-            const newState = Object.assign({}, state, userProductBid);
+            const newState = state.setIn([action.userKey, action.productKey], action.price);
             console.log("==== bid returning newState, ", newState);
             return newState;
         default:

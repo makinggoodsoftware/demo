@@ -70,3 +70,19 @@
     display: inline-block;
     vertical-align: top;
 }
+
+table.bids {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table .number {
+    text-align: right;
+}
+
+table.bids .header {
+    width: 150px;
+    text-align: right;
+}

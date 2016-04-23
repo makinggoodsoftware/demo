@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bid } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
-    return { currentUser: store.currentUser, bidRequests: store.bidRequests, bids: store.bids }
+    return { currentUser: store.currentUser, bidRequests: store.bidRequests, bids: store.bids.toJS() }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -62,22 +62,30 @@ class Bids extends React.Component {
 
     buildTable() {
         const requestTotals = this.groupBidRequests();
-        const header = (<thead><tr key='tableHeader'><th></th><th>Quantity</th><th>My Bid per Unit</th><th></th></tr></thead>);
+        const header = (<thead><tr key='tableHeader'><th></th><th className='header'>Quantity</th><th className='header'>Bid (per Unit)</th><th></th><th className='header'>Total</th></tr></thead>);
         let rows = [];
+        let bid, price;
         for (let productKey in requestTotals) {
-            const input = (<input
-                            type='text'
-                            // value={this.state.bids[productKey]}
-                            onChange={this.handleBidChange.bind(this, productKey)}
-                            />)
-            const button = (<button
-                            onClick={this.bid.bind(this, productKey)}
-                            >Bid</button>)
+            let total = '', button = '';
+            if(this.props.bids && this.props.bids[this.props.currentUser.fullName] && (price = this.props.bids[this.props.currentUser.fullName][productKey])) {
+                console.log("==== buildTable, price = ", price);
+                bid = `$${price}`;
+                total = `$${requestTotals[productKey] * price}`;
+            } else {
+                bid = (<input
+                                type='text'
+                                // value={this.state.bids[productKey]}
+                                onChange={this.handleBidChange.bind(this, productKey)}
+                                />)
+                button = (<button
+                                onClick={this.bid.bind(this, productKey)}
+                                >Bid</button>)
+            }
 
-            const row = (<tr key={ productKey }><td>{ productKey }</td><td>{ requestTotals[productKey] }</td><td>{ input }</td><td>{ button }</td></tr>);
+            const row = (<tr key={ productKey }><td>{ productKey }</td><td className='number'>{ requestTotals[productKey] }</td><td className='number'>{ bid }</td><td>{ button }</td><td className='number'>{ total }</td></tr>);
             rows.push(row);
         }
-        return (<table>{ header }<tbody>{ rows }</tbody></table>);
+        return (<table className='bids'>{ header }<tbody>{ rows }</tbody></table>);
     }
 
     render () {
