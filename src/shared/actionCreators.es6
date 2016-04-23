@@ -9,3 +9,7 @@ export function logOutUser() {
 export function requestBid(userKey, productKey, qty) {
     return { type: 'BID_REQUEST', userKey, productKey, qty }
 }
+
+export function bid(userKey, productKey, price) {
+    return { type: 'BID', userKey, productKey, price }
+}

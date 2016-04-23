@@ -9,6 +9,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Header from '../components/header.es6';
 import Home from '../components/home.es6';
+import Bids from '../components/bids.es6';
 import ProductForm from '../components/productForm.es6';
 import reducers from '../shared/reducers.es6';
 
@@ -25,7 +26,7 @@ class Catalog extends React.Component {
     }
 
     onToggle(node, toggled){
-        console.log(`==== got onToggle with toggled = ${toggled} loading = ${node.loading} and node = `, node);
+        // console.log(`==== got onToggle with toggled = ${toggled} loading = ${node.loading} and node = `, node);
         if(this.state.cursor){this.state.cursor.active = false;}
         node.active = true;
         if(node.children){ console.log("==== children found!"); node.toggled = toggled; }
@@ -64,6 +65,7 @@ render((
                 <Route path="/">
                     <IndexRoute component={Home} />
                     <Route path="catalog" component={Catalog} />
+                    <Route path="bids" component={Bids} />
                 </Route>
             </Route>
         </Router>

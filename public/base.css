@@ -14,8 +14,8 @@
 }
 
 .links a {
-    position: absolute;
-    bottom: -28px
+    bottom: -28px;
+    margin-right: 20px;
 }
 
 .username {

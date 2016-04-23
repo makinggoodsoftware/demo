@@ -2,22 +2,22 @@ import Immutable from 'immutable';
 
 let storeHelpers = {
     beardedNode: function (node) {
-        console.log("==== beardedNode begin, node passed in = ", node);
+        // console.log("==== beardedNode begin, node passed in = ", node);
         const keys = Object.keys(node);
-        console.log("==== node passed in, keys = ", keys);
+        // console.log("==== node passed in, keys = ", keys);
         const nodeFirstObj = node[keys[0]];
         // const firstNodeKeys = Object.keys(nodeFirstObj); // the keys will be product id integers if this category has no sub-categories
         // console.log("==== first keys = ", firstNodeKeys);
         if ('name' in nodeFirstObj) {  // assumes no mixed categories (ie. category cannot contain both categories and products)
             // node is an actual product, not category
-            console.log("==== Product, not category");
+            // console.log("==== Product, not category");
             const products = keys.map((key => {
                 return node[key]
             }));
-            console.log("==== returning products:  ", products);
+            // console.log("==== returning products:  ", products);
             return products;
         } else {
-            console.log("==== Category, not product");
+            // console.log("==== Category, not product");
             const categories = [];
             keys.forEach((key) => {
                 categories.push ({
@@ -26,7 +26,7 @@ let storeHelpers = {
                     children: this.beardedNode(node[key])
                 })
             });
-            console.log("==== returning categories: ", categories);
+            // console.log("==== returning categories: ", categories);
             return categories;
         }
     },
@@ -131,13 +131,13 @@ let storeHelpers = {
             // console.log("==== prodObj = ", prodObj);
             tree = tree.setIn(product, prodObj);
         });
-        console.log("==== tree = ", tree.toJS());
+        // console.log("==== tree = ", tree.toJS());
         return tree
     },
 
     getProducts: function () {
         const productTree = this.productTree();
-        console.log("==== productTree = ", productTree.toJS());
+        // console.log("==== productTree = ", productTree.toJS());
         const productObj = productTree.toJS();
         // let beardedTree = {};
         let children = [];
@@ -150,7 +150,7 @@ let storeHelpers = {
             children: children
         };
 
-        console.log("==== beardedTree = ", beardedTree);
+        // console.log("==== beardedTree = ", beardedTree);
 
         const test = {
             name: 'root',

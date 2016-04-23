@@ -22,7 +22,7 @@ class Home extends React.Component {
     }
 
     logIn(userName) {
-        console.log("==== log in click!, props.actions = ");
+        // console.log("==== log in click!, props.actions = ");
         userName = userName == '' ? 'Buyer One' : userName;
         this.props.logInUser(userName);
     }
@@ -55,7 +55,7 @@ class Home extends React.Component {
                 </div> )
         }
 
-        console.log("==== home = ", home);
+        // console.log("==== home = ", home);
         return home
     }
 }

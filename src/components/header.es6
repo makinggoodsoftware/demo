@@ -22,9 +22,26 @@ class Header extends React.Component {
         const currentUser = this.props.currentUser;
 
         const links = [];
-        if(currentUser && currentUser.type == 'buyer') {
-            links.push(<Link to="/catalog" key="catalog">Catalog</Link>)
+        if(currentUser) {
+            switch (currentUser.type) {
+                case 'buyer':
+                    links.push( < Link
+                    to = "/catalog"
+                    key = "catalog" > Catalog < / Link >
+                    );
+                    links.push( < Link
+                    to = "/bids"
+                    key = "bids" > Bids < / Link >
+                    );
+                    break;
+                case 'supplier':
+                    links.push( < Link
+                    to = "/bids"
+                    key = "bids" > Bids < / Link >
+                )
+            }
         }
+
         console.log("==== rendering Header, links = ", links);
 
         let currentUserName, logOutButton = '';

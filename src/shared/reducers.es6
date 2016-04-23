@@ -48,12 +48,28 @@ function bidRequests(state = {}, action) {
     }
 }
 
+function bids(state = {}, action) {
+    switch (action.type) {
+        case 'BID':
+            const productBid = {};
+            productBid[action.productKey] = action.price;
+            const userProductBid = {};
+            userProductBid[action.userKey] = productBid;
+            const newState = Object.assign({}, state, userProductBid);
+            console.log("==== bid returning newState, ", newState);
+            return newState;
+        default:
+            return state
+    }
+}
+
 // these reducers will be called with first argument set to the value of the top-level key in store
-// so, passing 'currentUsers' to combineReducers will cause the currentUsers reducer to be called with the value at the currentUser key of the store object
+// so, passing 'currentUser' to combineReducers will cause the currentUser reducer to be called with the value at the currentUser key of the store object
 const reducers = combineReducers({
     visibilityFilter,
     currentUser,
-    bidRequests
+    bidRequests,
+    bids
 });
 
 export default reducers
