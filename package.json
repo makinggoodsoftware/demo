@@ -19,11 +19,15 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "./node_modules/.bin/webpack -d"
   },
   "author": "Kurt Snyder",
   "license": "UNLICENSED",
   "devDependencies": {
     "redux-devtools": "^3.2.0"
+  },
+  "engines": {
+    "node": "4.4.3"
   }
 }
