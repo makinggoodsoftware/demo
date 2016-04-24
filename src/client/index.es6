@@ -9,6 +9,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Header from '../components/header.es6';
 import Home from '../components/home.es6';
+import BidRequests from '../components/bidrequests.es6';
 import Bids from '../components/bids.es6';
 import ProductForm from '../components/productForm.es6';
 import reducers from '../shared/reducers.es6';
@@ -65,6 +66,7 @@ render((
                 <Route path="/">
                     <IndexRoute component={Home} />
                     <Route path="catalog" component={Catalog} />
+                    <Route path="bidRequests" component={BidRequests} />
                     <Route path="bids" component={Bids} />
                 </Route>
             </Route>

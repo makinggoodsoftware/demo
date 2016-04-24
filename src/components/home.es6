@@ -15,11 +15,17 @@ function mapDispatchToProps(dispatch) {
 class Home extends React.Component {
     constructor() {
         super();
-        this.state = {value: ''};
+        this.state = {value: '', password: ''};
     }
 
     handleChange(event) {
         this.setState({value: event.target.value});
+    }
+
+    handlePasswordChange(event) {
+        console.log("==== event sent value: ", event.target.value);
+        // this.setState({password: '*'.repeat(event.target.value.length)});
+        this.setState({password: event.target.value});
     }
 
     logIn(userName) {
@@ -40,16 +46,15 @@ class Home extends React.Component {
                                     Click here to browse our catalog and request product bids
                                 </Link></div>
                     );
-                    links.push( <div key='bids'><Link
-                                    to = "/bids" >
+                    links.push( <div key='bidRequests'><Link
+                                    to = "/bidRequests" >
                                     Click here to see your bid requests
                                 </Link></div>
                     );
                     break;
                 case 'supplier':
-                    links.push( <div><Link
-                                    to = "/bids"
-                                    key = "bids">
+                    links.push( <div key='bids'><Link
+                                    to = "/bids">
                         Click here to see buyer requests and enter bids</Link></div>
                     )
             }
@@ -68,8 +73,9 @@ class Home extends React.Component {
                     <div className='label'>
                         Password:
                         <input
-                            type="text"
-                            value=''
+                            type="password"
+                            password={this.state.password}
+                            onChange={this.handlePasswordChange.bind(this)}
                         />
                     </div>
                     <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
