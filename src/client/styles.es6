@@ -8,7 +8,6 @@ export default {
     tree: {
         base: {
             listStyle: 'none',
-            backgroundColor: '#21252B',
             margin: 0,
             padding: 0,
             color: '#9DA5AB',
@@ -26,7 +25,7 @@ export default {
                 display: 'block'
             },
             activeLink: {
-                background: '#31363F'
+                background: '#89ABE8'
             },
             toggle: {
                 base: {
@@ -55,7 +54,7 @@ export default {
                 base: {
                     display: 'inline-block',
                     verticalAlign: 'top',
-                    color: '#9DA5AB'
+                    color: 'black'
                 },
                 connector: {
                     width: '2px',
@@ -99,11 +98,10 @@ export default {
             fontFamily: 'Josefin Sans',
             fontSize: '16px',
             whiteSpace: 'pre-wrap',
-            backgroundColor: '#282C34',
             border: 'solid 1px black',
             padding: '20px',
-            color: '#9DA5AB',
-            minHeight: '250px'
+            color: 'black',
+            // minHeight: '250px'
         }
     }
 };

@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { requestBid } from '../shared/actionCreators.es6'
 
-const HELP_MSG = 'Select a Product on the Left...';
+const HELP_MSG = '<-- To Request a Bid, First Select a Product to the Left';
 
 // see https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 function mapStateToProps(store) { // React calls this whenever the part of the store we're subscribed to has changed
@@ -39,24 +39,30 @@ class ProductForm extends React.Component {
         const style = styles.viewer;
         // console.log("==== this.props.node = ", this.props.node);
         // console.log("==== this.props.node == null ", this.props.node == null);
-        const name = this.props.node && this.props.node.price ? this.props.node.name : HELP_MSG;
+
         // console.log("==== name = ", name);
         // console.log("==== br by name: ", this.props.bidRequests[name]);
         if (this.props.bidRequests[name]) console.log("==== br qry: ", this.props.bidRequests[name][this.props.currentUser.fullName]);
         let requestStatus = '';
         let form = '';
         let qty = 0;
+        const name = this.props.node && this.props.node.price ? this.props.node.name : 'no product selected';
         if (this.props.bidRequests[name] && (qty = this.props.bidRequests[name][this.props.currentUser.fullName])) {
-            requestStatus = `Bid request placed for quantity ${qty} of ${name}`;
+            requestStatus = `Requested bid for ${qty} of ${name}`;
+        } else if (!(this.props.node && this.props.node.price)) {
+            requestStatus = HELP_MSG;
         } else {
             form = (<div>
-                        <span>{name}</span>
-                        <input
-                            type='text'
-                            value={this.state.qty}  // setting value here makes this a React controlled component
-                            onChange={this.handleQtyChange.bind(this)}
-                        />
-                        <button onClick={this.requestBid.bind(this, name)}>Request Bid</button>
+                        <span>{this.props.node.name}</span>
+                        <span className='request-qty'>
+                            Qty:
+                            <input
+                                type='text'
+                                value={this.state.qty}  // setting value here makes this a React controlled component
+                                onChange={this.handleQtyChange.bind(this)}
+                            />
+                            <button onClick={this.requestBid.bind(this, name)}>Request Bid</button>
+                        </span>
                     </div>
                     )
         }

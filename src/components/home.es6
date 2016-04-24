@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { logInUser } from '../shared/actionCreators.es6'
@@ -31,7 +32,28 @@ class Home extends React.Component {
         // console.log("==== props for home = ", this.props);
         let home;
         if (this.props.currentUser && this.props.currentUser.fullName) {
-            home = <div>WELCOME</div>
+            let links = [];
+            switch (this.props.currentUser.type) {
+                case 'buyer':
+                    links.push( <div key='catalog'><Link
+                                    to = "/catalog" >
+                                    Click here to browse our catalog and request product bids
+                                </Link></div>
+                    );
+                    links.push( <div key='bids'><Link
+                                    to = "/bids" >
+                                    Click here to see your bid requests
+                                </Link></div>
+                    );
+                    break;
+                case 'supplier':
+                    links.push( <div><Link
+                                    to = "/bids"
+                                    key = "bids">
+                        Click here to see buyer requests and enter bids</Link></div>
+                    )
+            }
+            home = <div className='intro'>{ links }</div>;
         } else {
             home = (
                 <div className='login'>

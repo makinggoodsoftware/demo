@@ -27,17 +27,20 @@ class Header extends React.Component {
                 case 'buyer':
                     links.push( < Link
                     to = "/catalog"
-                    key = "catalog" > Catalog < / Link >
+                    key = "catalog"
+                    activeClassName='headerLinkActive'>Catalog</Link >
                     );
                     links.push( < Link
                     to = "/bids"
-                    key = "bids" > Bids < / Link >
+                    key = "bids"
+                    activeClassName='headerLinkActive'>Bids</Link>
                     );
                     break;
                 case 'supplier':
                     links.push( < Link
                     to = "/bids"
-                    key = "bids" > Bids < / Link >
+                    key = "bids"
+                    activeClassName='headerLinkActive'>Bids</Link >
                 )
             }
         }
@@ -52,7 +55,7 @@ class Header extends React.Component {
 
         return (
             <div>
-                <div><span className='logo'>TONICMART</span><span className='links'>{ links }</span><span className='username'>{ currentUserName }{ logOutButton }</span></div>
+                <div className='header'><span><Link className='logo' to='/'>T<span className='logoLower'>ONIC</span>M<span className='logoLower'>ART</span></Link></span><span className='links'>{ links }</span><span className='username'>{ currentUserName }{ logOutButton }</span></div>
                 { this.props.children }
             </div>
         )
