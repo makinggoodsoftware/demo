@@ -28,7 +28,7 @@ class BidRequests extends React.Component {
         const requests = {};
         for (let productKey in bidRequests) {
             // console.log("==== productKey = ", productKey);
-            const productRequests = bidRequests[productKey];
+            // const productRequests = bidRequests[productKey];
             // console.log("==== productRequests = ", productRequests);
             const qty = bidRequests[productKey][currentUserKey];
             if(qty) {
