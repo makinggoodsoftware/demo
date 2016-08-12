@@ -9,7 +9,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Header from '../components/header.es6';
 import Home from '../components/home.es6';
-import BidRequests from '../components/bidrequests.es6';
+import BidRequests from '../components/bidRequests.es6';
 import Bids from '../components/bids.es6';
 import ProductForm from '../components/productForm.es6';
 import reducers from '../shared/reducers.es6';
