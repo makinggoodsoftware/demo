@@ -94,8 +94,6 @@ class Bids extends React.Component {
         const requestTotals = this.groupBidRequests();
         return (
             <div>
-                <div>bidRequests: {JSON.stringify(requestTotals)}</div>
-                <div>bids: {JSON.stringify(this.props.bids)}</div>
                 { table }
             </div>
         )
