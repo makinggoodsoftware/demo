@@ -7,9 +7,54 @@ a.headerLinkActive {
     text-decoration: underline;
 }
 
+.clearFloat {
+    clear: both;
+}
+
+.colLeft {
+    width: 50%;
+    float: left;
+}
+
+.colRight {
+    width: 50%;
+    float: right;
+}
+
 .header {
     margin-top: 20px;
     margin-left: 20px;
+}
+
+.intro {
+    max-width: 990px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Titillium Web', "lucida grande", sans-serif;
+    font-size: 34px;
+    text-align: center;
+}
+
+.intro section {
+    padding: 2em 0 2em 0;
+}
+
+.intro .oddRow {
+    /*background-color: #fcfbde;*/
+}
+
+.intro .sectionHead {
+    font-size: 28px;
+    text-align: left;
+}
+
+.intro .sectionBody {
+    font-size: 18px;
+    text-align: left;
+}
+
+.intro div {
+    /*margin-top: 40px;*/
 }
 
 .logo {
@@ -28,12 +73,15 @@ a.headerLinkActive {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 24px;
     position: absolute;
-    left: 250px;
-    top: 25px;
+    top: 60px;
 }
 
 .links a {
     margin-right: 20px;
+}
+
+.main {
+    background-color: #f3f7ed;
 }
 
 .username {
@@ -74,16 +122,6 @@ a.headerLinkActive {
     bottom: 0px;
     left: 50%;
     margin-left: -25px;
-}
-
-.intro {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 28px;
-    text-align: center;
-}
-
-.intro div {
-    margin-top: 40px;
 }
 
 .product-tree {
