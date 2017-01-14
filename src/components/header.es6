@@ -65,23 +65,23 @@ class Header extends React.Component {
                 )
             }
         } else {
-            links.push ( <span className='label'>
+            links.push ( <div className='label'>
                             Username:
                             <input
                                 type="text"
                                 value={this.state.value}
                                 onChange={this.handleChange.bind(this)}
                             />
-                        </span> );
+                        </div> );
             links.push (
-                        <span className='label'>
+                        <div className='label'>
                             Password:
                             <input
                                 type="password"
                                 password={this.state.password}
                                 onChange={this.handlePasswordChange.bind(this)}
                             />
-                        </span> );
+                        </div> );
             links.push (
                         <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
                         );
@@ -97,7 +97,19 @@ class Header extends React.Component {
 
         return (
             <div>
-                <div className='header'><span><Link className='logo' to='/'><img src='/images/Logomakr_9976sI.png'/></Link></span><span className='links'>{ links }</span><span className='username'>{ currentUserName }{ logOutButton }</span></div>
+                <header id='header'>
+                    <nav id='main-nav'>
+                        <div className='signin'>
+                            <div className='links'>{ links }</div>
+                            <div className='username'>{ currentUserName }{ logOutButton }</div>
+                        </div>
+                        <div className='nav-desktop'>
+                            <Link className='logo' to='/'>
+                                <img src='/images/Logomakr_9976sI.png'/>
+                            </Link>
+                        </div>
+                    </nav>
+                </header>
                 { this.props.children }
             </div>
         )
