@@ -93,7 +93,10 @@ class Bids extends React.Component {
         // console.log("==== table = ", table);
         const requestTotals = this.groupBidRequests();
         return (
-            <div>
+            <div id='bids'>
+                <div className='title'>
+                    My bids
+                </div>
                 { table }
             </div>
         )

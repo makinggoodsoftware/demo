@@ -40,19 +40,24 @@ class Catalog extends React.Component {
 
     render () {
         return (
-            <StyleRoot>
-                <div style={styles.component}>
-                    <Treebeard
-                        style={styles}
-                        className='product-tree'
-                        data={this.state.data}
-                        onToggle={this.onToggle}
-                    />
+            <div id='catalog'>
+                <div className='title'>
+                    Catalog
                 </div>
-                <div style={styles.component}>
-                    <ProductForm node={this.state.cursor}/>
-                </div>
-            </StyleRoot>
+                <StyleRoot>
+                    <div style={styles.component}>
+                        <Treebeard
+                            style={styles}
+                            className='product-tree'
+                            data={this.state.data}
+                            onToggle={this.onToggle}
+                        />
+                    </div>
+                    <div style={styles.component}>
+                        <ProductForm node={this.state.cursor}/>
+                    </div>
+                </StyleRoot>
+            </div>
         )
     }
 }

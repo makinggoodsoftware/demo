@@ -61,13 +61,13 @@ a.headerLinkActive {
 }
 
 #header {
-    height: 350px;
+    /*height: 350px;*/
 }
 
 /*from http://stackoverflow.com/questions/4183948/css-set-background-image-with-opacity*/
 /*negative margin top scrolls photo off top of window, once size is determined, image file should be cropped*/
 /*with width at 100%, in Google inspector sometimes the image loses height, why?*/
-#header:after {
+#background {
     content : "";
     display: block;
     position: absolute;
@@ -167,7 +167,25 @@ a.headerLinkActive {
 .main {
     background-color: #f3f7ed;
     /*max-width: 990px;*/
-    margin: 0 auto;
+    margin: 350px auto 0 auto;
+}
+
+#catalog {
+    margin: 80px auto 0 auto;
+}
+
+.title {
+    font-family: 'Josefin Sans';
+    font-size: 22px;
+    text-align: center;
+}
+
+#bid-requests {
+    margin: 80px auto 0 auto;
+}
+
+#bids {
+    margin: 80px auto 0 auto;
 }
 
 #main-nav {
@@ -248,8 +266,7 @@ a.headerLinkActive {
 table.bids {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 18px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto 0 auto;
 }
 
 table .number {

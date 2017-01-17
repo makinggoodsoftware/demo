@@ -112,7 +112,10 @@ class BidRequests extends React.Component {
         const table = this.buildTable(requestsWithBids);
         console.log("==== table = ", table);
         return (
-            <div>
+            <div id='bid-requests'>
+                <div className='title'>
+                    Bid Requests
+                </div>
                 { table }
             </div>
         )

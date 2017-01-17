@@ -68,7 +68,7 @@ class Home extends React.Component {
                         3.&nbsp;&nbsp;Sellers bid
                     </div>
                     <div className='section-body'>
-                        We bring together regulatory-approved suppliers from around the world to bid.
+                        We bring together suppliers from around the world with regulatory approval.  Bids include freight and other costs.
                     </div>
                 </div>
                 <div className='col-right'>
@@ -87,7 +87,7 @@ class Home extends React.Component {
                         4.&nbsp;&nbsp;Buyers choose the best bid
                     </div>
                     <div className='section-body'>
-                        The order is completed through a system agreed upon by buyer and supplier.
+                        The order is completed through the buyer's existing procurement system.
                     </div>
                 </div>
                 <div className='col-left'>
@@ -101,9 +101,13 @@ class Home extends React.Component {
         );
 
         home =
-            <div className='main'>
-                <div className='intro'>{ sections }</div>
-            </div>;
+            <div>
+                <div id='background'>
+                </div>
+                <div className='main'>
+                    <div className='intro'>{ sections }</div>
+                </div>
+            </div>
 
         // console.log("==== home = ", home);
         return home
