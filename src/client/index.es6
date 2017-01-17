@@ -57,7 +57,7 @@ class Catalog extends React.Component {
     }
 }
 
-let store = createStore(reducers); // second arg here would be initial store, ie, rehydrated from server in a univeral app
+let store = createStore(reducers); // second arg here would be initial store, ie, rehydrated from server in a universal app
 
 render((
     <Provider store={store}>

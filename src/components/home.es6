@@ -18,10 +18,7 @@ class Home extends React.Component {
                     The medical product marketplace for competitive pricing
                 </div>
                 <div className='body'>
-                    Our team has 30 years of experience lowering costs by building open, fair markets for only the highest quality products.
-                </div>
-                <div id='how-work' className='headline'>
-                    How does it work?
+                    For 30 years our team has been dramatically lowering costs by building open, fair markets for only the highest quality products.
                 </div>
             </section>
         );
@@ -29,15 +26,15 @@ class Home extends React.Component {
             <section key='step1' className='steps'>
                 <div className='col-left'>
                     <div className='section-head'>
-                        1. Choose your products
+                        1.&nbsp;&nbsp;Buyers choose products
                     </div>
                     <div className='section-body'>
-                        Buyers select product specifications by browsing our extensive offering of consumable goods.
+                        Select product specifications by browsing our extensive offering of consumable goods.
                     </div>
                     {/* -- 1. Buyers specify the types of products they need --*/}
                 </div>
                 <div className='col-right'>
-                    <img src='/images/products_88x9LV.png' style={{height: '4em'}}/>
+                    <img src='/images/Logomakr_5s5LLD.png' style={{height: '4em'}}/>
                 </div>
             </section>
             );
@@ -49,14 +46,14 @@ class Home extends React.Component {
             <section key='step2' className='steps'>
                 <div className='col-right'>
                     <div className='section-head'>
-                        2. We combine your selections with other buyers
+                        2.&nbsp;&nbsp;We aggregate demand across buyers
                     </div>
                     <div className='section-body'>
-                        We aggregate the demand for each product specification across multiple buyers to achieve volume
+                        For each product specification we combine requests across buyers to build significant volume.
                     </div>
                 </div>
                 <div className='col-left'>
-                    <img src='/images/products_88x9LV.png' style={{height: '4em'}}/>
+                    <img src='/images/Logomakr_4KHtfP.png' style={{height: '6em'}}/>
                 </div>
             </section>
             );
@@ -64,6 +61,45 @@ class Home extends React.Component {
             <section key='clear-step2' className='clear-float'>
             </section>
             );
+        sections.push(
+            <section key='step3' className='steps'>
+                <div className='col-left'>
+                    <div className='section-head'>
+                        3.&nbsp;&nbsp;Sellers bid
+                    </div>
+                    <div className='section-body'>
+                        We bring together regulatory-approved suppliers from around the world to bid.
+                    </div>
+                </div>
+                <div className='col-right'>
+                    <img src='/images/Logomakr_5C1XRM.png' style={{height: '4em'}}/>
+                </div>
+            </section>
+            );
+        sections.push(
+            <section key='clear-step3' className='clear-float'>
+            </section>
+            );
+        sections.push(
+            <section key='step4' className='steps'>
+                <div className='col-right'>
+                    <div className='section-head'>
+                        4.&nbsp;&nbsp;Buyers choose the best bid
+                    </div>
+                    <div className='section-body'>
+                        The order is completed through a system agreed upon by buyer and supplier.
+                    </div>
+                </div>
+                <div className='col-left'>
+                    <img src='/images/cart_42n8Kh.png' style={{height: '4em'}}/>
+                </div>
+            </section>
+        );
+        sections.push(
+            <section key='clear-step4' className='clear-float'>
+            </section>
+        );
+
         home =
             <div className='main'>
                 <div className='intro'>{ sections }</div>
