@@ -22,7 +22,7 @@ time, mark, audio, video {
 
 a {
     text-decoration: none;
-    color: #8E102C;
+    color: rgb(114,188,43);
 }
 
 a.headerLinkActive {
@@ -100,8 +100,8 @@ a.headerLinkActive {
 
 .intro .headline {
     font-size: 36px;
+    padding-top: 20px;
     text-align: center;
-    /*font-weight: 200;*/
 }
 
 .intro .body {
@@ -110,10 +110,6 @@ a.headerLinkActive {
     max-width: 480px;
     margin: 0 auto;
 }
-
-/*.intro #how-work {*/
-    /*padding-top: .1em;*/
-/*}*/
 
 .intro #main-image {
     opacity: 0.9;
@@ -140,14 +136,14 @@ a.headerLinkActive {
 }
 
 .intro .steps {
-    height: 200px;
+    height: 230px;
 }
 
 .intro div {
 }
 
 .links {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-size: 24px;
     /*position: absolute;*/
     top: 60px;
@@ -155,6 +151,10 @@ a.headerLinkActive {
 
 .links a {
     margin-right: 20px;
+}
+
+.links .label {
+    font-size: 16px;
 }
 
 .logo {
@@ -166,7 +166,6 @@ a.headerLinkActive {
 
 .main {
     background-color: #f3f7ed;
-    /*max-width: 990px;*/
     margin: 350px auto 0 auto;
 }
 
@@ -175,7 +174,7 @@ a.headerLinkActive {
 }
 
 .title {
-    font-family: 'Josefin Sans';
+    font-family: 'Titillium Web';
     font-size: 22px;
     text-align: center;
 }
@@ -199,16 +198,40 @@ a.headerLinkActive {
 
 #main-nav .links {
     font-family: 'Titillium Web', "lucida grande", sans-serif;
-    font-size: 14px;
-    text-align: right;
+    font-size: 24px;
+    /*text-align: right;*/
+}
+
+#main-nav .page-links {
+    float: right;
+    font-family: 'Titillium Web', "lucida grande", sans-serif;
+    font-size: 24px;
+    margin: 34px 120px 0px 0px;
+}
+
+.page-links a {
+    margin-left: 25px;
 }
 
 #main-nav .signin {
-    float: right;
+    font-family: 'Titillium Web', "lucida grande", sans-serif;
+    margin-top: 10px;
+    position: absolute;
+    right: 20px;
+    text-align: right;
+}
+
+#main-nav .signin input {
+    font-family: inherit;
+    margin-left: 5px;
+}
+
+#main-nav .signin button {
+    font-family: inherit;
 }
 
 .username {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-size: 20px;
     /*position: absolute;*/
     right: 30px;
@@ -221,7 +244,7 @@ a.headerLinkActive {
 
 .login {
     height: 125px;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-size: 22px;
     /*position: absolute;*/
     left: 50%;
@@ -264,7 +287,7 @@ a.headerLinkActive {
 }
 
 table.bids {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     font-size: 18px;
     margin: 20px auto 0 auto;
 }

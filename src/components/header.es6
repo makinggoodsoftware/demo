@@ -43,6 +43,8 @@ class Header extends React.Component {
         const currentUser = this.props.currentUser;
 
         const links = [];
+        const loginElems = [];
+        let currentUserName, logOutButton = '';
         if(currentUser && currentUser.fullName) {
             switch (currentUser.type) {
                 case 'buyer':
@@ -64,44 +66,48 @@ class Header extends React.Component {
                     activeClassName='headerLinkActive'>Bids</Link >
                 )
             }
+            currentUserName = `Welcome, ${currentUser.fullName}`;
+            logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
+            loginElems.push (
+                <div classname='username'>
+                    { currentUserName }{ logOutButton }
+                </div>
+            );
         } else {
-            links.push ( <div className='label'>
-                            Username:
-                            <input
-                                type="text"
-                                value={this.state.value}
-                                onChange={this.handleChange.bind(this)}
-                            />
-                        </div> );
-            links.push (
-                        <div className='label'>
-                            Password:
-                            <input
-                                type="password"
-                                password={this.state.password}
-                                onChange={this.handlePasswordChange.bind(this)}
-                            />
-                        </div> );
-            links.push (
-                        <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
-                        );
+            loginElems.push (
+                <div className='label'>
+                    Username:
+                    <input
+                        type="text"
+                        value={this.state.value}
+                        onChange={this.handleChange.bind(this)}
+                    />
+                </div> );
+            loginElems.push (
+                <div className='label'>
+                    Password:
+                    <input
+                        type="password"
+                        password={this.state.password}
+                        onChange={this.handlePasswordChange.bind(this)}
+                    />
+                </div> );
+            loginElems.push (
+                <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
+            );
         }
 
         console.log("==== rendering Header, links = ", links);
-
-        let currentUserName, logOutButton = '';
-        if (currentUser && currentUser.fullName) {
-            currentUserName = `Welcome, ${currentUser.fullName}`;
-            logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
-        }
 
         return (
             <div>
                 <header id='header'>
                     <nav id='main-nav'>
+                        <div className='page-links'>
+                            { links }
+                        </div>
                         <div className='signin'>
-                            <div className='links'>{ links }</div>
-                            <div className='username'>{ currentUserName }{ logOutButton }</div>
+                            { loginElems }
                         </div>
                         <div className='nav-desktop'>
                             <Link className='logo' to='/'>

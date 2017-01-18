@@ -11,7 +11,7 @@ export default {
             margin: 0,
             padding: 0,
             color: '#9DA5AB',
-            fontFamily: 'Josefin Sans,sans-serif',
+            fontFamily: 'Titillium Web, lucida grande, sans-serif',
             fontSize: '16px'
         },
         node: {
@@ -80,7 +80,7 @@ export default {
         }
     },
     component: {
-        fontFamily: 'Josefin Sans',
+        fontFamily: 'Titillium Web, lucida grande, sans-serif',
         width: '50%',
         display: 'inline-block',
         verticalAlign: 'top',
@@ -95,7 +95,7 @@ export default {
     },
     viewer: {
         base: {
-            fontFamily: 'Josefin Sans',
+            fontFamily: 'Titillium Web, lucida grande, sans-serif',
             fontSize: '16px',
             whiteSpace: 'pre-wrap',
             border: 'solid 1px black',
