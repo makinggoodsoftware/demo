@@ -23,7 +23,7 @@ class Header extends React.Component {
     }
 
     handlePasswordChange(event) {
-        console.log("==== event sent value: ", event.target.value);
+        // console.log("==== event sent value: ", event.target.value);
         // this.setState({password: '*'.repeat(event.target.value.length)});
         this.setState({password: event.target.value});
     }
@@ -35,7 +35,8 @@ class Header extends React.Component {
     }
 
     logOut() {
-        this.props.logOutUser();
+        // this.props.logOutUser();
+        this.props.auth.logout();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
         browserHistory.push('/');
     }
     
@@ -97,7 +98,7 @@ class Header extends React.Component {
             );
         }
 
-        console.log("==== rendering Header, links = ", links);
+        // console.log("==== rendering Header, links = ", links);
 
         return (
             <div>
