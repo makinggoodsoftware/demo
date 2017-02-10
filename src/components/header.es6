@@ -2,14 +2,14 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, logOutUser } from '../shared/actionCreators.es6'
+import { logInUser, getUser, logOutUser } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ logInUser, logOutUser }, dispatch)
+    return bindActionCreators({ logInUser, getUser, logOutUser }, dispatch)
 }
 
 class Header extends React.Component {
@@ -39,7 +39,26 @@ class Header extends React.Component {
         this.props.auth.logout();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
         browserHistory.push('/');
     }
+
+    componentWillMount() {
+        console.log("==== header component will mount, props = ", this.props);
+        // const token = localStorage.getItem('id_token');
+        // if(token) {
+        //     this.props.getUser(token);
+        // }
+    }
     
+    componentDidMount() {
+        console.log("==== header component did mount, props = ", this.props);
+        const token = localStorage.getItem('id_token');
+        if(token) {
+            console.log("==== header cDM token!");
+            this.props.getUser(token);
+        } else {
+            console.log("==== header cDM no token");
+        }
+    }
+
     render () {
         const currentUser = this.props.currentUser;
 

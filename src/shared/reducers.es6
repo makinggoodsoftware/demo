@@ -2,7 +2,7 @@
 
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
-
+import request from 'superagent';
 function visibilityFilter(state = 'SHOW_ALL', action) {
     switch (action.type) {
         case 'SET_VISIBILITY_FILTER':
@@ -28,8 +28,19 @@ function currentUser(state = null, action) {
             return user;
         case 'LOG_OUT_USER':
             return {}; //TODO: this and default arg value should be the same
+        case 'GET_USER':
+            console.log("GET_USER reducer running with token ", action.token);
+            if (action.token) {
+                request
+                    .get('http://localhost:3001/users/edit')
+                    .set('Authorization', 'Bearer ' + action.token)
+                    .end(function (err, res) {
+                        console.log("res = ", res)
+                    })
+            }
+            return state;
         default:
-            return state
+            return state;
     }
 }
 
@@ -42,7 +53,7 @@ function bidRequests(state = {}, action) {
             const bidsThisProductWithKey = {};
             bidsThisProductWithKey[action.productKey] = bidsThisProduct;
             const newState = Object.assign({}, state, bidsThisProductWithKey);
-            console.log("==== bidRquests returning newState, ", newState);
+            console.log("==== bidRequests returning newState, ", newState);
             return newState;
         default:
             return state
