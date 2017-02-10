@@ -77,13 +77,13 @@ const requireAuth = (nextState, replace, callback) => {
     } else {
         console.log("==== authed!")
     }
-    callback()
+    callback() // passing 3rd argument makes React Router wait to be called back before continuing with the route
 }
 
 render((
     <Provider store={store}>
         <Router history={browserHistory}>
-            <Route component={Header}>
+            <Route component={Header} auth={auth}>
                 <Route path="/">
                     <IndexRoute component={Home} />
                     <Route path="login" auth={auth} component={Login} />

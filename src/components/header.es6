@@ -13,9 +13,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Header extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {value: '', password: ''};
+        this.lock = props.route.auth.getLock();
     }
 
     handleChange(event) {
@@ -41,22 +42,25 @@ class Header extends React.Component {
     }
 
     componentWillMount() {
-        console.log("==== header component will mount, props = ", this.props);
-        // const token = localStorage.getItem('id_token');
-        // if(token) {
-        //     this.props.getUser(token);
-        // }
+        // console.log("==== header component will mount, props = ", this.props);
+        // Add callback for lock `authenticated` event, it appears lock can take multiple callbacks for the same event
+        this.lock.on('authenticated', this._getUser.bind(this))
     }
-    
-    componentDidMount() {
-        console.log("==== header component did mount, props = ", this.props);
+
+    _getUser () {
         const token = localStorage.getItem('id_token');
         if(token) {
-            console.log("==== header cDM token!");
+            console.log("==== header _getUser token!");
             this.props.getUser(token);
         } else {
-            console.log("==== header cDM no token");
+            console.log("==== header _getUser no token");
         }
+    }
+
+    componentDidMount() {
+        // console.log("==== header component did mount, props = ", this.props);
+        // only call this if we don't have user details from the API in the store already...
+        // this._getUser();
     }
 
     render () {
