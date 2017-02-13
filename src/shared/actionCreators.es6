@@ -2,8 +2,12 @@ export function logInUser(userName) {
     return { type: 'LOG_IN_USER', userName }
 }
 
-export function getUser(token) {
-    return { type: 'GET_USER', token }
+export function getUserAuth0(token, lock) {
+    return { type: 'GET_USER_AUTH0', token, lock }
+}
+
+export function getUser(token, externalId) {
+    return { type: 'GET_USER', token, externalId }
 }
 
 export function logOutUser() {

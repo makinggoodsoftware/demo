@@ -32,11 +32,24 @@ function currentUser(state = null, action) {
             console.log("GET_USER reducer running with token ", action.token);
             if (action.token) {
                 request
-                    .get('http://localhost:3001/users/edit')
+                    .post('http://localhost:3001/users/edit')
+                    .send({ external_id: action.externalId})
                     .set('Authorization', 'Bearer ' + action.token)
                     .end(function (err, res) {
                         console.log("res = ", res)
                     })
+            }
+            return state;
+        case 'GET_USER_AUTH0':
+            console.log("GET_USER_AUTH0 reducer running with token ", action.token);
+            if (action.lock && action.token) {
+                action.lock.getUserInfo(action.token, function(error, userInfo) {
+                    if (error) {
+                        console.log("==== getUserInfo error")
+                    } else {
+                        console.log("==== auth0 userInfo = ", userInfo)
+                    }
+                });
             }
             return state;
         default:

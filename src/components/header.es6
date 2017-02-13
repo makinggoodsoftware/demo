@@ -2,21 +2,21 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, getUser, logOutUser } from '../shared/actionCreators.es6'
+import { logInUser, getUserAuth0, getUser, logOutUser } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ logInUser, getUser, logOutUser }, dispatch)
+    return bindActionCreators({ logInUser, getUserAuth0, getUser, logOutUser }, dispatch)
 }
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: '', password: ''};
-        this.lock = props.route.auth.getLock();
+        this.lock = props.route.authSvc.getLock();
     }
 
     handleChange(event) {
@@ -37,7 +37,7 @@ class Header extends React.Component {
 
     logOut() {
         // this.props.logOutUser();
-        this.props.auth.logout();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
+        this.props.authSvc.logout();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
         browserHistory.push('/');
     }
 
@@ -48,12 +48,15 @@ class Header extends React.Component {
     }
 
     _getUser () {
-        const token = localStorage.getItem('id_token');
-        if(token) {
-            console.log("==== header _getUser token!");
-            this.props.getUser(token);
+        const id_token = localStorage.getItem('id_token');
+        // const access_token = localStorage.getItem('access_token');
+        const external_id = localStorage.getItem('user_id');  // id of user in Auth0 db
+        if(id_token) {
+            // console.log("==== header _getUser token!, lock =", this.lock);
+            // this.props.getUserAuth0(access_token, this.lock);  // was a good test that we can query Auth0 for user info
+            this.props.getUser(id_token, external_id);
         } else {
-            console.log("==== header _getUser no token");
+            console.log("==== header _getUser no id_token");
         }
     }
 
@@ -117,7 +120,7 @@ class Header extends React.Component {
                     />
                 </div> );
             loginElems.push (
-                <button className='label' onClick={this.logIn.bind(this, this.state.value)}>Log In</button>
+                <button className='label' onClick={this.props.route.authSvc.login.bind(this)}>Sign In</button>
             );
         }
 

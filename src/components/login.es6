@@ -8,8 +8,8 @@ export class Login extends React.Component {
     render() {
         console.log("==== props = ", this.props);
         // const { auth } = this.props.route.auth;
-        const auth = this.props.route.auth;
-        console.log("==== auth=", auth);
+        const authSvc = this.props.route.authSvc;
+        console.log("==== authSvc=", authSvc);
         return (
             <Jumbotron>
                 <h2 className={{"text-align": "center"}}>
@@ -18,7 +18,7 @@ export class Login extends React.Component {
                 <div className="jumbotron">
                     <h2>Login</h2>
                     <ButtonToolbar style={{display: "inline-block"}}>
-                        <Button bsStyle="primary" onClick={auth.login.bind(this)}>Login</Button>
+                        <Button bsStyle="primary" onClick={authSvc.login.bind(this)}>Login</Button>
                     </ButtonToolbar>
                 </div>
             </Jumbotron>
@@ -28,7 +28,7 @@ export class Login extends React.Component {
 
 Login.propTypes = {
         location: T.object,
-        auth: T.instanceOf(AuthService)
+        authSvc: T.instanceOf(AuthService)
     };
 
 export default Login;

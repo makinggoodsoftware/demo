@@ -28,7 +28,7 @@ export default class AuthService {
     _doAuthentication(authResult) {
         console.log("==== called _doAuthentication (must be after site reloaded...)");
         // Saves the user token
-        this.setToken(authResult.idToken)
+        this.setTokens(authResult)
         // this was resulting in 401 errors: from https://tonicmart.auth0.com/userinfo:
         // this.lock.getUserInfo(authResult.idToken, function(error,profile) {
         //     if (error) {
@@ -57,10 +57,14 @@ export default class AuthService {
         return !!token && !isTokenExpired(token);
     }
 
-    setToken(idToken) {
+    setTokens(authResult) {
         // Saves user token to local storage
-        console.log("==== setting token: ", idToken);
-        localStorage.setItem('id_token', idToken)
+        console.log("==== setting tokens from authResult: ", authResult);
+        console.log("==== idTokenPayload from authResult: ", authResult.idTokenPayload);
+        localStorage.setItem('id_token', authResult.idToken);
+        // localStorage.setItem('access_token', authResult.accessToken);  // needed to query Auth0 for user data
+        // this payload also has expiration time, which we could also track:
+        localStorage.setItem('user_id', authResult.idTokenPayload.sub);  // can this be derived from id_token?  would storing it in React state be somewhat more secure than in local storage?
     }
 
     getToken() {

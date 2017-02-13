@@ -66,12 +66,12 @@ class Catalog extends React.Component {
 
 let store = createStore(reducers); // second arg here would be initial store, ie, rehydrated from server in a universal app
 
-const auth = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com');
+const authSvc = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com');
 
 // validate authentication for private routes
 const requireAuth = (nextState, replace, callback) => {
     console.log("==== requireAuth called");
-    if (!auth.loggedIn()) {
+    if (!authSvc.loggedIn()) {
         console.log("==== not authed, redirecting")
         replace({ pathname: '/login' })
     } else {
@@ -83,10 +83,10 @@ const requireAuth = (nextState, replace, callback) => {
 render((
     <Provider store={store}>
         <Router history={browserHistory}>
-            <Route component={Header} auth={auth}>
+            <Route component={Header} authSvc={authSvc}>
                 <Route path="/">
                     <IndexRoute component={Home} />
-                    <Route path="login" auth={auth} component={Login} />
+                    <Route path="login" authSvc={authSvc} component={Login} />
                     <Route path="catalog" component={Catalog} onEnter={requireAuth} />
                     <Route path="bidRequests" component={BidRequests} />
                     <Route path="bids" component={Bids} />
