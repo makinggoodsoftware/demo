@@ -96,13 +96,13 @@ class Header extends React.Component {
             currentUserName = `Welcome, ${currentUser.fullName}`;
             logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
             loginElems.push (
-                <div classname='username'>
+                <div classname='username' key='currentUserName'>
                     { currentUserName }{ logOutButton }
                 </div>
             );
         } else {
             loginElems.push (
-                <div className='label'>
+                <div className='label' key='username'>
                     Username:
                     <input
                         type="text"
@@ -111,16 +111,16 @@ class Header extends React.Component {
                     />
                 </div> );
             loginElems.push (
-                <div className='label'>
+                <div className='label' key='password'>
                     Password:
                     <input
                         type="password"
-                        password={this.state.password}
                         onChange={this.handlePasswordChange.bind(this)}
                     />
+                    {/*password={this.state.password}*/}
                 </div> );
             loginElems.push (
-                <button className='label' onClick={this.props.route.authSvc.login.bind(this)}>Sign In</button>
+                <button className='label' key='loginBtn' onClick={this.props.route.authSvc.login.bind(this)}>Sign In</button>
             );
         }
 
