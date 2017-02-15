@@ -48,15 +48,15 @@ class Header extends React.Component {
     }
 
     _getUser () {
-        const id_token = localStorage.getItem('id_token');
+        const idToken = localStorage.getItem('id_token');
         // const access_token = localStorage.getItem('access_token');
-        const external_id = localStorage.getItem('user_id');  // id of user in Auth0 db
-        if(id_token) {
+        const externalId = localStorage.getItem('user_id');  // id of user in Auth0 db
+        if(idToken) {
             // console.log("==== header _getUser token!, lock =", this.lock);
             // this.props.getUserAuth0(access_token, this.lock);  // was a good test that we can query Auth0 for user info
-            this.props.getUser(id_token, external_id);
+            this.props.getUser(idToken, externalId);
         } else {
-            console.log("==== header _getUser no id_token");
+            console.log("==== header _getUser no idToken");
         }
     }
 
@@ -96,7 +96,7 @@ class Header extends React.Component {
             currentUserName = `Welcome, ${currentUser.fullName}`;
             logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
             loginElems.push (
-                <div classname='username' key='currentUserName'>
+                <div className='username' key='currentUserName'>
                     { currentUserName }{ logOutButton }
                 </div>
             );

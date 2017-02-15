@@ -5,7 +5,8 @@ import { Treebeard } from 'react-treebeard';
 import { StyleRoot } from 'radium';
 import styles from './styles.es6';
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import Header from '../components/header.es6';
 import Home from '../components/home.es6';
@@ -64,7 +65,7 @@ class Catalog extends React.Component {
     }
 }
 
-let store = createStore(reducers); // second arg here would be initial store, ie, rehydrated from server in a universal app
+let store = createStore(reducers, applyMiddleware(thunk)); // second arg here would be initial store, ie, rehydrated from server in a universal app
 
 const authSvc = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com');
 

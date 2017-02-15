@@ -2,7 +2,6 @@
 
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
-import request from 'superagent';
 function visibilityFilter(state = 'SHOW_ALL', action) {
     switch (action.type) {
         case 'SET_VISIBILITY_FILTER':
@@ -28,18 +27,13 @@ function currentUser(state = null, action) {
             return user;
         case 'LOG_OUT_USER':
             return {}; //TODO: this and default arg value should be the same
-        case 'GET_USER':
-            console.log("GET_USER reducer running with token ", action.token);
-            if (action.token) {
-                request
-                    .post('http://localhost:3001/users/edit')
-                    .send({ external_id: action.externalId})
-                    .set('Authorization', 'Bearer ' + action.token)
-                    .end(function (err, res) {
-                        console.log("res = ", res)
-                    })
+        case 'SET_CURRENT_USER':
+            if (action.currentUser) {
+                console.log("==== reducer SET_CURRENT_USER returning ", action.currentUser);
+                return action.currentUser
+            } else {
+                return state;
             }
-            return state;
         case 'GET_USER_AUTH0':
             console.log("GET_USER_AUTH0 reducer running with token ", action.token);
             if (action.lock && action.token) {
