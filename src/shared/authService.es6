@@ -14,7 +14,7 @@ export default class AuthService {
         // Configure Auth0
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:3000',  // redirect after successful auth
+                redirectUrl: location.origin,  // redirect after successful auth
                 responseType: 'token',
                 sso: false
             }
