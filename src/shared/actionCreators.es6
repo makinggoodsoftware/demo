@@ -10,7 +10,7 @@ export function getUserAuth0(token, lock) {
 
 export function getUser(token, externalId) {
     return (dispatch) => {
-        const baseUrl = location.hostname == 'tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
+        const baseUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
         const url = baseUrl + '/users/edit';
         console.log("==== url = ", url);
         var user = {};
