@@ -10,9 +10,12 @@ export function getUserAuth0(token, lock) {
 
 export function getUser(token, externalId) {
     return (dispatch) => {
+        const baseUrl = location.hostname == 'tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
+        const url = baseUrl + '/users/edit';
+        console.log("==== url = ", url);
         var user = {};
         request
-            .post('http://localhost:3001/users/edit')
+            .post(url)
             .send({external_id: externalId})
             .set('Authorization', 'Bearer ' + token)
             .end(function (err, res) {
