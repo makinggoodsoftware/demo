@@ -5,6 +5,7 @@ module.exports = function (req, res, next) {
         req.headers['x-forwarded-proto'] !== 'https') {
 
         sslUrl = ['https://', req.hostname, req.url].join('');
+        console.log("==== returning sslUrl: ", sslUrl);
         return res.redirect(sslUrl);
     }
 
