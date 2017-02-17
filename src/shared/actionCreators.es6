@@ -16,13 +16,14 @@ export function getUser(token, externalId) {
         var user = {};
         request
             .post(url)
-            .send({external_id: externalId})
             .set('Authorization', 'Bearer ' + token)
             .end(function (err, res) {
                 console.log("res = ", res);
                 console.log("res.text = ", res.text);
                 const payload = JSON.parse(res.text);
                 user.fullName = payload.first + " " + payload.last;
+                user.userType = payload.userType;
+                user.email = payload.email;
                 console.log("==== user.fullName = ", user.fullName);
                 dispatch(setCurrentUser(user));
             });
