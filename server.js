@@ -1,8 +1,12 @@
 var path = require('path');
 var express = require('express');
 var app = express();
+// var forceSSL = require('src/shared/forceSSL.es6');
+var forceSSL = require('./src/shared/forceSSL.es6');
 
 app.set('port', (process.env.PORT || 3000));
+
+app.use(forceSSL);
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
