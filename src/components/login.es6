@@ -18,7 +18,7 @@ export class Login extends React.Component {
                 <div className="jumbotron">
                     <h2>Login</h2>
                     <ButtonToolbar style={{display: "inline-block"}}>
-                        <Button bsStyle="primary" onClick={authSvc.login.bind(this)}>Login</Button>
+                        <Button bsStyle="primary" onClick={authSvc.logIn.bind(this)}>Login</Button>
                     </ButtonToolbar>
                 </div>
             </Jumbotron>

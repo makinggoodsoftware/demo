@@ -7,7 +7,6 @@
 import Auth0Lock from 'auth0-lock'
 import { browserHistory } from 'react-router'
 import { isTokenExpired } from './jwtHelper.es6'
-// import { getUser } from '../shared/actionCreators.es6'
 
 export default class AuthService {
     constructor(clientId, domain) {
@@ -22,30 +21,18 @@ export default class AuthService {
         // Add callback for lock `authenticated` event
         this.lock.on('authenticated', this._doAuthentication.bind(this))
         // binds login functions to keep this context
-        this.login = this.login.bind(this)
+        this.logIn = this.logIn.bind(this)
     }
 
     _doAuthentication(authResult) {
         console.log("==== called _doAuthentication (must be after site reloaded...)");
         // Saves the user token
-        this.setTokens(authResult)
-        // this was resulting in 401 errors: from https://tonicmart.auth0.com/userinfo:
-        // this.lock.getUserInfo(authResult.idToken, function(error,profile) {
-        //     if (error) {
-        //         return;
-        //     }
-        //     // Saves the user token
-        //     this.setToken(authResult.idToken);
-        //     console.log("==== profile nickname = ", profile.nickname)
-        // })
-
-        // console.log("==== AuthService about to call getUser");
-        // getUser(authResult.idToken);
-        // navigate to the home route
+        this.setTokens(authResult);
+        // navigate to the home route -- #TODO:  why redirect?, can't we just change React state?
         browserHistory.replace('/')
     }
 
-    login() {
+    logIn() {
         // Call the show method to display the widget.
         this.lock.show()
     }
@@ -58,23 +45,18 @@ export default class AuthService {
     }
 
     setTokens(authResult) {
-        // Saves user token to local storage
-        console.log("==== setting tokens from authResult: ", authResult);
-        console.log("==== idTokenPayload from authResult: ", authResult.idTokenPayload);
-        localStorage.setItem('id_token', authResult.idToken);
+        localStorage.setItem('idToken', authResult.idToken);
         // localStorage.setItem('access_token', authResult.accessToken);  // needed to query Auth0 for user data
         // this payload also has expiration time, which we could also track:
-        localStorage.setItem('user_id', authResult.idTokenPayload.sub);  // can this be derived from id_token?  would storing it in React state be somewhat more secure than in local storage?
+        // localStorage.setItem('user_id', authResult.idTokenPayload.sub);  // can this be derived from id_token?  would storing it in React state be somewhat more secure than in local storage?
     }
 
     getToken() {
-        // Retrieves the user token from local storage
-        return localStorage.getItem('id_token')
+        return localStorage.getItem('idToken')
     }
 
-    logout() {
-        // Clear user token and profile data from local storage
-        localStorage.removeItem('id_token');
+    logOut() {
+        localStorage.removeItem('idToken');
     }
 
     getLock() {

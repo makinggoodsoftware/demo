@@ -2,14 +2,14 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, getUserAuth0, getUser, logOutUser } from '../shared/actionCreators.es6'
+import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ logInUser, getUserAuth0, getUser, logOutUser }, dispatch)
+    return bindActionCreators({ logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser }, dispatch)
 }
 
 class Header extends React.Component {
@@ -36,8 +36,8 @@ class Header extends React.Component {
     }
 
     logOut() {
-        // this.props.logOutUser();
-        this.props.authSvc.logout();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
+        this.props.setCurrentUser(null);
+        this.props.route.authSvc.logOut();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
         browserHistory.push('/');
     }
 
@@ -48,22 +48,16 @@ class Header extends React.Component {
     }
 
     _getUser () {
-        const idToken = localStorage.getItem('id_token');
+        const idToken = localStorage.getItem('idToken');
         // const access_token = localStorage.getItem('access_token');
-        const externalId = localStorage.getItem('user_id');  // id of user in Auth0 db
+        // const externalId = localStorage.getItem('user_id');  // id of user in Auth0 db
         if(idToken) {
             // console.log("==== header _getUser token!, lock =", this.lock);
             // this.props.getUserAuth0(access_token, this.lock);  // was a good test that we can query Auth0 for user info
-            this.props.getUser(idToken, externalId);
+            this.props.getUser(idToken);
         } else {
             console.log("==== header _getUser no idToken");
         }
-    }
-
-    componentDidMount() {
-        // console.log("==== header component did mount, props = ", this.props);
-        // only call this if we don't have user details from the API in the store already...
-        // this._getUser();
     }
 
     render () {
@@ -120,7 +114,7 @@ class Header extends React.Component {
                     {/*password={this.state.password}*/}
                 </div> );
             loginElems.push (
-                <button className='label' key='loginBtn' onClick={this.props.route.authSvc.login.bind(this)}>Sign In</button>
+                <button className='label' key='loginBtn' onClick={this.props.route.authSvc.logIn.bind(this)}>Sign In</button>
             );
         }
 

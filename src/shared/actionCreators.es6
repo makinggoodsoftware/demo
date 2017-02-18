@@ -8,10 +8,10 @@ export function getUserAuth0(token, lock) {
     return { type: 'GET_USER_AUTH0', token, lock }
 }
 
-export function getUser(token, externalId) {
+export function getUser(token) {
     return (dispatch) => {
-        const baseUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
-        const url = baseUrl + '/users/edit';
+        const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
+        const url = baseApiUrl + '/users/edit';
         console.log("==== url = ", url);
         var user = {};
         request
