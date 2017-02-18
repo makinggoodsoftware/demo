@@ -15,24 +15,7 @@ function mapDispatchToProps(dispatch) {
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: '', password: ''};
         this.lock = props.route.authSvc.getLock();
-    }
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    handlePasswordChange(event) {
-        // console.log("==== event sent value: ", event.target.value);
-        // this.setState({password: '*'.repeat(event.target.value.length)});
-        this.setState({password: event.target.value});
-    }
-
-    logIn(userName) {
-        // console.log("==== log in click!, props.actions = ");
-        userName = userName == '' ? 'Buyer One' : userName;
-        this.props.logInUser(userName);
     }
 
     logOut() {
@@ -42,7 +25,6 @@ class Header extends React.Component {
     }
 
     componentWillMount() {
-        // console.log("==== header component will mount, props = ", this.props);
         // Add callback for lock `authenticated` event, it appears lock can take multiple callbacks for the same event
         this.lock.on('authenticated', this._getUser.bind(this))
     }
@@ -67,7 +49,7 @@ class Header extends React.Component {
         const loginElems = [];
         let currentUserName, logOutButton = '';
         if(currentUser && currentUser.fullName) {
-            switch (currentUser.type) {
+            switch (currentUser.userType) {
                 case 'buyer':
                     links.push( < Link
                     to = "/catalog"
@@ -88,31 +70,13 @@ class Header extends React.Component {
                 )
             }
             currentUserName = `Welcome, ${currentUser.fullName}`;
-            logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Log out</button>;
+            logOutButton = <button className='log-out-btn' onClick={this.logOut.bind(this)}>Sign out</button>;
             loginElems.push (
                 <div className='username' key='currentUserName'>
                     { currentUserName }{ logOutButton }
                 </div>
             );
         } else {
-            loginElems.push (
-                <div className='label' key='username'>
-                    Username:
-                    <input
-                        type="text"
-                        value={this.state.value}
-                        onChange={this.handleChange.bind(this)}
-                    />
-                </div> );
-            loginElems.push (
-                <div className='label' key='password'>
-                    Password:
-                    <input
-                        type="password"
-                        onChange={this.handlePasswordChange.bind(this)}
-                    />
-                    {/*password={this.state.password}*/}
-                </div> );
             loginElems.push (
                 <button className='label' key='loginBtn' onClick={this.props.route.authSvc.logIn.bind(this)}>Sign In</button>
             );

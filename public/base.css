@@ -206,7 +206,7 @@ a.headerLinkActive {
     float: right;
     font-family: 'Titillium Web', "lucida grande", sans-serif;
     font-size: 24px;
-    margin: 34px 120px 0px 0px;
+    margin: 34px 390px 0px 0px;
 }
 
 .page-links a {
@@ -221,6 +221,16 @@ a.headerLinkActive {
     text-align: right;
 }
 
+#main-nav .signin button {
+    font-size: 24px;
+}
+
+
+#main-nav .signin button.log-out-btn {
+    font-size: 16px;
+}
+
+
 #main-nav .signin input {
     font-family: inherit;
     margin-left: 5px;
@@ -232,8 +242,7 @@ a.headerLinkActive {
 
 .username {
     font-family: 'Titillium Web', sans-serif;
-    font-size: 20px;
-    /*position: absolute;*/
+    font-size: 16px;
     right: 30px;
     top: 25px;
 }
