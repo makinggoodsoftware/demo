@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 // var forceSSL = require('src/shared/forceSSL.es6');
 var forceSSL = require('./src/shared/forceSSL.es6');
+// var handleRender = require('./src/shared/handleRender.es6');
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -20,6 +21,8 @@ app.use(function(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
+
+// app.use(handleRender);
 
 app.listen(app.get('port'), function() {
     console.log('Server started: http://localhost:' + app.get('port') + '/');
