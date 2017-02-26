@@ -24,7 +24,7 @@ class Header extends React.Component {
         browserHistory.push('/');
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // Add callback for lock `authenticated` event, it appears lock can take multiple callbacks for the same event
         this.lock.on('authenticated', this._getUser.bind(this))
     }

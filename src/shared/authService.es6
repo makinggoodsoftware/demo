@@ -11,9 +11,16 @@ import { isTokenExpired } from './jwtHelper.es6'
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
+
+        const browser = (typeof window !== 'undefined')
+        if (!browser) {
+            return
+        }
+        // const redirectUrl = ((typeof window !== 'undefined') ? window.location.origin : 'localhost:3000')
+
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: location.origin,  // redirect after successful auth
+                redirectUrl: window.location.origin,  // redirect after successful auth
                 responseType: 'token',
                 sso: false
             }

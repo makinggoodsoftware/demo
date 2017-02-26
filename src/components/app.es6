@@ -27,7 +27,7 @@ export default class App extends React.Component {
 
     render () {
         return (
-            <Router history={browserHistory}>
+            <Router history={this.props.history}>
                 <Route component={Header} authSvc={this.authSvc}>
                     <Route path="/">
                         <IndexRoute component={Home} />
