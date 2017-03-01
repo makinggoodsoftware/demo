@@ -12,15 +12,11 @@ var config = {
         filename: 'bundle.js'
     },
     module : {
-        loaders : [
+        rules : [
             {
                 test : /\.es6?/,
                 include : SRC_DIR,
-                loader : 'babel'
-            },
-            {
-                test: /\.json$/,
-                loader: 'json-loader'
+                loader : 'babel-loader'
             }
         ]
     }

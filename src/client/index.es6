@@ -15,6 +15,7 @@ console.log('Hello From Index.es6!');
 window['i'] = require('immutable'); // for use in console
 
 // #TODO: make this async, and logIn button dependent on it completing:
+// or would it be possible to load this during webpack bundling, if it's not a session that expires?
 window.authSvc = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com')
 
 // Grab the state from a global variable injected into the server-generated HTML
