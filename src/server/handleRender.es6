@@ -1,17 +1,21 @@
-import { createStore, applyMiddleware } from 'redux';
-import { renderToString } from 'react-dom/server'
+import React from 'react'
+import { createStore } from 'redux'
 import reducers from '../shared/reducers.es6';
-import App from '../components/app.es6';
-import renderFullPage from '../server/renderFullPage.es6'
+import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux'
+import App from '../components/app.es6'
+import { createMemoryHistory } from 'react-router'
+import renderFullPage from './renderFullPage.es6'
 
-export default function handleRender(req, res) {
+export function handleRender(req, res) {
     // Create a new Redux store instance
     const store = createStore(reducers);
+    const history = createMemoryHistory()
 
     // Render the component to a string
     const html = renderToString(
         <Provider store={store}>
-            <App />
+            <App history={ history }/>
         </Provider>
     )
 

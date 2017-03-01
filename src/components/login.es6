@@ -5,10 +5,13 @@ import AuthService from '../shared/authService.es6'
 import { Jumbotron } from 'react-bootstrap'
 
 export class Login extends React.Component {
+    constructor(props) {
+        super(props)
+        this.authSvc = window.authSvc
+    }
+
     render() {
         console.log("==== props = ", this.props);
-        // const { auth } = this.props.route.auth;
-        const authSvc = this.props.route.authSvc;
         console.log("==== authSvc=", authSvc);
         return (
             <Jumbotron>
@@ -18,7 +21,7 @@ export class Login extends React.Component {
                 <div className="jumbotron">
                     <h2>Login</h2>
                     <ButtonToolbar style={{display: "inline-block"}}>
-                        <Button bsStyle="primary" onClick={authSvc.logIn.bind(this)}>Login</Button>
+                        <Button bsStyle="primary" onClick={this.authSvc.logIn.bind(this)}>Login</Button>
                     </ButtonToolbar>
                 </div>
             </Jumbotron>

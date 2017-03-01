@@ -15,18 +15,23 @@ function mapDispatchToProps(dispatch) {
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.lock = props.route.authSvc.getLock();
+        this.authSvc = typeof window !== 'undefined' ? window.authSvc : {}
+    }
+
+    logIn() {
+        this.authSvc.logIn()
     }
 
     logOut() {
         this.props.setCurrentUser(null);
-        this.props.route.authSvc.logOut();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
+        this.authSvc.logOut();  // from https://auth0.com/docs/quickstart/spa/react/03-session-handling
         browserHistory.push('/');
     }
 
     componentDidMount() {
         // Add callback for lock `authenticated` event, it appears lock can take multiple callbacks for the same event
-        this.lock.on('authenticated', this._getUser.bind(this))
+        //#TODO: can this wait on the call made at app load to be sure authSvc has been set on window -- perhaps have a separate component including login button that only displays when call has completed
+        this.authSvc.getLock().on('authenticated', this._getUser.bind(this))
     }
 
     _getUser () {
@@ -78,7 +83,7 @@ class Header extends React.Component {
             );
         } else {
             loginElems.push (
-                <button className='label' key='loginBtn' onClick={this.props.route.authSvc.logIn.bind(this)}>Sign In</button>
+                <button className='label' key='loginBtn' onClick={this.logIn.bind(this)}>Sign In</button>
             );
         }
 
