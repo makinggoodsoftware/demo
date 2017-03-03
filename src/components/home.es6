@@ -34,7 +34,7 @@ class Home extends React.Component {
                     {/* -- 1. Buyers specify the types of products they need --*/}
                 </div>
                 <div className='col-right'>
-                    <img src='/images/Logomakr_5s5LLD.png' style={{height: '4em'}}/>
+                    <img src='/assets/images/Logomakr_5s5LLD.png' style={{height: '4em'}}/>
                 </div>
             </section>
             );
@@ -53,7 +53,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-left'>
-                    <img src='/images/Logomakr_4KHtfP.png' style={{height: '6em'}}/>
+                    <img src='/assets/images/Logomakr_4KHtfP.png' style={{height: '6em'}}/>
                 </div>
             </section>
             );
@@ -72,7 +72,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-right'>
-                    <img src='/images/Logomakr_5C1XRM.png' style={{height: '4em'}}/>
+                    <img src='/assets/images/Logomakr_5C1XRM.png' style={{height: '4em'}}/>
                 </div>
             </section>
             );
@@ -91,7 +91,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-left'>
-                    <img src='/images/cart_42n8Kh.png' style={{height: '4em'}}/>
+                    <img src='/assets/images/cart_42n8Kh.png' style={{height: '4em'}}/>
                 </div>
             </section>
         );

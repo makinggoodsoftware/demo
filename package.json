@@ -26,10 +26,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node ./server.js",
-    "dev-serve": "babel-node ./server.js --presets es2015,stage-2",
-    "build": "./node_modules/.bin/webpack -d",
-    "postinstall": "npm build"
+    "client-build": "./node_modules/.bin/webpack --config ./webpack.client-config.js",
+    "client-dev-build": "./node_modules/.bin/webpack -d --config ./webpack.client-config.js",
+    "server-build": "./node_modules/.bin/webpack --config ./webpack.server-config.js",
+    "dev-serve": "babel-node ./src/server.js --presets es2015,stage-2",
+    "serve": "node ./build/server.js",
+    "postinstall": "npm run client-build && npm run server-build"
   },
   "author": "Kurt Snyder",
   "license": "UNLICENSED",
@@ -37,7 +39,8 @@
     "babel-cli": "6.23.0",
     "babel-preset-stage-2": "6.22.0",
     "json-loader": "0.5.4",
-    "redux-devtools": "^3.2.0"
+    "redux-devtools": "^3.2.0",
+    "webpack-node-externals": "1.5.4"
   },
   "engines": {
     "node": "4.4.3",

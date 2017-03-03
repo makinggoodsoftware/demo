@@ -1,16 +1,16 @@
 var path = require('path');
 var express = require('express');
 var app = express();
-var handleRender = require('./src/server/handleRender.es6').handleRender
-var forceSSL = require('./src/shared/forceSSL.es6');
-var routes = require('./src/shared/routes.es6')
+var handleRender = require('./server/handleRender.es6').handleRender
+var forceSSL = require('./shared/forceSSL.es6');
+var routes = require('./shared/routes.es6')
 var match = require('react-router').match
 
 app.set('port', (process.env.PORT || 3000));
 
 app.use(forceSSL);
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join('build/public')));
 
 // Additional middleware which will set headers that we need on each request.
 app.use(function(req, res, next) {
@@ -22,8 +22,6 @@ app.use(function(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
-
-console.log("==== __dirname = ", __dirname)
 
 app.get('*', (req, res) => {
     // console.log("==== comparing with routes obj: ", routes)

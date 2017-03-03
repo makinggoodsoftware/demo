@@ -101,7 +101,7 @@ class Header extends React.Component {
                         </div>
                         <div className='nav-desktop'>
                             <Link className='logo' to='/'>
-                                <img src='/images/Logomakr_9976sI.png'/>
+                                <img src='/assets/images/Logomakr_9976sI.png'/>
                             </Link>
                         </div>
                     </nav>
