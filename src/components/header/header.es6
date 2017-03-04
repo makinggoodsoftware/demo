@@ -2,7 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '../shared/actionCreators.es6'
+import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '../../shared/actionCreators.es6'
+import imgLogo from './assets/Logomakr_9976sI.png'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
@@ -101,7 +102,7 @@ class Header extends React.Component {
                         </div>
                         <div className='nav-desktop'>
                             <Link className='logo' to='/'>
-                                <img src='/assets/images/Logomakr_9976sI.png'/>
+                                <img src={ imgLogo }/>
                             </Link>
                         </div>
                     </nav>

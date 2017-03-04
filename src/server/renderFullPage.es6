@@ -1,11 +1,13 @@
+import css from '../components/base.css'
+
 export default function renderFullPage(html, preloadedState) {
     return `
     <!doctype html>
     <html>
       <head>
         <title>Redux Universal Example</title>
-        <link rel="stylesheet" href="assets/base.css" />
-        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200|Titillium+Web:300|Josefin+Sans" rel="stylesheet" type='text/css'>
+        <link rel="stylesheet" href="assets/styles.css" />
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200|Titillium+Web:300|Josefin+Sans" rel="stylesheet" type='text/css' />
       </head>
       <body>
         <div id="content">${html}</div>

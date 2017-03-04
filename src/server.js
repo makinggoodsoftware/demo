@@ -29,8 +29,8 @@ app.get('*', (req, res) => {
         { routes, location: req.url },
         (err, redirectLocation, renderProps) => {
 
-            console.log("==== renderProps = ", renderProps)
-            console.log("==== location = ", req.url)
+            // console.log("==== renderProps = ", renderProps)
+            // console.log("==== location = ", req.url)
             // console.log("==== handleREnder = ", handleRender)
 
             handleRender(req, res)  // temporary bypass since match is not working...

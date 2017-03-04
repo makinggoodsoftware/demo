@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import img1 from './assets/Logomakr_5s5LLD.png'
+import img2 from './assets/Logomakr_4KHtfP.png'
+import img3 from './assets/Logomakr_5C1XRM.png'
+import img4 from './assets/cart_42n8Kh.png'
 
 class Home extends React.Component {
     constructor() {
@@ -34,7 +36,7 @@ class Home extends React.Component {
                     {/* -- 1. Buyers specify the types of products they need --*/}
                 </div>
                 <div className='col-right'>
-                    <img src='/assets/images/Logomakr_5s5LLD.png' style={{height: '4em'}}/>
+                    <img src={ img1 } style={{height: '4em'}}/>
                 </div>
             </section>
             );
@@ -53,7 +55,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-left'>
-                    <img src='/assets/images/Logomakr_4KHtfP.png' style={{height: '6em'}}/>
+                    <img src={ img2 } style={{height: '6em'}}/>
                 </div>
             </section>
             );
@@ -72,7 +74,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-right'>
-                    <img src='/assets/images/Logomakr_5C1XRM.png' style={{height: '4em'}}/>
+                    <img src={ img3 } style={{height: '4em'}}/>
                 </div>
             </section>
             );
@@ -91,7 +93,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className='col-left'>
-                    <img src='/assets/images/cart_42n8Kh.png' style={{height: '4em'}}/>
+                    <img src={ img4 } style={{height: '4em'}}/>
                 </div>
             </section>
         );

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
-import Header from '../components/header.es6';
+import Header from '../components/header/header.es6';
 import Catalog from '../components/catalog.es6';
-import Home from '../components/home.es6';
+import Home from '../components/home/home.es6';
 import BidRequests from '../components/bidRequests.es6';
 import Bids from '../components/bids.es6';
 import Login from '../components/login.es6';
