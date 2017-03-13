@@ -36,7 +36,14 @@ var config = {
     },
     plugins: [
         new ExtractTextPlugin("styles.css")
-    ]
+    ],
+    // see https://github.com/FormidableLabs/radium/issues/575
+    // not sure why the build was getting two versions of radium (in the github issue, the problem was in a library consumed by another app that also depended on radium)
+    resolve: {
+        alias: {
+            radium: path.join(__dirname, 'node_modules', 'radium')
+        }
+    }
 };
 
 module.exports = config;

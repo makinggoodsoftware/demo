@@ -15,7 +15,7 @@
     "file-loader": "0.10.1",
     "immutable": "3.8.0",
     "jwt-decode": "2.1.0",
-    "radium": "^0.16.6",
+    "radium": "0.18.1",
     "react": "15.4.2",
     "react-bootstrap": "0.30.7",
     "react-dom": "15.4.2",
