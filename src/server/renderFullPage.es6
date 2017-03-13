@@ -1,11 +1,11 @@
-import css from '../components/base.css'
+import css from '../components/base.css'  // triggers Webpack to process the file #TODO: return JSX below instead of string
 
 export default function renderFullPage(html, preloadedState) {
     return `
     <!doctype html>
     <html>
       <head>
-        <title>Redux Universal Example</title>
+        <title>Tonicmart</title>
         <link rel="stylesheet" href="assets/styles.css" />
         <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200|Titillium+Web:300|Josefin+Sans" rel="stylesheet" type='text/css' />
       </head>

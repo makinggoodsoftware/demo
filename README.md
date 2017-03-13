@@ -1,5 +1,5 @@
-To build project: ./node_modules/.bin/webpack -d
-To start server: npm start
+To build project: npm run postinstall
+To start server: npm run serve
 
 To import data from spreadsheet:
 last two columns should be product description and price

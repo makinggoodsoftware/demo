@@ -35,22 +35,22 @@ class ProductForm extends React.Component {
     }
 
     render(){
-        // console.log("==== props for productForm = ", this.props);
         const style = styles.viewer;
-        // console.log("==== this.props.node = ", this.props.node);
-        // console.log("==== this.props.node == null ", this.props.node == null);
 
-        // console.log("==== name = ", name);
-        // console.log("==== br by name: ", this.props.bidRequests[name]);
-        if (this.props.bidRequests[name]) console.log("==== br qry: ", this.props.bidRequests[name][this.props.currentUser.fullName]);
         let requestStatus = '';
         let form = '';
         let qty = 0;
-        const name = this.props.node && this.props.node.price ? this.props.node.name : 'no product selected';
-        if (this.props.bidRequests[name] && (qty = this.props.bidRequests[name][this.props.currentUser.fullName])) {
-            requestStatus = `Requested bid for ${qty} of ${name}`;
+        let productSpecId
+        let productName = 'no product selected'
+        if (this.props.node && this.props.node.price) {
+            productSpecId = this.props.node.id
+            productName = this.props.node.name
+        }
+        if (this.props.bidRequests[productSpecId]) console.log("==== br qty: ", this.props.bidRequests[productSpecId][this.props.currentUser.fullName])
+        if (this.props.bidRequests[productSpecId] && (qty = this.props.bidRequests[productSpecId][this.props.currentUser.fullName])) {
+            requestStatus = `Requested bid for ${qty} of ${productName}`
         } else if (!(this.props.node && this.props.node.price)) {
-            requestStatus = HELP_MSG;
+            requestStatus = HELP_MSG
         } else {
             form = (<div>
                         <span>{this.props.node.name}</span>
@@ -61,7 +61,7 @@ class ProductForm extends React.Component {
                                 value={this.state.qty}  // setting value here makes this a React controlled component
                                 onChange={this.handleQtyChange.bind(this)}
                             />
-                            <button onClick={this.requestBid.bind(this, name)}>Request Bid</button>
+                            <button onClick={this.requestBid.bind(this, productSpecId)}>Request Bid</button>
                         </span>
                     </div>
                     )
