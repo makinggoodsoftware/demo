@@ -38,7 +38,7 @@ export function logOutUser() {
     return { type: 'LOG_OUT_USER' }
 }
 
-export function requestBid(userKey, productKey, qty) {
+export function requestBid(userKey, productKey, qty, deliveryDate) {
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
         const url = baseApiUrl + '/bid_requests/create';
@@ -49,7 +49,7 @@ export function requestBid(userKey, productKey, qty) {
         request
             .post(url)
             .set('Authorization', 'Bearer ' + idToken)
-            .send({product_spec_id: productKey, quantity: qty})
+            .send({product_spec_id: productKey, quantity: qty, deliveryDate})
             .end(function (err, res) {
                 console.log("res = ", res);
                 console.log("res.text = ", res.text);

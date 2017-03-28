@@ -29,9 +29,25 @@ class ProductForm extends React.Component {
     }
 
     requestBid(productKey) {
-        // console.log(`==== Bid requested by ${this.props.currentUser.fullName} for qty ${this.state.qty} of product key `, productKey);
-        this.props.requestBid(this.props.currentUser.fullName, productKey, this.state.qty)
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDateInput.value}`);
+        this.props.requestBid(this.props.currentUser.fullName, productKey, this.state.qty, this.deliveryDateInput.value)
         this.setState({qty: ''});
+    }
+
+    bindPikaday(elem) {
+        // consider using https://github.com/thomasboyt/react-pikaday
+        console.log("==== elem = ", elem)
+        if (elem) {
+            this.picker = new Pikaday({field: elem})
+        } else if (this.picker) {
+            this.picker.destroy()
+        }
+        console.log("==== after binding: picker = ", this.picker)
+    }
+
+    componentDidMount() {
+        var Pikaday = require('pikaday')
+        window['Pikaday'] = Pikaday  // a hack to make library available
     }
 
     render(){
@@ -53,16 +69,27 @@ class ProductForm extends React.Component {
             requestStatus = HELP_MSG
         } else {
             form = (<div>
-                        <span>{this.props.node.name}</span>
-                        <span className='request-qty'>
-                            Qty:
+                        <div>
+                            <span>{this.props.node.name}</span>
+                            <span className='request-qty'>
+                                Qty:
+                                <input
+                                    type='text'
+                                    value={this.state.qty}  // setting value here makes this a React controlled component
+                                    onChange={this.handleQtyChange.bind(this)}
+                                />
+                            </span>
+                        </div>
+                        <div>
+                            Delivered by date (optional):
+                            {/*the date input is not a controlled React component because pikaday doesn't trigger the onChange event*/}
                             <input
                                 type='text'
-                                value={this.state.qty}  // setting value here makes this a React controlled component
-                                onChange={this.handleQtyChange.bind(this)}
+                                id='datepicker'
+                                ref={(input) => { this.deliveryDateInput = input; this.bindPikaday(input) }}
                             />
-                            <button onClick={this.requestBid.bind(this, productSpecId)}>Request Bid</button>
-                        </span>
+                        </div>
+                        <button onClick={this.requestBid.bind(this, productSpecId)}>Request Bid</button>
                     </div>
                     )
         }

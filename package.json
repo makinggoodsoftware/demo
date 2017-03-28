@@ -15,6 +15,7 @@
     "file-loader": "0.10.1",
     "immutable": "3.8.0",
     "jwt-decode": "2.1.0",
+    "pikaday": "1.5.1",
     "radium": "0.18.1",
     "react": "15.4.2",
     "react-bootstrap": "0.30.7",

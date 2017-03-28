@@ -310,3 +310,8 @@ table.bids .header {
     width: 150px;
     text-align: right;
 }
+
+/*for pikaday calendar:*/
+.pika-single.is-hidden {
+    display: none;
+}
