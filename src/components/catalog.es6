@@ -16,13 +16,13 @@ export default class Catalog extends React.Component {
         // console.log(`==== got onToggle with toggled = ${toggled} loading = ${node.loading} and node = `, node);
         if(this.state.cursor){this.state.cursor.active = false;}
         node.active = true;
-        if(node.children){ console.log("==== children found!"); node.toggled = toggled; }
+        if(node.children){ node.toggled = toggled; }
         this.setState({ cursor: node });
     }
 
-    componentWillUpdate(_, nextState) {
-        console.log("==== app nextState = ", nextState)
-    }
+    // componentWillUpdate(_, nextState) {
+    //     console.log("==== app nextState = ", nextState)
+    // }
 
     render () {
         return (

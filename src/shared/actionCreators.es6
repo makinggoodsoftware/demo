@@ -11,21 +11,22 @@ export function getUserAuth0(token, lock) {
 export function getUser(token) {
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
-        const url = baseApiUrl + '/users/edit';
-        console.log("==== url = ", url);
-        var user = {};
+        const url = baseApiUrl + '/users/edit'
+        console.log("==== url = ", url)
+        var user = {}
         request
             .post(url)
             .set('Authorization', 'Bearer ' + token)
             .end(function (err, res) {
-                console.log("res = ", res);
-                console.log("res.text = ", res.text);
-                const payload = JSON.parse(res.text);
-                user.fullName = payload.first + " " + payload.last;
-                user.userType = payload.userType;
-                user.email = payload.email;
-                console.log("==== user.fullName = ", user.fullName);
-                dispatch(setCurrentUser(user));
+                console.log("res = ", res)
+                console.log("res.text = ", res.text)
+                const payload = JSON.parse(res.text)
+                user.id = payload.id
+                user.fullName = payload.first + " " + payload.last
+                user.userType = payload.userType
+                user.email = payload.email
+                console.log("==== user.fullName = ", user.fullName)
+                dispatch(setCurrentUser(user))
             });
     }
 }
@@ -61,8 +62,31 @@ export function requestBid(userKey, productKey, qty, deliveryDate) {
     }
 }
 
+export function fetchBidRequests(userKey) {
+    return (dispatch) => {
+        const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
+        const url = baseApiUrl + '/bid_requests'
+        console.log("==== url = ", url)
+        const idToken = localStorage.getItem('idToken')
+        // #TODO: handle api error (update Redux store accordingly)
+        request
+            .get(url)
+            .set('Authorization', 'Bearer ' + idToken)
+            .end(function (err, res) {
+                console.log("fetch bidRequests res = ", res)
+                console.log("fetch bidRequests res.text = ", res.text)
+                const payload = JSON.parse(res.text)
+                dispatch(setBidRequests(payload))
+            });
+    }
+}
+
 export function setBidRequest(userKey, productKey, qty) {
     return { type: 'BID_REQUEST', userKey, productKey, qty }
+}
+
+export function setBidRequests(bidRequests) {
+    return { type: 'BID_REQUESTS', bidRequests }
 }
 
 export function bid(userKey, productKey, price) {

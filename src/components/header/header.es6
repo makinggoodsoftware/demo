@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '../../shared/actionCreators.es6'
+import { logInUser, getUserAuth0, setCurrentUser, getUser, fetchBidRequests, logOutUser } from '../../shared/actionCreators.es6'
 import imgLogo from './assets/Logomakr_9976sI.png'
 
 function mapStateToProps(store) {
@@ -10,7 +10,7 @@ function mapStateToProps(store) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser }, dispatch)
+    return bindActionCreators({ logInUser, getUserAuth0, setCurrentUser, getUser, fetchBidRequests, logOutUser }, dispatch)
 }
 
 class Header extends React.Component {
@@ -32,19 +32,20 @@ class Header extends React.Component {
     componentDidMount() {
         // Add callback for lock `authenticated` event, it appears lock can take multiple callbacks for the same event
         //#TODO: can this wait on the call made at app load to be sure authSvc has been set on window -- perhaps have a separate component including login button that only displays when call has completed
-        this.authSvc.getLock().on('authenticated', this._getUser.bind(this))
+        this.authSvc.getLock().on('authenticated', this._getData.bind(this))
     }
 
-    _getUser () {
+    _getData () {
         const idToken = localStorage.getItem('idToken');
         // const access_token = localStorage.getItem('access_token');
         // const externalId = localStorage.getItem('user_id');  // id of user in Auth0 db
         if(idToken) {
-            // console.log("==== header _getUser token!, lock =", this.lock);
+            // console.log("==== header _getData token!, lock =", this.lock);
             // this.props.getUserAuth0(access_token, this.lock);  // was a good test that we can query Auth0 for user info
             this.props.getUser(idToken);
+            this.props.fetchBidRequests(idToken);
         } else {
-            console.log("==== header _getUser no idToken");
+            console.log("==== header _getData no idToken");
         }
     }
 

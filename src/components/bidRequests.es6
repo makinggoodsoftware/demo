@@ -22,18 +22,18 @@ class BidRequests extends React.Component {
     }
 
     groupBidRequestsByBuyer() {
-        const bidRequests = this.props.bidRequests;
-        const currentUserKey = this.props.currentUser.fullName;
+        const bidRequests = this.props.bidRequests
+        const currentUserKey = this.props.currentUser.id
         // console.log("==== bidRequests = ", bidRequests);
-        const requests = {};
+        const requests = {}
         for (let productKey in bidRequests) {
             // console.log("==== productKey = ", productKey);
             // const productRequests = bidRequests[productKey];
             // console.log("==== productRequests = ", productRequests);
-            const qty = bidRequests[productKey][currentUserKey];
+            const qty = bidRequests[productKey][currentUserKey].quantity
             if(qty) {
                 // const bidRequest = {};
-                requests[productKey] = qty;
+                requests[productKey] = qty
                 // requests.push(bidRequest);
             }
         }

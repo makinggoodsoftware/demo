@@ -29,20 +29,20 @@ class ProductForm extends React.Component {
     }
 
     requestBid(productKey) {
-        console.log(`==== Bid requested by ${this.props.currentUser.fullName} for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDateInput.value}`);
-        this.props.requestBid(this.props.currentUser.fullName, productKey, this.state.qty, this.deliveryDateInput.value)
-        this.setState({qty: ''});
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDateInput.value}`)
+        this.props.requestBid(this.props.currentUser.id, productKey, this.state.qty, this.deliveryDateInput.value)
+        this.setState({qty: ''})
     }
 
     bindPikaday(elem) {
         // consider using https://github.com/thomasboyt/react-pikaday
-        console.log("==== elem = ", elem)
+        // console.log("==== elem = ", elem)
         if (elem) {
             this.picker = new Pikaday({field: elem})
         } else if (this.picker) {
             this.picker.destroy()
         }
-        console.log("==== after binding: picker = ", this.picker)
+        // console.log("==== after binding: picker = ", this.picker)
     }
 
     componentDidMount() {
@@ -51,19 +51,22 @@ class ProductForm extends React.Component {
     }
 
     render(){
-        const style = styles.viewer;
-
-        let requestStatus = '';
-        let form = '';
-        let qty = 0;
+        const style = styles.viewer
+        const userId = this.props.currentUser.id
+        console.log(`==== userId = ${userId}`)
+        let requestStatus = ''
+        let form = ''
+        let qty = 0
         let productSpecId
         let productName = 'no product selected'
         if (this.props.node && this.props.node.price) {
             productSpecId = this.props.node.id
             productName = this.props.node.name
         }
-        if (this.props.bidRequests[productSpecId]) console.log("==== br qty: ", this.props.bidRequests[productSpecId][this.props.currentUser.fullName])
-        if (this.props.bidRequests[productSpecId] && (qty = this.props.bidRequests[productSpecId][this.props.currentUser.fullName])) {
+        // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
+        // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
+        if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId] && (qty = this.props.bidRequests[productSpecId][userId].quantity)) {
+            // console.log("==== br qty: ", qty)
             requestStatus = `Requested bid for ${qty} of ${productName}`
         } else if (!(this.props.node && this.props.node.price)) {
             requestStatus = HELP_MSG
