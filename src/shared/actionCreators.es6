@@ -39,26 +39,28 @@ export function logOutUser() {
     return { type: 'LOG_OUT_USER' }
 }
 
-export function requestBid(userKey, productKey, qty, deliveryDate) {
+export function requestBid(userKey, bid) {
+    // console.log("==== requestBid fn, bid = ", bid)
+
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
-        const url = baseApiUrl + '/bid_requests/create';
-        console.log("==== url = ", url);
+        const url = baseApiUrl + '/bid_requests/create'
+        // console.log("==== url = ", url)
         const idToken = localStorage.getItem('idToken')
         let requestId
         // #TODO: handle api error (update Redux store accordingly)
         request
             .post(url)
             .set('Authorization', 'Bearer ' + idToken)
-            .send({product_spec_id: productKey, quantity: qty, deliveryDate})
+            .send(bid)
             .end(function (err, res) {
-                console.log("res = ", res);
-                console.log("res.text = ", res.text);
-                const payload = JSON.parse(res.text);
+                console.log("res = ", res)
+                console.log("res.text = ", res.text)
+                const payload = JSON.parse(res.text)
                 requestId = payload.bid_request_id
-                console.log("==== new bidRequestId = ", requestId);
-                dispatch(setBidRequest(userKey, productKey, qty));
-            });
+                console.log("==== new bidRequestId = ", requestId)
+                dispatch(setBidRequest(userKey, bid))
+            })
     }
 }
 
@@ -81,8 +83,8 @@ export function fetchBidRequests(userKey) {
     }
 }
 
-export function setBidRequest(userKey, productKey, qty) {
-    return { type: 'BID_REQUEST', userKey, productKey, qty }
+export function setBidRequest(userKey, bid) {
+    return { type: 'BID_REQUEST', userKey, bid }
 }
 
 export function setBidRequests(bidRequests) {

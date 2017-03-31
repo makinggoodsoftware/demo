@@ -19,18 +19,29 @@ function mapDispatchToProps(dispatch) {
 
 class ProductForm extends React.Component {
     constructor(props){
-        super(props);
-        this.state = {qty: ''};
+        super(props)
+        this.state = {qty: '', deliveryCity: '', deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
-    handleQtyChange(event) {
-        // console.log("==== product qty change event: ", event);
-        this.setState({qty: event.target.value});
+    handleInputChange(event) {
+        const target = event.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
+
+        this.setState({
+            [name]: value
+        })
     }
 
     requestBid(productKey) {
-        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDateInput.value}`)
-        this.props.requestBid(this.props.currentUser.id, productKey, this.state.qty, this.deliveryDateInput.value)
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDeadlineInput.value}`)
+        const bid = (({ qty, deliveryCity, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
+        bid.productSpecId = productKey
+        bid.deliveryDeadline = this.deliveryDeadlineInput.value
+        this.setState({defaultDeliveryDeadline: bid.deliveryDeadline})
+        console.log("==== productForm requestBid, bid = ", bid)
+        // this.props.requestBid(this.props.currentUser.id, productKey, this.deliveryDeadlineInput.value, this.state.deliveryCity, this.state.deliveryCountryCode, this.state.deliveryBidRequested, this.state.incoterm)
+        this.props.requestBid(this.props.currentUser.id, bid)
         this.setState({qty: ''})
     }
 
@@ -56,6 +67,7 @@ class ProductForm extends React.Component {
         console.log(`==== userId = ${userId}`)
         let requestStatus = ''
         let form = ''
+        let bidReq
         let qty = 0
         let productSpecId
         let productName = 'no product selected'
@@ -65,31 +77,77 @@ class ProductForm extends React.Component {
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
         // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
-        if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId] && (qty = this.props.bidRequests[productSpecId][userId].quantity)) {
+        if (this.props.bidRequests[productSpecId] && (bidReq = this.props.bidRequests[productSpecId][userId]) && (qty = this.props.bidRequests[productSpecId][userId].qty)) {
             // console.log("==== br qty: ", qty)
-            requestStatus = `Requested bid for ${qty} of ${productName}`
+            const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''
+            const deliveryBid = bidReq.deliveryBidRequested ? `and delivery costs via ${bidReq.incoterm} ` : ''
+            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${bidReq.deliveryCountryCode} ${deliveryDeadline}`
         } else if (!(this.props.node && this.props.node.price)) {
             requestStatus = HELP_MSG
         } else {
             form = (<div>
                         <div>
-                            <span>{this.props.node.name}</span>
+                            {this.props.node.name}
+                        </div>
+                        <div>
                             <span className='request-qty'>
                                 Qty:
                                 <input
+                                    name='qty'
                                     type='text'
                                     value={this.state.qty}  // setting value here makes this a React controlled component
-                                    onChange={this.handleQtyChange.bind(this)}
+                                    onChange={this.handleInputChange.bind(this)}
                                 />
                             </span>
                         </div>
                         <div>
-                            Delivered by date (optional):
+                            <span className='request-city'>
+                                City:
+                                <input
+                                    name='deliveryCity'
+                                    type='text'
+                                    value={this.state.deliveryCity}
+                                    onChange={this.handleInputChange.bind(this)}
+                                />
+                            </span>
+                            <span className='request-country'>
+                                Country:
+                                <input
+                                    name='deliveryCountryCode'
+                                    type='text'
+                                    value={this.state.deliveryCountryCode}
+                                    onChange={this.handleInputChange.bind(this)}
+                                />
+                            </span>
+                        </div>
+                        <div>
+                            <span className='request-delivery-bid'>
+                                Include bid for delivery costs?
+                                <input
+                                    name='deliveryBidRequested'
+                                    type='checkbox'
+                                    checked={this.state.deliveryBidRequested}
+                                    onChange={this.handleInputChange.bind(this)}
+                                />
+                            </span>
+                            <span>
+                                Incoterm:
+                                <input
+                                    name='incoterm'
+                                    type='text'
+                                    value={this.state.incoterm}
+                                    onChange={this.handleInputChange.bind(this)}
+                                />
+                            </span>
+                        </div>
+                        <div>
+                            Delivery deadline (optional):
                             {/*the date input is not a controlled React component because pikaday doesn't trigger the onChange event*/}
                             <input
                                 type='text'
                                 id='datepicker'
-                                ref={(input) => { this.deliveryDateInput = input; this.bindPikaday(input) }}
+                                value={this.state.defaultDeliveryDeadline}
+                                ref={(input) => { this.deliveryDeadlineInput = input; this.bindPikaday(input) }}
                             />
                         </div>
                         <button onClick={this.requestBid.bind(this, productSpecId)}>Request Bid</button>

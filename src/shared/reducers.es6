@@ -43,10 +43,11 @@ function bidRequests(state = {}, action) {
     switch (action.type) {
         case 'BID_REQUEST':  // when user submits a new one
             // all of this simpler with Immutable.js ?
-            const bidsThisProduct = state[action.productKey] || {}
-            bidsThisProduct[action.userKey] = { quantity: action.qty }
+            const bid = action.bid
+            const bidsThisProduct = state[bid.productSpecId] || {}
+            bidsThisProduct[action.userKey] = bid
             const bidsThisProductWithKey = {}
-            bidsThisProductWithKey[action.productKey] = bidsThisProduct
+            bidsThisProductWithKey[bid.productSpecId] = bidsThisProduct
             const newState = Object.assign({}, state, bidsThisProductWithKey)
             console.log("==== bidRequests returning newState, ", newState)
             return newState
