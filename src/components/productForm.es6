@@ -146,7 +146,7 @@ class ProductForm extends React.Component {
                             <input
                                 type='text'
                                 id='datepicker'
-                                value={this.state.defaultDeliveryDeadline}
+                                defaultValue={this.state.defaultDeliveryDeadline}
                                 ref={(input) => { this.deliveryDeadlineInput = input; this.bindPikaday(input) }}
                             />
                         </div>
