@@ -43,7 +43,6 @@ class Header extends React.Component {
             // console.log("==== header _getData token!, lock =", this.lock);
             // this.props.getUserAuth0(access_token, this.lock);  // was a good test that we can query Auth0 for user info
             this.props.getUser(idToken);
-            this.props.fetchBidRequests(idToken);
         } else {
             console.log("==== header _getData no idToken");
         }
