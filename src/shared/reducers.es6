@@ -58,12 +58,19 @@ function bidRequests(state = {}, action) {
     }
 }
 
-function bids(state = Immutable.Map({}), action) {
+function allBidRequests(state = Immutable.Map({}), action) {
     switch (action.type) {
-        case 'BID':
-            const newState = state.setIn([action.userKey, action.productKey], action.price);
-            console.log("==== bid returning newState, ", newState);
-            return newState;
+        case 'BID_REQUESTS_ALL':  // bid requests for suppliers (fetched from server)
+            return Object.assign({}, state, action.bidRequests)
+        case 'SET_BID':
+            // console.log("==== SET_BID reducer current state = ", state.toJS())
+            // console.log(`==== SET_BID reducer, action.productSpecKey = ${action.productSpecKey}, action.bid = `, action.bid)
+            const keyPath = [action.productSpecKey.toString(), action.bid.deliveryCountryCode, action.bid.bidRequestId.toString(), 'bid']
+            // console.log("==== keyPath = ", keyPath)
+            // const newState = state.setIn([action.productSpecKey.toString(), action.bid.deliveryCountryCode, action.bid.bidRequestId.toString(), 'bid'], action.bid)
+            const newState = state.setIn(keyPath, action.bid)
+            // console.log("==== bid returning newState.toJS(), ", newState.toJS())
+            return newState
         default:
             return state
     }
@@ -74,7 +81,7 @@ function bids(state = Immutable.Map({}), action) {
 const reducers = combineReducers({
     currentUser,
     bidRequests,
-    bids
-});
+    allBidRequests
+})
 
 export default reducers

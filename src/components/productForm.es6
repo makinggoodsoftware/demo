@@ -64,7 +64,6 @@ class ProductForm extends React.Component {
     render(){
         const style = styles.viewer
         const userId = this.props.currentUser.id
-        console.log(`==== userId = ${userId}`)
         let requestStatus = ''
         let form = ''
         let bidReq
@@ -77,6 +76,7 @@ class ProductForm extends React.Component {
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
         // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
+        // console.log(`==== userId = ${userId}, productSpecId = ${productSpecId}`)
         if (this.props.bidRequests[productSpecId] && (bidReq = this.props.bidRequests[productSpecId][userId]) && (qty = this.props.bidRequests[productSpecId][userId].qty)) {
             // console.log("==== br qty: ", qty)
             const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''

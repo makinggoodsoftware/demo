@@ -308,7 +308,7 @@ table .number {
 
 table.bids .header {
     width: 150px;
-    text-align: right;
+    text-align: left;
 }
 
 /*for pikaday calendar:*/

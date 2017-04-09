@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bid } from '../shared/actionCreators.es6'
 
 function mapStateToProps(store) {
-    return { currentUser: store.currentUser, bidRequests: store.bidRequests, bids: store.bids.toJS() }
+    return { currentUser: store.currentUser, bidRequests: store.bidRequests }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -69,20 +69,20 @@ class BidRequests extends React.Component {
     }
 
     // keeps state in sync with the DOM's state of the input element
-    handleBidChange(productKey, event) {
-        console.log("==== bid change event: ", event);
-        const bids = this.state.bids;
-        bids[productKey] = event.target.value;
-        console.log("==== setting state with: ", bids);
-        this.setState(bids);
-    }
+    // handleBidChange(productKey, event) {
+    //     console.log("==== bid change event: ", event);
+    //     const bids = this.state.bids;
+    //     bids[productKey] = event.target.value;
+    //     console.log("==== setting state with: ", bids);
+    //     this.setState(bids);
+    // }
 
-    bid(productKey) {
-        console.log("==== bid on product: ", productKey);
-        console.log("==== bid with price: ", this.state.bids[productKey]);
-        console.log("==== state.bids: ", this.state.bids);
-        this.props.bid(this.props.currentUser.fullName, productKey, this.state.bids[productKey]);
-    }
+    // bid(productKey) {
+    //     console.log("==== bid on product: ", productKey);
+    //     console.log("==== bid with price: ", this.state.bids[productKey]);
+    //     console.log("==== state.bids: ", this.state.bids);
+    //     this.props.bid(this.props.currentUser.fullName, productKey, this.state.bids[productKey]);
+    // }
 
     buildTable(requestsWithBids) {
         const header = (<thead><tr key='tableHeader'><th></th><th className='header'>Quantity</th><th className='header'>Winning Bidder</th><th className='header'>Bid (per Unit)</th><th className='header'>Total</th></tr></thead>);
