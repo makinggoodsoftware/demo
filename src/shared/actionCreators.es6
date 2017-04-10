@@ -26,9 +26,7 @@ export function getUser(token) {
                 user.userType = payload.userType
                 user.email = payload.email
                 console.log("==== user.fullName = ", user.fullName)
-                if (user.userType == 'buyer') {
-                    dispatch(fetchBidRequests(user.userType))
-                }
+                dispatch(fetchBidRequests(user.userType))
                 dispatch(setCurrentUser(user))
             });
     }
@@ -85,6 +83,7 @@ export function fetchBidRequests(type) {
                     console.log("==== user type buyer, calling setBidRequests")
                     dispatch(setBidRequests(payload))
                 } else {
+                    // format is { productSpecId: { countryCode: { bidRequestId: { bidRequest properties, including property 'bid' of any bid the current supplier has placed for this request } } } }
                     dispatch(setAllBidRequests(payload))
                 }
             });
@@ -125,8 +124,8 @@ export function setBidRequests(bidRequests) {
     return { type: 'BID_REQUESTS', bidRequests }
 }
 
-export function setAllBidRequests(bidRequests) {
-    return { type: 'BID_REQUESTS_ALL', bidRequests }
+export function setAllBidRequests(bidRequestsAll) {
+    return { type: 'BID_REQUESTS_ALL', bidRequestsAll }
 }
 
 export function setBid(productSpecKey, bid) {

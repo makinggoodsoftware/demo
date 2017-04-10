@@ -57,11 +57,11 @@ class Bids extends React.Component {
         // console.log("==== looking up bid for bidReq: ", bidReqKey)
         const bid = this.state.bids[bidReqKey]
         // console.log("==== found bid: ", bid)
-        bid.bidRequestId = bidReqKey
+        bid.bidRequestIds = [bidReqKey]
         bid.deliveryCountryCode = deliveryCountryCode
         bid.originCountryCode = 'IN'  //# fix
         bid.sourceCountryCode = 'IN'  //# fix
-        // console.log("==== createBid: ", bid)
+        // console.log("==== createBid, after building bid: ", bid)
         // console.log("==== state.bids: ", this.state.bids)
 
         this.props.createBid(productSpecKey, bid)
@@ -94,8 +94,8 @@ class Bids extends React.Component {
                 // console.log("==== country row = ", row)
                 rows.push(row)
                 const bidReqs = countries[countryCode]
-                for (let bidId in bidReqs ) {
-                    const bidReq = bidReqs[bidId]
+                for (let bidReqId in bidReqs ) {
+                    const bidReq = bidReqs[bidReqId]
                     let totalDisp = '', button = ''
                     if (bidReq.bid) {
                         const unitPrice = bidReq.bid.pricePerUnit
@@ -105,15 +105,15 @@ class Bids extends React.Component {
                         bid = (<input
                                         type='text'
                                         // value={this.state.bids[productSpecKey]}
-                                        onChange={this.handleBidChange.bind(this, bidReq.id)}
+                                        onChange={this.handleBidChange.bind(this, bidReqId)}
                                         />)
                         button = (<button
-                                        onClick={this.createBid.bind(this, productSpecKey, countryCode, bidReq.id)}
+                                        onClick={this.createBid.bind(this, productSpecKey, countryCode, bidReqId)}
                                         >Bid</button>)
 
                     }
                     const row = (
-                        <tr key={ bidId }><td></td><td></td>
+                        <tr key={ bidReqId }><td></td><td></td>
                             <td>{ bidReq.deliveryCity }</td>
                             <td className='number'>{ bidReq.qty }</td>
                             <td className=''>{ bidReq.incoterm }</td>
