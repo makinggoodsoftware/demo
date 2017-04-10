@@ -77,12 +77,22 @@ function allBidRequests(state = {}, action) {
     }
 }
 
+function rawCatalog(state = {}, action) {
+    return state
+}
+
+function productSpecs(state = {}, action) {
+    return state
+}
+
 // these reducers will be called with first argument set to the value of the top-level key in store
 // so, passing 'currentUser' to combineReducers will cause the currentUser reducer to be called with the value at the currentUser key of the store object
 const reducers = combineReducers({
     currentUser,
     bidRequests,
-    allBidRequests
+    allBidRequests,
+    rawCatalog,
+    productSpecs
 })
 
 export default reducers

@@ -1,15 +1,21 @@
-import React from 'react';
-import StoreHelpers from '../shared/storeHelpers.es6';
-import { Treebeard } from 'react-treebeard';
-import { StyleRoot } from 'radium';
-import styles from '../client/styles.es6';
-import ProductForm from '../components/productForm.es6';
+import React from 'react'
+import StoreHelpers from '../shared/storeHelpers.es6'
+import { Treebeard } from 'react-treebeard'
+import { StyleRoot } from 'radium'
+import styles from '../client/styles.es6'
+import { connect } from 'react-redux'
+import ProductForm from '../components/productForm.es6'
 
-export default class Catalog extends React.Component {
+function mapStateToProps(store) {
+    return { rawCatalog: store.rawCatalog }
+}
+
+class Catalog extends React.Component {
     constructor(props){
-        super(props);
-        this.state = { data: StoreHelpers.getProducts(), cursor: null };
-        this.onToggle = this.onToggle.bind(this);
+        super(props)
+        // console.log("==== rawCat = ", this.props.rawCatalog)
+        this.state = { data: StoreHelpers.getProducts(this.props.rawCatalog), cursor: null }
+        this.onToggle = this.onToggle.bind(this)
     }
 
     onToggle(node, toggled){
@@ -47,3 +53,5 @@ export default class Catalog extends React.Component {
         )
     }
 }
+
+export default connect(mapStateToProps)(Catalog)

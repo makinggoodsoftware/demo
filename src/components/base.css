@@ -300,6 +300,7 @@ table.bids {
     font-family: 'Titillium Web', sans-serif;
     font-size: 18px;
     margin: 20px auto 0 auto;
+    border-spacing: 20px 0;
 }
 
 table .number {
@@ -307,8 +308,17 @@ table .number {
 }
 
 table.bids .header {
-    width: 150px;
+    /*width: 150px;*/
     text-align: left;
+}
+
+table.bids .right {
+    /*width: 150px;*/
+    text-align: right;
+}
+
+table.bids td {
+    font-size: 14px;
 }
 
 /*for pikaday calendar:*/
