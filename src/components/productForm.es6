@@ -5,6 +5,7 @@ import styles from '../client/styles.es6';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { requestBid } from '../shared/actionCreators.es6'
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
 const HELP_MSG = '<-- To Request a Bid, First Select a Product to the Left';
 
@@ -20,7 +21,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {qty: '', deliveryCity: '', deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -33,9 +34,15 @@ class ProductForm extends React.Component {
         })
     }
 
+    handleGeoChange(name, value) {
+        this.setState({
+            [name]: value
+        })
+    }
+
     requestBid(productKey) {
         console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDeadlineInput.value}`)
-        const bid = (({ qty, deliveryCity, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
+        const bid = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
         bid.productSpecId = productKey
         bid.deliveryDeadline = this.deliveryDeadlineInput.value
         this.setState({defaultDeliveryDeadline: bid.deliveryDeadline})
@@ -81,7 +88,7 @@ class ProductForm extends React.Component {
             // console.log("==== br qty: ", qty)
             const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''
             const deliveryBid = bidReq.deliveryBidRequested ? `and delivery costs via ${bidReq.incoterm} ` : ''
-            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${bidReq.deliveryCountryCode} ${deliveryDeadline}`
+            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${bidReq.deliveryRegionCode}, ${bidReq.deliveryCountryCode} ${deliveryDeadline}`
         } else if (!(this.props.node && this.props.node.price)) {
             requestStatus = HELP_MSG
         } else {
@@ -101,21 +108,32 @@ class ProductForm extends React.Component {
                             </span>
                         </div>
                         <div>
+                            <span className='request-country'>
+                                Country:
+                                <CountryDropdown
+                                    value={this.state.deliveryCountryCode}
+                                    valueType='short'
+                                    onChange={(val) => this.handleGeoChange('deliveryCountryCode', val)}
+                                />
+                            </span>
+                        </div>
+                        <div>
+                            <span className='request-region'>
+                                Region:
+                                <RegionDropdown
+                                    country={this.state.deliveryCountryCode}
+                                    countryValueType='short'
+                                    valueType='short'
+                                    value={this.state.deliveryRegionCode}
+                                    onChange={(val) => this.handleGeoChange('deliveryRegionCode', val)}
+                                />
+                            </span>
                             <span className='request-city'>
                                 City:
                                 <input
                                     name='deliveryCity'
                                     type='text'
                                     value={this.state.deliveryCity}
-                                    onChange={this.handleInputChange.bind(this)}
-                                />
-                            </span>
-                            <span className='request-country'>
-                                Country:
-                                <input
-                                    name='deliveryCountryCode'
-                                    type='text'
-                                    value={this.state.deliveryCountryCode}
                                     onChange={this.handleInputChange.bind(this)}
                                 />
                             </span>
