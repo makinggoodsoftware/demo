@@ -8,6 +8,7 @@ import reducers from '../shared/reducers.es6';
 import { browserHistory } from 'react-router'
 import Immutable from 'immutable'
 import AuthService from '../shared/authService.es6';
+import { SourceData } from 'react-country-region-selector'
 
 console.log('Hello From Index.es6!');
 
@@ -23,6 +24,19 @@ let preloadedState = window.__PRELOADED_STATE__
 
 // Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__
+
+window.geoSourceData = SourceData
+// console.log("==== sourceData = ", window.geoSourceData)
+const geoLookup = Object.assign(...window.geoSourceData.map(country => {
+    const regions = Object.assign(...country[2].split('|').map(region => {
+        const regionArr = region.split('~')
+        return { [regionArr[1]]: regionArr[0] }
+    }))
+    return {[country[1]]: { name: country[0], regions } }
+} ))
+window.geoLookup = geoLookup
+console.log("==== geoLookup = ", window.geoLookup)
+
 
 preloadedState.rawCatalog = [
     ["Intraocular Lens ","Rigid / Hard / PMMA Intraocular Lenses ","IOLPMMA Single piece","$4.00 ",1001],
@@ -111,8 +125,10 @@ preloadedState.rawCatalog = [
     ["Pharmaceuticals ","Antiseptic& Disinfectant Ranges","STERIRINSE (TRICLOSAN 0.3%) - 500 ML","$0.00 ",1084]
 ]
 
+// for more about this syntax - function body in parens - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 const productSpecs = Object.assign(...preloadedState.rawCatalog.map(productSpec => ({[productSpec[4]]: productSpec[2]})))
 // console.log("==== productSpecs = ", productSpecs)
+// #TODO: product catalog should probalby be on window, not store, if it can't change in this app
 preloadedState.productSpecs = productSpecs
 
 const store = createStore(reducers, preloadedState, applyMiddleware(thunk))

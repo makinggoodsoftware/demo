@@ -81,7 +81,8 @@ class Bids extends React.Component {
             const countries = allBidRequests[productSpecKey]
             // console.log("==== countries = ", countries)
             for (let deliveryCountryCode in countries) {
-                const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }><td width='3%'></td><td className='category' colSpan='9'>{ deliveryCountryCode }</td></tr>)
+                const deliveryCountryName = window.geoLookup[deliveryCountryCode]['name']
+                const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }><td width='3%'></td><td className='category' colSpan='9'>{ deliveryCountryName }</td></tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
                 const bidReqs = countries[deliveryCountryCode]

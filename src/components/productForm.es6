@@ -88,7 +88,13 @@ class ProductForm extends React.Component {
             // console.log("==== br qty: ", qty)
             const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''
             const deliveryBid = bidReq.deliveryBidRequested ? `and delivery costs via ${bidReq.incoterm} ` : ''
-            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${bidReq.deliveryRegionCode}, ${bidReq.deliveryCountryCode} ${deliveryDeadline}`
+            const deliveryCountry = window.geoLookup[bidReq.deliveryCountryCode]
+            console.log("==== deliCoun", deliveryCountry)
+            const deliveryCountryName = deliveryCountry['name']
+            console.log("==== countr name ", deliveryCountryName)
+            const deliveryRegionName = deliveryCountry['regions'][bidReq.deliveryRegionCode]
+            console.log("==== region name ", deliveryRegionName)
+            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
         } else if (!(this.props.node && this.props.node.price)) {
             requestStatus = HELP_MSG
         } else {
