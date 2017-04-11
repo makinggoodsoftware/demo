@@ -3,6 +3,7 @@ import styles from '../client/styles.es6';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { createBid } from '../shared/actionCreators.es6'
+import { CountryDropdown } from 'react-country-region-selector'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser, allBidRequests: store.allBidRequests, bidRequests: store.bidRequests, productSpecs: store.productSpecs }
@@ -36,17 +37,23 @@ class Bids extends React.Component {
         this.setState({ bids })
     }
 
+    handleGeoChange(bidReqKey, name, value) {
+        const bids = this.state.bids
+        if (bids[bidReqKey]) {
+            bids[bidReqKey][name] = value
+        } else {
+            bids[bidReqKey] = {[name]: value}
+        }
+        // console.log("==== geo Change setting state with: ", bids)
+        this.setState({ bids })
+    }
+
     createBid(productSpecKey, deliveryCountryCode, bidReqKey) {
         // console.log("==== looking up bid for bidReq: ", bidReqKey)
         const bid = this.state.bids[bidReqKey]
         // console.log("==== found bid: ", bid)
         bid.bidRequestIds = [bidReqKey]
         bid.deliveryCountryCode = deliveryCountryCode
-        bid.originCountryCode = 'IN'  //# fix
-        bid.sourceCountryCode = 'IN'  //# fix
-        // console.log("==== createBid, after building bid: ", bid)
-        // console.log("==== state.bids: ", this.state.bids)
-
         this.props.createBid(productSpecKey, bid)
     }
 
@@ -55,10 +62,10 @@ class Bids extends React.Component {
         const allBidRequests = this.props.allBidRequests
         const header = (<thead><tr key='tableHeader'>
             <th className='header'></th>
-            <th className='header'>Delivery To</th>
-            <th className='header'></th>
+            <th className='header' colSpan='2'>Dest. City</th>
             <th className='header'>Incoterm</th>
             <th className='header'>Deadline</th>
+            <th className='header'>Origin</th>
             <th className='header right'>Qty</th>
             <th className='header right'>Unit Price</th>
             <th className='header right'>Delivery Price</th>
@@ -68,20 +75,21 @@ class Bids extends React.Component {
         let rows = []
         let bid, deliveryPrice
         for (let productSpecKey in allBidRequests) {
-            const row = (<tr key={ productSpecKey }><td colSpan='10'>{ this.props.productSpecs[productSpecKey] }</td></tr>)
+            const row = (<tr key={ productSpecKey }><td colSpan='10' className='category'>{ this.props.productSpecs[productSpecKey] }</td></tr>)
             // console.log("==== productRow = ", row)
             rows.push(row)
             const countries = allBidRequests[productSpecKey]
             // console.log("==== countries = ", countries)
-            for (let countryCode in countries) {
-                const row = (<tr key={ `${productSpecKey}-${countryCode}` }><td width='3%'></td><td colSpan='9'>{ countryCode }</td></tr>)
+            for (let deliveryCountryCode in countries) {
+                const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }><td width='3%'></td><td className='category' colSpan='9'>{ deliveryCountryCode }</td></tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
-                const bidReqs = countries[countryCode]
+                const bidReqs = countries[deliveryCountryCode]
                 for (let bidReqId in bidReqs ) {
                     const bidReq = bidReqs[bidReqId]
-                    let deliveryPriceDisp = '', totalDisp = '', button = ''
+                    let originCountryCode = '', deliveryPriceDisp = '', totalDisp = '', button = ''
                     if (bidReq.bid) {
+                        originCountryCode = bidReq.bid.originCountryCode
                         const qty = parseInt(bidReq.qty)
                         const unitPrice = parseFloat(bidReq.bid.pricePerUnit)
                         bid = `$${unitPrice}`
@@ -93,6 +101,11 @@ class Bids extends React.Component {
                         deliveryPriceDisp = `$${deliveryPrice}`
                         totalDisp = `$${(qty * unitPrice) + deliveryPrice}`
                     } else {
+                        originCountryCode = (<CountryDropdown
+                                valueType='short'
+                                onChange={(val) => this.handleGeoChange(bidReqId, 'originCountryCode', val)}
+                            />
+                        )
                         bid = (<input
                                         type='text'
                                         name='pricePerUnit'
@@ -104,15 +117,16 @@ class Bids extends React.Component {
                                         onChange={this.handleInputChange.bind(this, bidReqId)}
                                         />)
                         button = (<button
-                                        onClick={this.createBid.bind(this, productSpecKey, countryCode, bidReqId)}
+                                        onClick={this.createBid.bind(this, productSpecKey, deliveryCountryCode, bidReqId)}
                                         >Bid</button>)
 
                     }
                     const row = (
                         <tr key={ bidReqId }><td></td><td width='3%'></td>
-                            <td>{ bidReq.deliveryCity }</td>
+                            <td className=''>{ bidReq.deliveryCity }</td>
                             <td className=''>{ bidReq.incoterm }</td>
                             <td className=''>{ bidReq.deliveryDeadline }</td>
+                            <td className=''>{ originCountryCode }</td>
                             <td className='number'>{ bidReq.qty }</td>
                             <td className='number'>{ bid }</td>
                             <td className='number'>{ deliveryPriceDisp }</td>

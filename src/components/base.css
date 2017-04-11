@@ -310,6 +310,12 @@ table .number {
 table.bids .header {
     /*width: 150px;*/
     text-align: left;
+    font-weight: bold;
+}
+
+table.bids .category {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 table.bids .right {
