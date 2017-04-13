@@ -79,14 +79,8 @@ export function fetchBidRequests(type) {
                 console.log("fetch bidRequests res = ", res)
                 console.log("fetch bidRequests res.text = ", res.text)
                 const payload = JSON.parse(res.text)
-                if (type == 'buyer') {
-                    console.log("==== user type buyer, calling setBidRequests")
-                    dispatch(setBidRequests(payload))
-                } else {
-                    // format is { productSpecId: { countryCode: { bidRequestId: { bidRequest properties, including property 'bid' of any bid the current supplier has placed for this request } } } }
-                    dispatch(setAllBidRequests(payload))
-                }
-            });
+                dispatch(setBidRequests(payload))
+            })
     }
 }
 
@@ -122,10 +116,6 @@ export function setBidRequest(userKey, bid) {
 
 export function setBidRequests(bidRequests) {
     return { type: 'BID_REQUESTS', bidRequests }
-}
-
-export function setAllBidRequests(bidRequestsAll) {
-    return { type: 'BID_REQUESTS_ALL', bidRequestsAll }
 }
 
 export function setBid(productSpecKey, bid) {

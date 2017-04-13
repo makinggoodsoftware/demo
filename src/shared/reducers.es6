@@ -1,11 +1,10 @@
 // based on https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md
 
-import { combineReducers } from 'redux';
-import Immutable from 'immutable';
+import { combineReducers } from 'redux'
 
 // here state is just the currentUsers value of the store object, determined by mapStateToProps in the component
 function currentUser(state = null, action) {
-    const user = {};
+    const user = {}
     switch (action.type) {
         case 'LOG_IN_USER':
             if(action.userName.toLowerCase().startsWith('buyer')) {
@@ -19,10 +18,10 @@ function currentUser(state = null, action) {
         case 'LOG_OUT_USER':
             return {}; //TODO: this and default arg value should be the same
         case 'SET_CURRENT_USER':
-            console.log("==== reducer SET_CURRENT_USER returning ", action.currentUser);
-            return action.currentUser;
+            console.log("==== reducer SET_CURRENT_USER returning ", action.currentUser)
+            return action.currentUser
         case 'GET_USER_AUTH0':
-            console.log("GET_USER_AUTH0 reducer running with token ", action.token);
+            console.log("GET_USER_AUTH0 reducer running with token ", action.token)
             if (action.lock && action.token) {
                 action.lock.getUserInfo(action.token, function(error, userInfo) {
                     if (error) {
@@ -48,29 +47,20 @@ function bidRequests(state = {}, action) {
             bidsThisProduct[action.userKey] = bid
             const bidsThisProductWithKey = {}
             bidsThisProductWithKey[bid.productSpecId] = bidsThisProduct
-            const newState = Object.assign({}, state, bidsThisProductWithKey)
+            let newState = Object.assign({}, state, bidsThisProductWithKey)
             console.log("==== bidRequests returning newState, ", newState)
             return newState
         case 'BID_REQUESTS':  // when they're fetched from server
             return Object.assign({}, state, action.bidRequests)
-        default:
-            return state
-    }
-}
-
-function allBidRequests(state = {}, action) {
-    switch (action.type) {
-        case 'BID_REQUESTS_ALL':  // bid requests for suppliers (fetched from server)
-            // console.log("==== before reducing bid_requests_all, state = ", state)
-            return Object.assign({}, state, action.bidRequestsAll)
-        case 'SET_BID':
-            // console.log(`==== SET_BID reducer, action.productSpecKey = ${action.productSpecKey}, action.bid = `, action.bid)
+        case 'SET_BID': // suppliers
+            console.log(`==== SET_BID reducer, action.productSpecKey = ${action.productSpecKey}, action.bid = `, action.bid)
             // #TODO: handle multiple bidRequestIds:
             // const keyPath = [action.productSpecKey.toString(), action.bid.deliveryCountryCode, action.bid.bidRequestIds[0].toString(), 'bid']
             // const newState = state.setIn(keyPath, action.bid)
-            state[action.productSpecKey.toString()][action.bid.deliveryCountryCode][action.bid.bidRequestIds[0].toString()]['bid'] = action.bid
-            const newState = Object.assign({}, state)
-            // console.log("==== SET_BID new state = ", newState)
+            // set the whole array of bids because only suppliers can bid, and they only ever get to see their own bids
+            state[action.productSpecKey.toString()][action.bid.deliveryCountryCode][action.bid.bidRequestIds[0].toString()]['bids'] = [action.bid]
+            newState = Object.assign({}, state)
+            console.log("==== SET_BID new state = ", newState)
             return newState
         default:
             return state
@@ -90,7 +80,6 @@ function productSpecs(state = {}, action) {
 const reducers = combineReducers({
     currentUser,
     bidRequests,
-    allBidRequests,
     rawCatalog,
     productSpecs
 })
