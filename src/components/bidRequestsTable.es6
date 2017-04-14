@@ -135,7 +135,7 @@ class BidRequestsTable extends React.Component {
 
                     // console.log("==== bidColumnValues = ", bidColumnValues)
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
-                        console.log("==== rowColumns = ", rowColumns)
+                        // console.log("==== rowColumns = ", rowColumns)
                         return (
                         [   <td className='number'>{ rowColumns[0] }</td>,
                             <td className='number'>{ rowColumns[1] }</td>,
