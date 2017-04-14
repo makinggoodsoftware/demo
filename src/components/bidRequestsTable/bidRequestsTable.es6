@@ -1,15 +1,16 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { createBid } from '../shared/actionCreators.es6'
+import { createBid, fetchBidRequests } from '../../shared/actionCreators.es6'
 import { CountryDropdown } from 'react-country-region-selector'
+import refreshIcon from './assets/Reload-icon.png'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser, bidRequests: store.bidRequests, productSpecs: store.productSpecs }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createBid }, dispatch)
+    return bindActionCreators({ createBid, fetchBidRequests }, dispatch)
 }
 
 class BidRequestsTable extends React.Component {
@@ -52,11 +53,18 @@ class BidRequestsTable extends React.Component {
         this.props.createBid(productSpecKey, bid)
     }
 
+    refresh() {
+        this.props.fetchBidRequests()
+    }
+
     buildTable() {
         const bidRequests = this.props.bidRequests
         const header = (<thead>
         <tr key='tableHeader'>
-            <th className='header'></th>
+            <th className='header'>
+                    <img className='refresh-btn' src={ refreshIcon }
+                         onClick={this.refresh.bind(this)} />
+            </th>
             <th className='header' colSpan='2'>Dest. City</th>
             <th className='header'>Incoterm</th>
             <th className='header'>Deadline</th>

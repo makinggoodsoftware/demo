@@ -331,3 +331,7 @@ table.bids td {
 .pika-single.is-hidden {
     display: none;
 }
+
+.refresh-btn {
+    width: 20px;
+}

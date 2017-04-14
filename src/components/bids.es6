@@ -2,7 +2,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { createBid } from '../shared/actionCreators.es6'
-import BidRequestsTable from './bidRequestsTable.es6'
+import BidRequestsTable from './bidRequestsTable/bidRequestsTable.es6'
 
 function mapStateToProps(store) {
     return { currentUser: store.currentUser }
