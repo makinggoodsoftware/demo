@@ -38,16 +38,17 @@ function currentUser(state = null, action) {
 }
 
 function bidRequests(state = {}, action) {
-    // bidRequests stored as { productKey: { userKey: { quantity: 0 } } }
     switch (action.type) {
-        case 'BID_REQUEST':  // when user submits a new one
+        case 'SET_BID_REQUEST':  // when user submits a new one
             // all of this simpler with Immutable.js ?
-            const bid = action.bid
-            const bidsThisProduct = state[bid.productSpecId] || {}
-            bidsThisProduct[action.userKey] = bid
-            const bidsThisProductWithKey = {}
-            bidsThisProductWithKey[bid.productSpecId] = bidsThisProduct
-            let newState = Object.assign({}, state, bidsThisProductWithKey)
+            const bidReq = action.bidReq
+            // the var reqsCountryId means reqs keyed by deliveryCountryCode, then bidReq.id
+            // other vars holding sub-objects have analogous names
+            let reqsCountryId = state[bidReq.productSpecId] || {}
+            const reqsId = reqsCountryId[bidReq.deliveryCountryCode] || {}
+            reqsId[bidReq.id] = bidReq
+            reqsCountryId[bidReq.deliveryCountryCode] = reqsId
+            let newState = Object.assign({}, state, { [bidReq.productSpecId]: reqsCountryId })
             console.log("==== bidRequests returning newState, ", newState)
             return newState
         case 'BID_REQUESTS':  // when they're fetched from server

@@ -40,8 +40,8 @@ export function logOutUser() {
     return { type: 'LOG_OUT_USER' }
 }
 
-export function requestBid(userKey, bid) {
-    // console.log("==== requestBid fn, bid = ", bid)
+export function requestBid(userKey, bidReq) {
+    // console.log("==== requestBid fn, bidReq = ", bidReq)
 
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
@@ -53,14 +53,14 @@ export function requestBid(userKey, bid) {
         request
             .post(url)
             .set('Authorization', 'Bearer ' + idToken)
-            .send(bid)
+            .send(bidReq)
             .end(function (err, res) {
                 console.log("res = ", res)
                 console.log("res.text = ", res.text)
                 const payload = JSON.parse(res.text)
                 requestId = payload.bid_request_id
                 console.log("==== new bidRequestId = ", requestId)
-                dispatch(setBidRequest(userKey, bid))
+                dispatch(setBidRequest(userKey, bidReq))
             })
     }
 }
@@ -110,8 +110,8 @@ export function createBid(productSpecKey, bid) {
     }
 }
 
-export function setBidRequest(userKey, bid) {
-    return { type: 'BID_REQUEST', userKey, bid }
+export function setBidRequest(userKey, bidReq) {
+    return { type: 'SET_BID_REQUEST', userKey, bidReq }
 }
 
 export function setBidRequests(bidRequests) {

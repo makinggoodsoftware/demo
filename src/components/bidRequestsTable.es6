@@ -83,18 +83,17 @@ class BidRequestsTable extends React.Component {
                     <td width='3%'></td>
                     <td className='category' colSpan='9'>{ deliveryCountryName }</td>
                 </tr>)
-                console.log("==== country row = ", row)
+                // console.log("==== country row = ", row)
                 rows.push(row)
                 const bidReqs = countries[deliveryCountryCode]
                 for (let bidReqId in bidReqs) {
-                    console.log("==== bidReq id = ", bidReqId)
+                    // console.log("==== bidReq id = ", bidReqId)
                     const bidReq = bidReqs[bidReqId]
-                    console.log("==== bidReq = ", bidReq)
+                    // console.log("==== bidReq = ", bidReq)
                     let bidColumnValues = [], deliveryPriceDisp = '', totalDisp = '', button = ''
-                    console.log("==== is array: ", Array.isArray(bidReq.bids ))
-                    console.log("==== length: ", bidReq.bids.length)
+                    // console.log("==== is array: ", Array.isArray(bidReq.bids ))
                     if (Array.isArray(bidReq.bids) && bidReq.bids.length > 0) {
-                        console.log("==== found bids for the request, length = ", bidReq.bids.length)
+                        // console.log("==== found bids for the request, length = ", bidReq.bids.length)
                         bidColumnValues = bidReq.bids.map((bid) => {
                             let deliveryPrice
                             const qty = parseInt(bidReq.qty)
@@ -111,7 +110,7 @@ class BidRequestsTable extends React.Component {
                             return [ unitPriceStr, deliveryPriceDisp, totalDisp, originCountryName, button ]
                         })
                     } else if (!this.props.readOnly) {
-                        console.log("==== found no bids, building input elems")
+                        // console.log("==== found no bids, building input elems")
                         bidColumnValues = [[
                         <input
                             type='text'
@@ -134,7 +133,7 @@ class BidRequestsTable extends React.Component {
                         ]]
                     }
 
-                    console.log("==== bidColumnValues = ", bidColumnValues)
+                    // console.log("==== bidColumnValues = ", bidColumnValues)
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
                         console.log("==== rowColumns = ", rowColumns)
                         return (
@@ -145,7 +144,7 @@ class BidRequestsTable extends React.Component {
                             <td>{ rowColumns[4] }</td>
                         ] )
                     })
-                    console.log("==== bidColumnElems = ", bidColumnElems)
+                    // console.log("==== bidColumnElems = ", bidColumnElems)
 
                     let partialRowColumns = ''
                     let partialBidRows = []

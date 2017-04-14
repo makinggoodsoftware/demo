@@ -42,13 +42,13 @@ class ProductForm extends React.Component {
 
     requestBid(productKey) {
         console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDeadlineInput.value}`)
-        const bid = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
-        bid.productSpecId = productKey
-        bid.deliveryDeadline = this.deliveryDeadlineInput.value
-        this.setState({defaultDeliveryDeadline: bid.deliveryDeadline})
-        console.log("==== productForm requestBid, bid = ", bid)
+        const bidReq = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
+        bidReq.productSpecId = productKey
+        bidReq.deliveryDeadline = this.deliveryDeadlineInput.value
+        this.setState({defaultDeliveryDeadline: bidReq.deliveryDeadline})
+        // console.log("==== productForm bidReq = ", bidReq)
         // this.props.requestBid(this.props.currentUser.id, productKey, this.deliveryDeadlineInput.value, this.state.deliveryCity, this.state.deliveryCountryCode, this.state.deliveryBidRequested, this.state.incoterm)
-        this.props.requestBid(this.props.currentUser.id, bid)
+        this.props.requestBid(this.props.currentUser.id, bidReq)
         this.setState({qty: ''})
     }
 
@@ -84,17 +84,24 @@ class ProductForm extends React.Component {
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
         // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
         // console.log(`==== userId = ${userId}, productSpecId = ${productSpecId}`)
-        if (this.props.bidRequests[productSpecId] && (bidReq = this.props.bidRequests[productSpecId][userId]) && (qty = this.props.bidRequests[productSpecId][userId].qty)) {
+        if (this.props.bidRequests[productSpecId]) {
             // console.log("==== br qty: ", qty)
+
+            const deliveryCountryCode = Object.keys(this.props.bidRequests[productSpecId])[0] // assumes buyer can only place one bid request per product
+            const bidReqsByCountry = this.props.bidRequests[productSpecId][deliveryCountryCode]
+            // console.log("==== bidReqsByCountry = ", bidReqsByCountry)
+            const bidReqId = Object.keys(bidReqsByCountry)[0] // assumes buyer can only place one bid request per product
+            const bidReq = bidReqsByCountry[bidReqId]
+            // console.log("==== found bidReq = ", bidReq)
             const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''
             const deliveryBid = bidReq.deliveryBidRequested ? `and delivery costs via ${bidReq.incoterm} ` : ''
-            const deliveryCountry = window.geoLookup[bidReq.deliveryCountryCode]
-            console.log("==== deliCoun", deliveryCountry)
+            const deliveryCountry = window.geoLookup[deliveryCountryCode]
+            // console.log("==== deliCoun", deliveryCountry)
             const deliveryCountryName = deliveryCountry['name']
-            console.log("==== countr name ", deliveryCountryName)
+            // console.log("==== countr name ", deliveryCountryName)
             const deliveryRegionName = deliveryCountry['regions'][bidReq.deliveryRegionCode]
-            console.log("==== region name ", deliveryRegionName)
-            requestStatus = `Requested bid for ${qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
+            // console.log("==== region name ", deliveryRegionName)
+            requestStatus = `Requested bid for ${bidReq.qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
         } else if (!(this.props.node && this.props.node.price)) {
             requestStatus = HELP_MSG
         } else {

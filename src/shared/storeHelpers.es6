@@ -32,15 +32,11 @@ let storeHelpers = {
     },
 
     productTree: function (rawCatalog) {
-        let tree = Immutable.Map({});
+        let tree = Immutable.Map({})
         rawCatalog.forEach((product, index) => {
-            const attrs = product.splice(-3);
-            product.push(index);
-            const prodObj = {name: attrs[0], price: attrs[1], id: attrs[2]};
-            // console.log("==== keys = ", product);
-            // console.log("==== prodObj = ", prodObj);
-            tree = tree.setIn(product, prodObj);
-        });
+            const prodObj = {name: product[2], price: product[3], id: product[4]}
+            tree = tree.setIn([product[0], product[1], index], prodObj)
+        })
         // console.log("==== tree = ", tree.toJS());
         return tree
     },
