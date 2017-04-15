@@ -137,6 +137,7 @@ class BidRequestsTable extends React.Component {
                         '',
                             // didn't work: value={ this.state[bidReqId] ? this.state[bidReqId]['originCountryCode'] : '' }
                         <CountryDropdown
+                                value={ this.state.bids[bidReqId] ? this.state.bids[bidReqId]['originCountryCode'] : '' }
                                 valueType='short'
                                 onChange={(val) => this.handleGeoChange(bidReqId, 'originCountryCode', val)}
                         />,
