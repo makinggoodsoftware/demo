@@ -66,7 +66,7 @@ class BidRequestsTable extends React.Component {
                     <img className='refresh-btn' src={ refreshIcon }
                          onClick={this.refresh.bind(this)} />
             </th>
-            <th className='header' colSpan='2'>Dest. City</th>
+            <th className='header' colSpan='3'>Destination</th>
             <th className='header'>Incoterm</th>
             <th className='header'>Deadline</th>
             <th className='header right'>Qty</th>
@@ -84,9 +84,9 @@ class BidRequestsTable extends React.Component {
             </tr>)
             // console.log("==== productRow = ", row)
             rows.push(row)
-            const countries = bidRequests[productSpecKey]
-            // console.log("==== countries = ", countries)
-            for (let deliveryCountryCode in countries) {
+            const bidReqCountries = bidRequests[productSpecKey]
+            // console.log("==== bidReqCountries = ", bidReqCountries)
+            for (let deliveryCountryCode in bidReqCountries) {
                 const deliveryCountryName = window.geoLookup[deliveryCountryCode]['name']
                 const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }>
                     <td width='3%'></td>
@@ -94,10 +94,11 @@ class BidRequestsTable extends React.Component {
                 </tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
-                const bidReqs = countries[deliveryCountryCode]
+                const bidReqs = bidReqCountries[deliveryCountryCode]
                 for (let bidReqId in bidReqs) {
                     // console.log("==== bidReq id = ", bidReqId)
                     const bidReq = bidReqs[bidReqId]
+                    const deliveryRegionName = window.geoLookup[deliveryCountryCode]['regions'][bidReq.deliveryRegionCode]
                     // console.log("==== bidReq = ", bidReq)
                     let bidColumnValues = [], deliveryPriceDisp = '', totalDisp = '', button = ''
                     // console.log("==== is array: ", Array.isArray(bidReq.bids ))
@@ -123,13 +124,11 @@ class BidRequestsTable extends React.Component {
                         bidColumnValues = [[
                         0,
                         <input
-                            key={`${bidReqId}-unit-price`}
                             type='text'
                             name='pricePerUnit'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
                         />,
                         <input
-                            key={`${bidReqId}-del-price`}
                             type='text'
                             name='deliveryPrice'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
@@ -142,7 +141,6 @@ class BidRequestsTable extends React.Component {
                                 onChange={(val) => this.handleGeoChange(bidReqId, 'originCountryCode', val)}
                         />,
                         <button
-                            key={`${bidReqId}-button`}
                             onClick={this.createBid.bind(this, productSpecKey, deliveryCountryCode, bidReqId)}>
                             Bid
                         </button>
@@ -178,6 +176,7 @@ class BidRequestsTable extends React.Component {
                         <tr key={ bidReqId }>
                             <td></td>
                             <td width='3%'></td>
+                            <td className=''>{ deliveryRegionName }</td>
                             <td className=''>{ bidReq.deliveryCity }</td>
                             <td className=''>{ bidReq.incoterm }</td>
                             <td className=''>{ bidReq.deliveryDeadline }</td>
