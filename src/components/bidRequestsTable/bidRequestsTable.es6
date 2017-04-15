@@ -34,13 +34,14 @@ class BidRequestsTable extends React.Component {
     }
 
     handleGeoChange(bidReqKey, name, value) {
+        console.log("==== args = ", arguments)
         const bids = this.state.bids
         if (bids[bidReqKey]) {
             bids[bidReqKey][name] = value
         } else {
             bids[bidReqKey] = {[name]: value}
         }
-        // console.log("==== geo Change setting state with: ", bids)
+        console.log("==== geo Change setting state with: ", bids)
         this.setState({ bids })
     }
 
@@ -115,41 +116,49 @@ class BidRequestsTable extends React.Component {
                             deliveryPriceDisp = `$${deliveryPrice}`
                             totalDisp = `$${(qty * unitPrice) + deliveryPrice}`
                             const originCountryName = window.geoLookup[bid.originCountryCode]['name']
-                            return [ unitPriceStr, deliveryPriceDisp, totalDisp, originCountryName, button ]
+                            return [ bid.id, unitPriceStr, deliveryPriceDisp, totalDisp, originCountryName, button ]
                         })
                     } else if (!this.props.readOnly) {
                         // console.log("==== found no bids, building input elems")
                         bidColumnValues = [[
+                        0,
                         <input
+                            key={`${bidReqId}-unit-price`}
                             type='text'
                             name='pricePerUnit'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
                         />,
                         <input
+                            key={`${bidReqId}-del-price`}
                             type='text'
                             name='deliveryPrice'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
                         />,
                         '',
+                            // didn't work: value={ this.state[bidReqId] ? this.state[bidReqId]['originCountryCode'] : '' }
                         <CountryDropdown
                                 valueType='short'
                                 onChange={(val) => this.handleGeoChange(bidReqId, 'originCountryCode', val)}
                         />,
                         <button
-                            onClick={this.createBid.bind(this, productSpecKey, deliveryCountryCode, bidReqId)}
-                        >Bid</button>
+                            key={`${bidReqId}-button`}
+                            onClick={this.createBid.bind(this, productSpecKey, deliveryCountryCode, bidReqId)}>
+                            Bid
+                        </button>
                         ]]
                     }
 
                     // console.log("==== bidColumnValues = ", bidColumnValues)
+                    // even though these column td's are wrapped in a tr with a unique key, React complains since these td's are delivered in an array if they don't have unique keys
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
                         // console.log("==== rowColumns = ", rowColumns)
+                        const key = `${bidReqId}-${rowColumns[0]}`   // bidReqId-bidId, for input fields (ie no saved bid), bidId is 0
                         return (
-                        [   <td className='number'>{ rowColumns[0] }</td>,
-                            <td className='number'>{ rowColumns[1] }</td>,
-                            <td className='number'>{ rowColumns[2] }</td>,
-                            <td className=''>{ rowColumns[3] }</td>,
-                            <td>{ rowColumns[4] }</td>
+                        [   <td key={ `${key}-unit-price` } className='number'>{ rowColumns[1] }</td>,
+                            <td key={ `${key}-del-price` } className='number'>{ rowColumns[2] }</td>,
+                            <td key={ `${key}-total` } className='number'>{ rowColumns[3] }</td>,
+                            <td key={ `${key}-orig-cc` } className=''>{ rowColumns[4] }</td>,
+                            <td key={ `${key}-button` } >{ rowColumns[5] }</td>
                         ] )
                     })
                     // console.log("==== bidColumnElems = ", bidColumnElems)
