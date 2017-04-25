@@ -55,7 +55,7 @@ class Header extends React.Component {
         const loginElems = [];
         let currentUserName, logOutButton = '';
         if(currentUser && currentUser.fullName) {
-            switch (currentUser.userType) {
+            switch (currentUser.orgType) {
                 case 'buyer':
                     links.push( < Link
                     to = "/catalog"

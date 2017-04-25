@@ -23,10 +23,11 @@ export function getUser(token) {
                 const payload = JSON.parse(res.text)
                 user.id = payload.id
                 user.fullName = payload.first + " " + payload.last
-                user.userType = payload.userType
+                user.orgType = payload.orgType
+                user.orgName = payload.orgName
                 user.email = payload.email
                 console.log("==== user.fullName = ", user.fullName)
-                dispatch(fetchBidRequests(user.userType))
+                dispatch(fetchBidRequests(user.orgType))
                 dispatch(setCurrentUser(user))
             });
     }
@@ -65,7 +66,7 @@ export function requestBid(userKey, bidReq) {
     }
 }
 
-export function fetchBidRequests(type) {
+export function fetchBidRequests() {
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
         const url = baseApiUrl + '/bid_requests'
