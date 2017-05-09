@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { requestBid } from '../shared/actionCreators.es6'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 
-const HELP_MSG = '<-- To Request a Bid, First Select a Product to the Left';
+const HELP_MSG = '<-- To Enter a Tender, Select a Product Specification to the Left';
 
 // see https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 function mapStateToProps(store) { // React calls this whenever the part of the store we're subscribed to has changed
@@ -21,7 +21,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -41,9 +41,10 @@ class ProductForm extends React.Component {
     }
 
     requestBid(productKey) {
-        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} delivered by ${this.deliveryDeadlineInput.value}`)
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} '${this.state.description}' delivered by ${this.deliveryDeadlineInput.value}`)
         const bidReq = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
         bidReq.productSpecId = productKey
+        bidReq.description = this.props.node.name
         bidReq.deliveryDeadline = this.deliveryDeadlineInput.value
         this.setState({defaultDeliveryDeadline: bidReq.deliveryDeadline})
         // console.log("==== productForm bidReq = ", bidReq)
@@ -76,10 +77,13 @@ class ProductForm extends React.Component {
         let bidReq
         let qty = 0
         let productSpecId
-        let productName = 'no product selected'
-        if (this.props.node && this.props.node.price) {
-            productSpecId = this.props.node.id
-            productName = this.props.node.name
+        let node_type = null
+        if (this.props.node) {
+            node_type = 'category'
+            if (this.props.node.hasOwnProperty('property_rules')) {
+                node_type = 'commodity'
+                productSpecId = this.props.node.id
+            }
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
         // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
@@ -101,8 +105,8 @@ class ProductForm extends React.Component {
             // console.log("==== countr name ", deliveryCountryName)
             const deliveryRegionName = deliveryCountry['regions'][bidReq.deliveryRegionCode]
             // console.log("==== region name ", deliveryRegionName)
-            requestStatus = `Requested bid for ${bidReq.qty} of '${productName}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
-        } else if (!(this.props.node && this.props.node.price)) {
+            requestStatus = `Requested bid for ${bidReq.qty} of '${bidReq.description}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
+        } else if (node_type != 'commodity') {
             requestStatus = HELP_MSG
         } else {
             form = (<div>

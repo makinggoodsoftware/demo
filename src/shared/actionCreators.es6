@@ -11,6 +11,7 @@ export function getUserAuth0(token, lock) {
 export function getUser(token) {
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
+        dispatch(fetchCommodities(token, baseApiUrl))
         const url = baseApiUrl + '/users/edit'
         console.log("==== url = ", url)
         var user = {}
@@ -31,6 +32,26 @@ export function getUser(token) {
                 dispatch(setCurrentUser(user))
             });
     }
+}
+
+export function fetchCommodities(token, baseApiUrl) {
+    return (dispatch) => {
+        const url = baseApiUrl + '/bearded_tree'
+        request
+            .get(url)
+            .set('Authorization', 'Bearer ' + token)
+            .end(function (err, res) {
+                console.log("fetch commodities res = ", res)
+                console.log("fetch commodities res.text = ", res.text)
+                const payload = JSON.parse(res.text)
+                console.log("==== action, parsed commodities = ", payload)
+                dispatch(setCommodities(payload))
+            })
+    }
+}
+
+export function setCommodities(data) {
+    return { type: 'SET_COMMODITIES', data }
 }
 
 export function setCurrentUser(currentUser) {
@@ -61,6 +82,7 @@ export function requestBid(userKey, bidReq) {
                 const payload = JSON.parse(res.text)
                 requestId = payload.bid_request_id
                 console.log("==== new bidRequestId = ", requestId)
+                // #TODO: include requestId when setting up tender in store:
                 dispatch(setBidRequest(userKey, bidReq))
             })
     }

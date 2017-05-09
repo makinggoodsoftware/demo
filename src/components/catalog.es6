@@ -1,5 +1,4 @@
 import React from 'react'
-import StoreHelpers from '../shared/storeHelpers.es6'
 import { Treebeard } from 'react-treebeard'
 import { StyleRoot } from 'radium'
 import styles from '../client/styles.es6'
@@ -7,14 +6,23 @@ import { connect } from 'react-redux'
 import ProductForm from '../components/productForm.es6'
 
 function mapStateToProps(store) {
-    return { rawCatalog: store.rawCatalog }
+    return { commodities: store.commodities, rawCatalog: store.rawCatalog }
 }
 
 class Catalog extends React.Component {
     constructor(props){
         super(props)
         // console.log("==== rawCat = ", this.props.rawCatalog)
-        this.state = { data: StoreHelpers.getProducts(this.props.rawCatalog), cursor: null }
+        // this.state = { data: StoreHelpers.getProducts(this.props.rawCatalog), cursor: null }
+
+        const beardedTree = {
+            name: 'Product Specifications',
+            toggled: true,
+            children: this.props.commodities.categories
+        }
+
+        this.state = { data: beardedTree, cursor: null }
+        console.log ("==== data ", this.state.data)
         this.onToggle = this.onToggle.bind(this)
     }
 

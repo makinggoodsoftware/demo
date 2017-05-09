@@ -6,7 +6,7 @@ import { CountryDropdown } from 'react-country-region-selector'
 import refreshIcon from './assets/Reload-icon.png'
 
 function mapStateToProps(store) {
-    return { currentUser: store.currentUser, bidRequests: store.bidRequests, productSpecs: store.productSpecs }
+    return { currentUser: store.currentUser, bidRequests: store.bidRequests, productSpecs: store.productSpecs, commodities: store.commodities }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -79,8 +79,9 @@ class BidRequestsTable extends React.Component {
         </thead>)
         let rows = []
         for (let productSpecKey in bidRequests) {
+            const commodity = this.props.commodities.commodities[productSpecKey]
             const row = (<tr key={ productSpecKey }>
-                <td colSpan='10' className='category'>{ this.props.productSpecs[productSpecKey] }</td>
+                <td colSpan='10' className='category'>{ commodity ? commodity['commodity_name'] : 'Unknown' }</td>
             </tr>)
             // console.log("==== productRow = ", row)
             rows.push(row)

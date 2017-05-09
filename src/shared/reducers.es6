@@ -68,6 +68,18 @@ function bidRequests(state = {}, action) {
     }
 }
 
+function commodities(state = {}, action) {
+    switch (action.type) {
+        case 'SET_COMMODITIES':
+            console.log("==== reducer, action.data = ", action.data)
+            // top-level commodities is an array, but Object.assign turns arrays into objects with keys of 0, 1, etc.
+            // we add a holding object here
+            return Object.assign({}, state, action.data )
+        default:
+            return state
+    }
+}
+
 function rawCatalog(state = {}, action) {
     return state
 }
@@ -82,7 +94,8 @@ const reducers = combineReducers({
     currentUser,
     bidRequests,
     rawCatalog,
-    productSpecs
+    productSpecs,
+    commodities
 })
 
 export default reducers
