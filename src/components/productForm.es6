@@ -1,11 +1,12 @@
 // based on the NodeViewer component from react-treebeard repo /examples
 
-import React from 'react';
-import styles from '../client/styles.es6';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React from 'react'
+import styles from '../client/styles.es6'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { requestBid } from '../shared/actionCreators.es6'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
+import ProductProperties from './productProperties/productProperties.es6'
 
 const HELP_MSG = '<-- To Enter a Tender, Select a Product Specification to the Left';
 
@@ -37,6 +38,17 @@ class ProductForm extends React.Component {
     handleGeoChange(name, value) {
         this.setState({
             [name]: value
+        })
+    }
+
+    handlePropertiesFormChange(event) {
+        const target = event.target
+        const value = target.type === 'checkbox' ? target.checked : target.value
+        const name = target.name
+        console.log(`==== productForm setting commodity Property ${name} to ${value}`)
+
+        this.setState({
+            commodityProperties: { [name]: value }
         })
     }
 
@@ -113,6 +125,11 @@ class ProductForm extends React.Component {
                         <div>
                             {this.props.node.name}
                         </div>
+                        <ProductProperties
+                            commodityId={ this.props.node.id }
+                            propertyRules={this.props.node.property_rules}
+                            changeEvtHandler={this.handlePropertiesFormChange.bind(this)}
+                        />
                         <div>
                             <span className='request-qty'>
                                 Qty:
