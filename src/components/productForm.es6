@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {commodityProperties: {}, description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -47,8 +47,10 @@ class ProductForm extends React.Component {
         const name = target.name
         console.log(`==== productForm setting commodity Property ${name} to ${value}`)
 
+        const commProps = this.state.commodityProperties
+        commProps[name] = value
         this.setState({
-            commodityProperties: { [name]: value }
+            commodityProperties: commProps
         })
     }
 

@@ -8,6 +8,7 @@ class ProductProperties extends React.Component {
 
     constructor(props) {
         super(props)
+        this.commodityElems = {}
     }
 
     //
@@ -46,62 +47,79 @@ class ProductProperties extends React.Component {
         return newElem
     }
 
-    render() {
-        const e = React.createElement
+    getIolElems() {
+        const diopterOpts = []
+        for (let i = -100; i <= 400; i = i + 5) {
+            const valueStr = i == 0 ? '0' : (i > 0 ? `+${i / 10}` : i / 10)
+            diopterOpts.push({t: 'option', p: {key: `diopter-${i}`, value: valueStr}, c: valueStr})
+        }
+
+        return [
+            {
+                t: 'select', p: {label: 'Optics', name: 'optics', key: 'select-optic'}, c: [
+                {t: 'option', p: {key: 'optic-mono', value: 'mono', default: true}, c: 'Monofocal'},
+                {t: 'option', p: {key: 'optic-bi', value: 'bi'}, c: 'Bifocal'},
+                {t: 'option', p: {key: 'optic-multi', value: 'multi'}, c: 'Multifocal'}
+            ]
+            },
+            {
+                t: 'select', p: {label: 'Material', name: 'material', key: 'select-material'}, c: [
+                {t: 'option', p: {key: 'material-pmma', value: 'pmma', default: true}, c: 'PMMA'},
+                {t: 'option', p: {key: 'material-hydrophilic', value: 'hydrophilic'}, c: 'Hydrophilic'},
+                {t: 'option', p: {key: 'material-hydrophobic', value: 'hydrophobic'}, c: 'Hydrophobic'}
+            ]
+            },
+            {
+                t: 'select', p: {label: 'Pieces', name: 'pieces', key: 'select-pieces'}, c: [
+                {t: 'option', p: {key: 'pieces-1', value: '1', default: true}, c: '1-piece'},
+                {t: 'option', p: {key: 'pieces-3', value: '3'}, c: '3-piece'}
+            ]
+            },
+            {
+                t: 'select', p: {label: 'Edge', name: 'edge', key: 'select-edge'}, c: [
+                {t: 'option', p: {key: 'edge-round', value: 'round', default: true}, c: 'Round'},
+                {t: 'option', p: {key: 'edge-square', value: 'square'}, c: 'Square'}
+            ]
+            },
+            {t: 'select', p: {label: 'Diopter', name: 'diopter', key: 'select-diopter'}, c: diopterOpts}
+        ]
+    }
+
+    buildElems(commodityId) {
         let elemParamsA
-
-        // #TODO: take some of this prep work out of render loop
-
-        if (this.props.commodityId != '42295524') {
+        if (commodityId == '42295524') {
+            elemParamsA = this.getIolElems()
+        } else {
             console.log("==== NOT IOL !!")
             elemParamsA = [
                 {t: 'input', p: { name: 'sample', key: 'free', type: 'text', value: 'default text' }}
             ]
-        } else {
-            console.log("==== IOL !!")
-            const diopterOpts = []
-            for(let i = -100; i <= 400; i = i + 5) {
-                const child = i == 0 ? '0' : (i > 0 ? `+${i/10}` : i/10)
-                diopterOpts.push({t: 'option', p: {key: `diopter-${i}`, value: i}, c: child})
-            }
-
-            elemParamsA = [
-                {t: 'select', p: {label: 'Optics', name: 'optics', key: 'select-optic'}, c: [
-                    {t: 'option', p: {key: 'optic-mono', value: 'mono', default: true}, c: 'Monofocal'},
-                    {t: 'option', p: {key: 'optic-bi', value: 'bi'}, c: 'Bifocal'},
-                    {t: 'option', p: {key: 'optic-multi', value: 'multi'}, c: 'Multifocal'}
-                ]},
-                {t: 'select', p: {label: 'Material', name: 'material', key: 'select-material'}, c: [
-                    {t: 'option', p: {key: 'material-pmma', value: 'pmma', default: true}, c: 'PMMA'},
-                    {t: 'option', p: {key: 'material-hydrophilic', value: 'hydrophilic'}, c: 'Hydrophilic'},
-                    {t: 'option', p: {key: 'material-hydrophobic', value: 'hydrophobic'}, c: 'Hydrophobic'}
-                ]},
-                {t: 'select', p: {label: 'Pieces', name: 'pieces', key: 'select-pieces'}, c: [
-                    {t: 'option', p: {key: 'pieces-1', value: '1', default: true}, c: '1-piece'},
-                    {t: 'option', p: {key: 'pieces-3', value: '3'}, c: '3-piece'}
-                ]},
-                {t: 'select', p: {label: 'Edge', name: 'edge', key: 'select-edge'}, c: [
-                    {t: 'option', p: {key: 'edge-rounded', value: 'rounded', default: true}, c: 'Rounded'},
-                    {t: 'option', p: {key: 'edge-square', value: 'square'}, c: 'Square'}
-                ]},
-                {t: 'select', p: {label: 'Diopter', name: 'diopter', key: 'select-diopter'}, c: diopterOpts }
-            ]
         }
 
-        // [...Array(100).keys()].map(k)
-
         // t = type, p = props, c = children
-        const elems = elemParamsA.map((elemParams, idx) => {
+        return elemParamsA.map((elemParams, idx) => {
             const label = elemParams.p ? elemParams.p.label : ''
             const children = Array.isArray(elemParams.c) ? elemParams.c : [elemParams.c]
-            return this.buildElement({t: 'div', p: {key: `IOL-${idx}`}},
-                             this.buildElement({t: 'label', p: {key: `${elemParams.p.key}-label`}}, label),
-                             this.buildElement({t: elemParams.t, p: elemParams.p}, ...children))
+            return this.buildElement({t: 'div', p: {key: `commodity-${idx}`}},
+                this.buildElement({t: 'label', p: {key: `${elemParams.p.key}-label`}}, label),
+                this.buildElement({t: elemParams.t, p: elemParams.p}, ...children))
         })
+    }
+
+    getCommodityElems(commodityId) {
+        // #TODO: memoizing doesn't matter since component rebuilds everytime commodityId changes anyway
+        if (!this.commodityElems[commodityId]) {
+            this.commodityElems[commodityId] = this.buildElems(commodityId)
+        }
+        return this.commodityElems[commodityId]
+    }
+
+    render() {
+        const elems = this.getCommodityElems(this.props.commodityId)
 
         console.log("==== elems = ", elems)
 
-        return e('div', null, elems)
+        return React.createElement('div', null, elems)
     }
 }
 
