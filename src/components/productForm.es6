@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {commodityProperties: {}, description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {productSpecDescription: null, commodityProps: {}, description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -41,16 +41,17 @@ class ProductForm extends React.Component {
         })
     }
 
-    handlePropertiesFormChange(event) {
-        const target = event.target
-        const value = target.type === 'checkbox' ? target.checked : target.value
-        const name = target.name
-        console.log(`==== productForm setting commodity Property ${name} to ${value}`)
-
-        const commProps = this.state.commodityProperties
-        commProps[name] = value
+    handlePropertiesFormChange(commodityProps) {
+        // const target = event.target
+        // const value = target.type === 'checkbox' ? target.checked : target.value
+        // const name = target.name
+        // console.log(`==== productForm setting commodity Property ${name} to ${value}`)
+        //
+        // const commProps = this.state.commodityProps
+        // commProps[name] = value
         this.setState({
-            commodityProperties: commProps
+            commodityProps: commodityProps,
+            productSpecDescription: commodityProps.description
         })
     }
 
@@ -92,17 +93,20 @@ class ProductForm extends React.Component {
         let qty = 0
         let productSpecId
         let node_type = null
+        let productSpecDescription
         if (this.props.node) {
             node_type = 'category'
             if (this.props.node.hasOwnProperty('property_rules')) {
                 node_type = 'commodity'
                 productSpecId = this.props.node.id
+                productSpecDescription = this.state.productSpecDescription || this.props.node.name
             }
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
         // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
         // console.log(`==== userId = ${userId}, productSpecId = ${productSpecId}`)
-        if (this.props.bidRequests[productSpecId]) {
+        if (false) {
+        // if (this.props.bidRequests[productSpecId]) {
             // console.log("==== br qty: ", qty)
 
             const deliveryCountryCode = Object.keys(this.props.bidRequests[productSpecId])[0] // assumes buyer can only place one bid request per product
@@ -125,12 +129,13 @@ class ProductForm extends React.Component {
         } else {
             form = (<div>
                         <div>
-                            {this.props.node.name}
+                            { productSpecDescription }
                         </div>
                         <ProductProperties
                             commodityId={ this.props.node.id }
+                            commodityName={ this.props.node.name }
                             propertyRules={this.props.node.property_rules}
-                            changeEvtHandler={this.handlePropertiesFormChange.bind(this)}
+                            parentEvtHandler={this.handlePropertiesFormChange.bind(this)}
                         />
                         <div>
                             <span className='request-qty'>
