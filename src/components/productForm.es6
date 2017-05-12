@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {productSpecDescription: null, commodityProps: {}, description: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {commodityProps: {}, commodityDescription: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -51,15 +51,16 @@ class ProductForm extends React.Component {
         // commProps[name] = value
         this.setState({
             commodityProps: commodityProps,
-            productSpecDescription: commodityProps.description
+            commodityDescription: commodityProps.description || this.props.node.name
         })
     }
 
     requestBid(productKey) {
-        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} '${this.state.description}' delivered by ${this.deliveryDeadlineInput.value}`)
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} '${this.state.commodityDescription}' delivered by ${this.deliveryDeadlineInput.value}`)
         const bidReq = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
         bidReq.productSpecId = productKey
-        bidReq.description = this.props.node.name
+        // bidReq.description = this.props.node.name
+        bidReq.description = this.state.commodityDescription
         bidReq.deliveryDeadline = this.deliveryDeadlineInput.value
         this.setState({defaultDeliveryDeadline: bidReq.deliveryDeadline})
         // console.log("==== productForm bidReq = ", bidReq)
@@ -99,7 +100,7 @@ class ProductForm extends React.Component {
             if (this.props.node.hasOwnProperty('property_rules')) {
                 node_type = 'commodity'
                 productSpecId = this.props.node.id
-                productSpecDescription = this.state.productSpecDescription || this.props.node.name
+                // productSpecDescription = this.state.commodityProps.description || this.props.node.name
             }
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
@@ -128,8 +129,8 @@ class ProductForm extends React.Component {
             requestStatus = HELP_MSG
         } else {
             form = (<div>
-                        <div>
-                            { productSpecDescription }
+                        <div className='product-desc'>
+                            { this.state.commodityDescription }
                         </div>
                         <ProductProperties
                             commodityId={ this.props.node.id }

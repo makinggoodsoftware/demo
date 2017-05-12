@@ -292,6 +292,11 @@ a.headerLinkActive {
     vertical-align: top;
 }
 
+.product-desc {
+    font-size: 24px;
+    font-weight: bold;
+}
+
 .request-qty {
     margin-left: 20px;
 }

@@ -67,6 +67,7 @@ class BidRequestsTable extends React.Component {
                          onClick={this.refresh.bind(this)} />
             </th>
             <th className='header' colSpan='3'>Destination</th>
+            <th className='header'>Specs</th>
             <th className='header'>Incoterm</th>
             <th className='header'>Deadline</th>
             <th className='header right'>Qty</th>
@@ -173,12 +174,19 @@ class BidRequestsTable extends React.Component {
                         partialBidRows = bidColumnElems
                     }
 
+                    let description = bidReq.description
+                    const match = description.match(/\/\s*(.*)$/)  // extract description after first /
+                    if (match) {
+                        description = match[1]
+                    }
+
                     const mainRow = (
                         <tr key={ bidReqId }>
                             <td></td>
                             <td width='3%'></td>
                             <td className=''>{ deliveryRegionName }</td>
                             <td className=''>{ bidReq.deliveryCity }</td>
+                            <td className=''>{ description }</td>
                             <td className=''>{ bidReq.incoterm }</td>
                             <td className=''>{ bidReq.deliveryDeadline }</td>
                             <td className='number'>{ bidReq.qty }</td>
