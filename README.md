@@ -6,6 +6,13 @@ To import Product Catalog data from spreadsheet:
 CURRENT DESIGN IN POSTGRES:
 prepare UNSPSC spreadsheet (Data tab has a 'Remove Duplicates' feature that helps)
 
+To populate Commodity table:
+run `ruby ./lib/commodity_import.rb` locally
+
+To push local db to Heroku:
+heroku pg:push postgres://localhost/tonicapi_development postgresql-corrugated-38351
+
+OLDER DESGN:
 Dev DB:
 psql=# COPY unspsc_nodes(id,cat_name,created_at,updated_at) FROM '/Users/byofuel/code/misc-tonicmart/UNSPSC/UNSPSC-EXPORT-8digit.csv' DELIMITER ',' CSV;
 psql=# COPY commodities(commodity_name,id,created_at,updated_at) FROM '/Users/byofuel/code/misc-tonicmart/UNSPSC/UNSPSC-COMM-EXPORT.csv' DELIMITER ',' CSV;
