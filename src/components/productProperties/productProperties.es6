@@ -11,7 +11,7 @@ class ProductProperties extends React.Component {
     }
 
     initCommodityState(props, constructor) {
-        this.setCommodityState(props.commodityName, props.commodityPropRules.defaults, constructor)
+        this.setCommodityState(props, props.commodityPropRules.defaults, constructor)
     }
 
     changeEvtHandler(event) {
@@ -21,17 +21,18 @@ class ProductProperties extends React.Component {
         // console.log(`==== setting commodity Property ${name} to ${value}`)
         const commProps = this.state.commodityProps
         commProps[name] = value
-        this.setCommodityState(this.props.commodityName, commProps)
+        this.setCommodityState(this.props, commProps)
     }
 
-    setCommodityState(commName, commProps, constructor) {
+    setCommodityState(props, commProps, constructor) {
+        const commName = props.commodityName
         if (constructor) {
             this.state = { commodityProps: commProps}
         } else {
             this.setState({commodityProps: commProps})
         }
-        this.commDescription = this.buildDescription(commName, commProps)
-        // console.log("==== just built description: ", this.commDescription)
+        this.commDescription = this.buildDescription(props, commProps)
+        console.log("==== just built description: ", this.commDescription)
         if (!constructor) {
             this.props.parentEvtHandler(commProps, this.commDescription)
         } else {
@@ -39,16 +40,16 @@ class ProductProperties extends React.Component {
         }
     }
 
-    buildDescription(commName, commProps) {
-        if (this.props.commodityPropRules.descriptionFn) {
-            return this.props.commodityPropRules.descriptionFn(commName, commProps)
+    buildDescription(props, commProps) {
+        if (props.commodityPropRules.descriptionFn) {
+            return props.commodityPropRules.descriptionFn(props.commodityName, commProps)
         } else {
-            return this.buildGenericDescription(commName, commProps)
+            return this.buildGenericDescription(props, commProps)
         }
     }
 
-    buildGenericDescription(commName, commProps) {
-        const descriptions = this.props.commodityPropRules.elements.map(elemName => {
+    buildGenericDescription(props, commProps) {
+        const descriptions = props.commodityPropRules.elements.map(elemName => {
             if (commProps[elemName]) {
                 const describeFn = this.sharedPropertyElements(elemName).describeFn
                 // console.log(`==== describeFn for ${elemName} =`, describeFn)
@@ -57,7 +58,7 @@ class ProductProperties extends React.Component {
                 return null
             }
         })
-        return ([commName].concat(descriptions)).filter(str => str).join(' / ')
+        return ([props.commodityName].concat(descriptions)).filter(str => str).join(' / ')
     }
 
     buildElement(paramObj, displayFn, ...children) {  // recursively builds children of element
@@ -205,6 +206,15 @@ class ProductProperties extends React.Component {
 
     sharedPropertyElements(property) {
         const elems = {
+            container: { elements: {
+                e: 'select', p: {label: 'Container', name: 'container', key: 'select-container'}, c: [
+                    {e: 'option', p: {key: 'container-any', value: 'any'} },
+                    {e: 'option', p: {key: 'container-ampule', value: 'ampule'} },
+                    {e: 'option', p: {key: 'container-bottle', value: 'bottle'} },
+                    {e: 'option', p: {key: 'container-tube', value: 'tube'} },
+                    {e: 'option', p: {key: 'container-vial', value: 'vial'} }]},
+                describeFn(commodityProps) {
+                    return commodityProps.container ? `${commodityProps.container}` : '' } },
             solution: { elements: {
                 e: 'span', p: {label: 'Solution', key: 'span-solution'}, c: [{
                     e: 'input',
@@ -218,12 +228,29 @@ class ProductProperties extends React.Component {
                     p: {name: 'volume', type: 'text', key: 'input-volume', size: 5}
                 }, ' ml'] },
                 describeFn(commodityProps) {
-                    return commodityProps.volume ? `${commodityProps.volume}ml` : '' } }
+                    return commodityProps.volume ? `${commodityProps.volume}ml` : '' } },
+            weight: { elements: {
+                e: 'span', p: {label: 'Weight', key: 'span-weight'}, c: [{
+                    e: 'input',
+                    p: {name: 'weight', type: 'text', key: 'input-weight', size: 5}
+                }, ' mg'] },
+                describeFn(commodityProps) {
+                    return commodityProps.weight ? `${commodityProps.weight}mg` : '' } }
         }
         return elems[property]
     }
 
     buildElems(propertyRules) {
+        if (!propertyRules.displayFn) {  // needed for sharedPropertyElements
+            propertyRules.displayFn = (key) => {
+                const displayValues = {
+                    true: 'Yes', false: 'No', any: 'Any', tube: 'Tube', bottle: 'Bottle', vial: 'Vial',
+                    ampule: 'Ampule'
+                }
+                return displayValues[key] || key
+            }
+        }
+
         return propertyRules.elements.map((elemParams, idx) => {
             if (typeof elemParams == 'string') {  // element is common & shared, lookup the details
                 elemParams = this.sharedPropertyElements(elemParams).elements

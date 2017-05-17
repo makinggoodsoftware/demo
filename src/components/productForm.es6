@@ -12,7 +12,7 @@ const HELP_MSG = '<-- To Enter a Tender, Select a Product Specification to the L
 
 // see https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 function mapStateToProps(store) { // React calls this whenever the part of the store we're subscribed to has changed
-    return { currentUser: store.currentUser, bidRequests: store.bidRequests }
+    return { currentUser: store.currentUser, commodities: store.commodities, bidRequests: store.bidRequests }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -51,7 +51,7 @@ class ProductForm extends React.Component {
         // commProps[name] = value
         this.setState({
             commodityProps: commodityProps,
-            commodityDescription: commDescription || this.props.node.name
+            commodityDescription: commDescription
         })
     }
 
@@ -59,7 +59,6 @@ class ProductForm extends React.Component {
         console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} '${this.state.commodityDescription}' delivered by ${this.deliveryDeadlineInput.value}`)
         const bidReq = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
         bidReq.productSpecId = productKey
-        // bidReq.description = this.props.node.name
         bidReq.description = this.state.commodityDescription
         bidReq.deliveryDeadline = this.deliveryDeadlineInput.value
         this.setState({defaultDeliveryDeadline: bidReq.deliveryDeadline})
@@ -107,21 +106,23 @@ class ProductForm extends React.Component {
 
             elements: [
                 {e: 'select', p: {label: 'Optics', name: 'optics', key: 'select-optic'}, c: [
-                    {e: 'option',  p: {key: 'optic-null'} },
                     {e: 'option', p: {key: 'optic-mono', value: 'mono'} },
                     {e: 'option', p: {key: 'optic-bi', value: 'bi'} },
                     {e: 'option', p: {key: 'optic-multi', value: 'multi'} }]},
                 {e: 'select', p: {label: 'Material', name: 'material', key: 'select-material'}, c: [
                     {e: 'option',  p: {key: 'material-null'} },
-                    {e: 'option', p: {key: 'material-pmma', value: 'pmma', default: true} },
+                    {e: 'option', p: {key: 'material-pmma', value: 'pmma'} },
                     {e: 'option', p: {key: 'material-hydrophilic', value: 'hydrophilic'} },
                     {e: 'option', p: {key: 'material-hydrophobic', value: 'hydrophobic'} }]},
                 {e: 'select', p: {label: 'Pieces', name: 'pieces', key: 'select-pieces'}, c: [
                     {e: 'option',  p: {key: 'pieces-null'} },
-                    {e: 'option', p: {key: 'pieces-1', value: '1', default: true} },
+                    {e: 'option', p: {key: 'pieces-1', value: '1'} },
                     {e: 'option', p: {key: 'pieces-3', value: '3'} }]},
+                {e: 'select', p: {label: 'Position Holes', name: 'positionHoles', key: 'select-position-holes'}, c: [
+                    {e: 'option', p: {key: 'holes-0', value: '0'} },
+                    {e: 'option', p: {key: 'holes-2', value: '2'} }]},
                 {e: 'select', p: {label: 'Edge', name: 'edge', key: 'select-edge'}, c: [
-                    {e: 'option', p: {key: 'edge-round', value: 'round', default: true} },
+                    {e: 'option', p: {key: 'edge-round', value: 'round' } },
                     {e: 'option', p: {key: 'edge-square', value: 'square'} }]},
 
                 {e: 'select', p: {label: 'Diopter', name: 'diopter', key: 'select-diopter'}, c: diopterOpts},
@@ -145,33 +146,30 @@ class ProductForm extends React.Component {
 
                 {e: 'select', p: {label: 'Scleral fixation', name: 'scleral', key: 'select-scleral'}, c: [
                     {e: 'option', p: {key: 'scleral-false', value: 'false'} },
-                    {e: 'option', p: {key: 'scleral-true', value: 'true'} }]},
-
-                {e: 'select', p: {label: 'Pediatric', name: 'pediatric', key: 'select-pediatric'}, c: [
-                    {e: 'option', p: {key: 'pediatric-false', value: 'false'} },
-                    {e: 'option', p: {key: 'pediatric-true', value: 'true'} }]}
+                    {e: 'option', p: {key: 'scleral-true', value: 'true'} }]}
             ],
 
             defaults: {
-                diopter: '0', opticDiameter: '6', overallDiameter: '12', aspheric: 'false', chromophore: 'transparent', cylinder: '0',
-                scleral: 'false', pediatric: 'false'
+                optics: 'mono', diopter: '0', opticDiameter: '6', overallDiameter: '12', aspheric: 'false', chromophore: 'transparent', cylinder: '0',
+                scleral: 'false', positionHoles: '0', edge: 'round'
             },
 
             descriptionFn(commodityName, commodityProps) {
+                const positionHoles = commodityProps.positionHoles && commodityProps.positionHoles == '0' ? '' : `${commodityProps.positionHoles} Holes`
                 const edge = commodityProps.edge == 'square' ? 'square' : ''
                 const aspheric = commodityProps.aspheric && commodityProps.aspheric != 'false' ? `Aspheric ${commodityProps.aspheric}` : ''
-                const opticDiameter = commodityProps.opticDiameter && commodityProps.opticDiameter != '6' ? `Opt ⌀${commodityProps.opticDiameter} mm` : ''
-                const overallDiameter = commodityProps.overallDiameter && commodityProps.overallDiameter != '12' ? `Overall ⌀${commodityProps.overallDiameter}mm` : ''
+                const opticDiameter = commodityProps.opticDiameter ? `Opt ⌀${commodityProps.opticDiameter} mm` : ''
+                const overallDiameter = commodityProps.overallDiameter ? `Overall ⌀${commodityProps.overallDiameter}mm` : ''
                 const chromophore = commodityProps.chromophore && commodityProps.chromophore == 'yellow' ? 'Yellow' : ''
                 const cylinder = commodityProps.cylinder && commodityProps.cylinder == '0' ? '' : `Cylinder ${commodityProps.cylinder}`
                 const scleral = commodityProps.scleral && commodityProps.scleral == 'true' ? 'Scleral fixation' : ''
-                const pediatric = commodityProps.pediatric && commodityProps.pediatric == 'true' ? 'Pediatric' : ''
                 console.log("==== descriptionFn commodityProps = ", commodityProps)
                 // console.log("==== propRules.displayFn = ", propRules.displayFn)
                 return [commodityName,
                     propRules.displayFn(commodityProps.optics),
                     propRules.displayFn(commodityProps.material),
                     propRules.displayFn(commodityProps.pieces),
+                    propRules.displayFn(positionHoles),
                     propRules.displayFn(edge),
                     propRules.displayFn(commodityProps.diopter),
                     propRules.displayFn(opticDiameter),
@@ -180,7 +178,6 @@ class ProductForm extends React.Component {
                     propRules.displayFn(chromophore),
                     propRules.displayFn(cylinder),
                     propRules.displayFn(scleral),
-                    propRules.displayFn(pediatric)
                 ].filter(str => str).join(' / ')
             }
 
@@ -194,16 +191,16 @@ class ProductForm extends React.Component {
         if (commodityId == '42295524') {
             propertyRules = this.getIolPropRules()
         }
-        // else if (['51151601', '51101503', '51151605', '51151504', '51241114', '13111042', '51241115'].includes(commodityId)) {
-        else if (true) {
+        else {
             // elements in order of display, defaults keys must match the 'name' of the HTML element returned by sharedPropertyElements()
             console.log("==== productForm, PRESET PROPERTY!!!!")
-            propertyRules = {
-                elements: ['solution', 'volume'],
-                defaults: {solution: 1, volume: 5},
-            }
+            // propertyRules = {
+            //     elements: ['solution', 'volume'],
+            //     defaults: {solution: 1, volume: 5},
+            // }
+            propertyRules = this.props.commodities.commodities[commodityId].property_rules
+            console.log("==== found property_rules: ", propertyRules)
         }
-        // propertyRules.commodityName = this.props.node.name
         if (!propertyRules.defaults) {
             propertyRules.defaults = {}
         }
@@ -228,10 +225,9 @@ class ProductForm extends React.Component {
         let productSpecDescription
         if (this.props.node) {
             node_type = 'category'
-            if (this.props.node.hasOwnProperty('property_rules')) {
+            if (this.props.node.id.slice(-2) != '00') {
                 node_type = 'commodity'
                 productSpecId = this.props.node.id
-                // productSpecDescription = this.state.commodityProps.description || this.props.node.name
             }
         }
         // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
@@ -265,7 +261,7 @@ class ProductForm extends React.Component {
                         </div>
                         <ProductProperties
                             commodityId={ this.props.node.id }
-                            commodityName={ this.props.node.name }
+                            commodityName={ this.props.commodities.commodities[this.props.node.id].commodity_name }
                             commodityPropRules= { this.getPropertyRules() }
                             // propertyRules={this.props.node.property_rules}
                             parentEvtHandler={this.handlePropertiesFormChange.bind(this)}
