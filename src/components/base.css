@@ -18,6 +18,7 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
     box-sizing: border-box;
+    -webkit-border-horizontal-spacing: 0px;
     /*border: 1px solid red;*/
 }
 
@@ -298,14 +299,14 @@ a.headerLinkActive {
 }
 
 .request-qty {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
 }
 
 table.bids {
     font-family: 'Titillium Web', sans-serif;
     font-size: 18px;
     margin: 20px auto 0 auto;
-    border-spacing: 20px 0;
+    /*border-spacing: 20px 0;*/
 }
 
 table .number {
@@ -316,10 +317,17 @@ table.bids .header {
     /*width: 150px;*/
     text-align: left;
     font-weight: bold;
+    padding: 0px 8px 0px 8px;
 }
 
-table.bids .category {
-    font-size: 16px;
+table.bids .commodity {
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+table.bids .country {
+    font-size: 15px;
     font-weight: bold;
 }
 
@@ -330,6 +338,7 @@ table.bids .right {
 
 table.bids td {
     font-size: 14px;
+    padding: 0px 8px 0px 0px;
 }
 
 /*for pikaday calendar:*/
@@ -339,4 +348,25 @@ table.bids td {
 
 .refresh-btn {
     width: 20px;
+}
+
+.request-delivery-bid {
+    padding: 0px 10px 0px 0px
+}
+
+.delivery-heading {
+    padding: 10px 0px 0px 0px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.required-symbol {
+    color: red;
+    font-size: 20px;
+}
+
+.submitTenderBtn {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 10px;
 }

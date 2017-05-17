@@ -67,14 +67,14 @@ class BidRequestsTable extends React.Component {
                          onClick={this.refresh.bind(this)} />
             </th>
             <th className='header' colSpan='3'>Destination</th>
-            <th className='header'>Specs</th>
-            <th className='header'>Incoterm</th>
-            <th className='header'>Deadline</th>
-            <th className='header right'>Qty</th>
-            <th className='header right'>Unit Price</th>
-            <th className='header right'>Delivery Price</th>
-            <th className='header'>Total</th>
-            <th className='header'>Origin</th>
+            <th className='header' style={{width: '400px'}}>Specs</th>
+            <th className='header' style={{width: '20px'}}>Inco-term</th>
+            <th className='header' style={{width: '100px'}}>Deadline</th>
+            <th className='header right' style={{width: '55px'}}>Qty</th>
+            <th className='header right' style={{width: '75px'}}>Unit Price</th>
+            <th className='header right' style={{width: '75px'}}>Delivery Price</th>
+            <th className='header' style={{width: '75px'}}>Total</th>
+            <th className='header' style={{width: '75px'}}>Origin</th>
             <th></th>
         </tr>
         </thead>)
@@ -82,7 +82,7 @@ class BidRequestsTable extends React.Component {
         for (let productSpecKey in bidRequests) {
             const commodity = this.props.commodities.commodities[productSpecKey]
             const row = (<tr key={ productSpecKey }>
-                <td colSpan='10' className='category'>{ commodity ? commodity['commodity_name'] : 'Unknown' }</td>
+                <td colSpan='10' className='commodity'>{ commodity ? commodity['commodity_name'] : 'Unknown' }</td>
             </tr>)
             // console.log("==== productRow = ", row)
             rows.push(row)
@@ -92,12 +92,14 @@ class BidRequestsTable extends React.Component {
                 const deliveryCountryName = window.geoLookup[deliveryCountryCode]['name']
                 const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }>
                     <td width='3%'></td>
-                    <td className='category' colSpan='9'>{ deliveryCountryName }</td>
+                    <td className='country' colSpan='9'>{ deliveryCountryName }</td>
                 </tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
                 const bidReqs = bidReqCountries[deliveryCountryCode]
+                let rowCount = -1
                 for (let bidReqId in bidReqs) {
+                    rowCount += 1
                     // console.log("==== bidReq id = ", bidReqId)
                     const bidReq = bidReqs[bidReqId]
                     const deliveryRegionName = window.geoLookup[deliveryCountryCode]['regions'][bidReq.deliveryRegionCode]
@@ -128,11 +130,13 @@ class BidRequestsTable extends React.Component {
                         <input
                             type='text'
                             name='pricePerUnit'
+                            size='7'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
                         />,
                         <input
                             type='text'
                             name='deliveryPrice'
+                            size='7'
                             onChange={this.handleInputChange.bind(this, bidReqId)}
                         />,
                         '',
@@ -174,18 +178,19 @@ class BidRequestsTable extends React.Component {
                         partialBidRows = bidColumnElems
                     }
 
-                    let description = bidReq.description
-                    const match = description.match(/\/\s*(.*)$/)  // extract description after first /
+                    let description = ''
+                    const match = bidReq.description.match(/\/\s*(.*)$/)  // extract description after first /
                     if (match) {
                         description = match[1]
                     }
 
+                    const style = Math.abs(rowCount % 2) == 1 ? {} : {backgroundColor: '#eafaea'}
                     const mainRow = (
-                        <tr key={ bidReqId }>
+                        <tr key={ bidReqId } style={style}>
                             <td></td>
                             <td width='3%'></td>
-                            <td className=''>{ deliveryRegionName }</td>
-                            <td className=''>{ bidReq.deliveryCity }</td>
+                            <td className='' style={{width: '100px'}}>{ deliveryRegionName }</td>
+                            <td className='' style={{width: '100px'}}>{ bidReq.deliveryCity }</td>
                             <td className=''>{ description }</td>
                             <td className=''>{ bidReq.incoterm }</td>
                             <td className=''>{ bidReq.deliveryDeadline }</td>

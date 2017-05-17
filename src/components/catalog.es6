@@ -16,7 +16,7 @@ class Catalog extends React.Component {
         // this.state = { data: StoreHelpers.getProducts(this.props.rawCatalog), cursor: null }
 
         const beardedTree = {
-            name: 'Product Specifications',
+            name: 'Catalog',
             toggled: true,
             children: this.props.commodities.categories
         }
@@ -42,7 +42,6 @@ class Catalog extends React.Component {
         return (
             <div id='catalog'>
                 <div className='title'>
-                    Catalog
                 </div>
                 <StyleRoot>
                     <div style={styles.component}>

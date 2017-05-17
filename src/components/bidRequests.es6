@@ -12,7 +12,6 @@ class BidRequests extends React.Component {
         return (
             <div id='bid-requests'>
                 <div className='title'>
-                    Bid Requests
                 </div>
                 <BidRequestsTable readOnly={true} ></BidRequestsTable>
             </div>

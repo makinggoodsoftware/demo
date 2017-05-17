@@ -259,6 +259,7 @@ class ProductProperties extends React.Component {
             const label = elemParams.p ? elemParams.p.label : ''
             const children = Array.isArray(elemParams.c) ? elemParams.c : [elemParams.c]
             return this.buildElement({e: 'div', p: {key: `commodity-${idx}`}}, null,
+                this.buildElement({e: 'span', p: {className: 'required-symbol', key: `${elemParams.p.key}-req`}}, null, '*'),
                 this.buildElement({e: 'label', p: {key: `${elemParams.p.key}-label`}}, null, label),
                 this.buildElement({e: elemParams.e, p: elemParams.p}, propertyRules.displayFn, ...children))
         })
@@ -278,9 +279,15 @@ class ProductProperties extends React.Component {
     }
 
     render() {
-        console.log("==== rendering productProperties for ", this.props.commodityName)
-        this.commodityElems = this.buildElems(this.props.commodityPropRules)
-        const elems = this.commodityElems
+        console.log(`==== rendering productProperties for ${this.props.commodityId}: `, this.props.commodityName)
+        console.log("==== commPropRules = ", this.props.commodityPropRules)
+        let elems
+        if (this.props.commodityPropRules.elements.length == 0) {
+            elems = "We're still working on setting up the details necessary to correctly specify this product.  We welcome your input into the details you would like to see here."
+        } else {
+            this.commodityElems = this.buildElems(this.props.commodityPropRules)
+            elems = this.commodityElems
+        }
 
         console.log("==== elems = ", elems)
 

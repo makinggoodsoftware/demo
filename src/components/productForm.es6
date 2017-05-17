@@ -82,13 +82,13 @@ class ProductForm extends React.Component {
     getIolPropRules() {
         const diopterOpts = []
         for (let i = -100; i <= 400; i = i + 5) {
-            const valueStr = i == 0 ? '0' : (i > 0 ? `+${i / 10}` : i / 10)
+            const valueStr = i == 0 ? '+0' : (i > 0 ? `+${i / 10}` : i / 10)
             diopterOpts.push({e: 'option', p: {key: `diopter-${i}`, value: valueStr}, c: valueStr})
         }
 
-        const cylinderOpts = [{e: 'option', p: {key: `cylinder-0`, value: '0'}, c: '0'}]
+        const cylinderOpts = [{e: 'option', p: {key: `cylinder-0`, value: '+0'}, c: '+0'}]
         for (let i = 15; i <= 60; i = i + 5) {
-            const valueStr = i == 0 ? '0' : (i > 0 ? `+${i / 10}` : i / 10)
+            const valueStr = i > 0 ? `+${i / 10}` : i / 10
             cylinderOpts.push({e: 'option', p: {key: `cylinder-${i}`, value: valueStr}, c: valueStr})
         }
 
@@ -150,7 +150,7 @@ class ProductForm extends React.Component {
             ],
 
             defaults: {
-                optics: 'mono', diopter: '0', opticDiameter: '6', overallDiameter: '12', aspheric: 'false', chromophore: 'transparent', cylinder: '0',
+                optics: 'mono', diopter: '+0', opticDiameter: '6', overallDiameter: '12', aspheric: 'false', chromophore: 'transparent', cylinder: '+0',
                 scleral: 'false', positionHoles: '0', edge: 'round'
             },
 
@@ -161,7 +161,7 @@ class ProductForm extends React.Component {
                 const opticDiameter = commodityProps.opticDiameter ? `Opt ⌀${commodityProps.opticDiameter} mm` : ''
                 const overallDiameter = commodityProps.overallDiameter ? `Overall ⌀${commodityProps.overallDiameter}mm` : ''
                 const chromophore = commodityProps.chromophore && commodityProps.chromophore == 'yellow' ? 'Yellow' : ''
-                const cylinder = commodityProps.cylinder && commodityProps.cylinder == '0' ? '' : `Cylinder ${commodityProps.cylinder}`
+                const cylinder = commodityProps.cylinder && commodityProps.cylinder == '+0' ? '' : `Cylinder ${commodityProps.cylinder}`
                 const scleral = commodityProps.scleral && commodityProps.scleral == 'true' ? 'Scleral fixation' : ''
                 console.log("==== descriptionFn commodityProps = ", commodityProps)
                 // console.log("==== propRules.displayFn = ", propRules.displayFn)
@@ -213,7 +213,7 @@ class ProductForm extends React.Component {
     }
 
     render() {
-        console.log("==== rendering productForm for ", this.props.node ? this.props.node.name : 'no node')
+        console.log("==== rendering productForm for ", this.props.node ? `${this.props.node.id}: ${this.props.node.name}` : 'no node')
         const style = styles.viewer
         const userId = this.props.currentUser.id
         let requestStatus = ''
@@ -263,22 +263,27 @@ class ProductForm extends React.Component {
                             commodityId={ this.props.node.id }
                             commodityName={ this.props.commodities.commodities[this.props.node.id].commodity_name }
                             commodityPropRules= { this.getPropertyRules() }
-                            // propertyRules={this.props.node.property_rules}
                             parentEvtHandler={this.handlePropertiesFormChange.bind(this)}
                         />
                         <div>
                             <span className='request-qty'>
-                                Qty:
+                                <span className='required-symbol'>*</span>
+                                Quantity:
                                 <input
                                     name='qty'
                                     type='text'
+                                    size='10'
                                     value={this.state.qty}  // setting value here makes this a React controlled component
                                     onChange={this.handleInputChange.bind(this)}
                                 />
                             </span>
                         </div>
+                        <div className='delivery-heading'>
+                            Delivery To:
+                        </div>
                         <div>
                             <span className='request-country'>
+                                <span className='required-symbol'>*</span>
                                 Country:
                                 <CountryDropdown
                                     value={this.state.deliveryCountryCode}
@@ -289,6 +294,7 @@ class ProductForm extends React.Component {
                         </div>
                         <div>
                             <span className='request-region'>
+                                <span className='required-symbol'>*</span>
                                 Region:
                                 <RegionDropdown
                                     country={this.state.deliveryCountryCode}
@@ -298,7 +304,10 @@ class ProductForm extends React.Component {
                                     onChange={(val) => this.handleGeoChange('deliveryRegionCode', val)}
                                 />
                             </span>
+                        </div>
+                        <div>
                             <span className='request-city'>
+                                <span className='required-symbol'>*</span>
                                 City:
                                 <input
                                     name='deliveryCity'
@@ -320,16 +329,23 @@ class ProductForm extends React.Component {
                             </span>
                             <span>
                                 Incoterm:
-                                <input
+                                <select
                                     name='incoterm'
-                                    type='text'
                                     value={this.state.incoterm}
-                                    onChange={this.handleInputChange.bind(this)}
-                                />
+                                    onChange={this.handleInputChange.bind(this)}>
+                                    <option>CIP</option>
+                                    <option>CPT</option>
+                                    <option>DAP</option>
+                                    <option>DAT</option>
+                                    <option>DDP</option>
+                                    <option>EXW</option>
+                                    <option>FCA</option>
+                                    <option>FOB</option>
+                                </select>
                             </span>
                         </div>
                         <div>
-                            Delivery deadline (optional):
+                            Delivery deadline:
                             {/*the date input is not a controlled React component because pikaday doesn't trigger the onChange event*/}
                             <input
                                 type='text'
@@ -338,7 +354,10 @@ class ProductForm extends React.Component {
                                 ref={(input) => { this.deliveryDeadlineInput = input; this.bindPikaday(input) }}
                             />
                         </div>
-                        <button onClick={this.requestBid.bind(this, productSpecId)}>Request Bid</button>
+                        <div>
+                            <button className='submitTenderBtn' onClick={this.requestBid.bind(this, productSpecId)}>Submit Tender</button>
+                        </div>
+                        <span className='required-symbol'>*</span>required fields
                     </div>
                     )
         }

@@ -21,7 +21,6 @@ class Bids extends React.Component {
         return (
             <div id='bids'>
                 <div className='title'>
-                    My bids
                 </div>
                 <BidRequestsTable></BidRequestsTable>
             </div>
