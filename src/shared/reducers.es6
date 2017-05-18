@@ -3,6 +3,18 @@
 import { combineReducers } from 'redux'
 
 // here state is just the currentUsers value of the store object, determined by mapStateToProps in the component
+
+function xhrs(state = {}, action) {
+    switch (action.type) {
+        case 'UPDATE_XHR_STATUS':
+            console.log(`==== reducer uXhrStatus got action`, action)
+            state[action.xhrId] = action
+            return Object.assign({}, state)
+        default:
+            return state
+    }
+}
+
 function currentUser(state = null, action) {
     const user = {}
     switch (action.type) {
@@ -39,17 +51,18 @@ function currentUser(state = null, action) {
 
 function bidRequests(state = {}, action) {
     switch (action.type) {
-        case 'SET_BID_REQUEST':  // when user submits a new one
+        case 'SET_TENDER':  // when user submits a new one
             // all of this simpler with Immutable.js ?
-            const bidReq = action.bidReq
-            // the var reqsCountryId means reqs keyed by deliveryCountryCode, then bidReq.id
+            const tender = action.tender
+            // the var tendersByCountry means tenders keyed by deliveryCountryCode, then tender.id
             // other vars holding sub-objects have analogous names
-            let reqsCountryId = state[bidReq.productSpecId] || {}
-            const reqsId = reqsCountryId[bidReq.deliveryCountryCode] || {}
-            reqsId[bidReq.id] = bidReq
-            reqsCountryId[bidReq.deliveryCountryCode] = reqsId
-            let newState = Object.assign({}, state, { [bidReq.productSpecId]: reqsCountryId })
-            console.log("==== bidRequests returning newState, ", newState)
+            // console.log("==== setting tender: ", tender)
+            let tendersByCountry = state[tender.commodityId] || {}
+            const tendersById = tendersByCountry[tender.deliveryCountryCode] || {}
+            tendersById[tender.id] = tender
+            tendersByCountry[tender.deliveryCountryCode] = tendersById
+            let newState = Object.assign({}, state, { [tender.commodityId]: tendersByCountry })
+            // console.log("==== tenders returning newState, ", newState)
             return newState
         case 'BID_REQUESTS':  // when they're fetched from server
             return Object.assign({}, state, action.bidRequests)
@@ -91,6 +104,7 @@ function productSpecs(state = {}, action) {
 // these reducers will be called with first argument set to the value of the top-level key in store
 // so, passing 'currentUser' to combineReducers will cause the currentUser reducer to be called with the value at the currentUser key of the store object
 const reducers = combineReducers({
+    xhrs,
     currentUser,
     bidRequests,
     rawCatalog,

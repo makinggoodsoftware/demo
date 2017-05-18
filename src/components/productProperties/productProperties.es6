@@ -96,114 +96,6 @@ class ProductProperties extends React.Component {
         return newElem
     }
 
-    // getIolPropRules() {
-    //     const diopterOpts = []
-    //     for (let i = -100; i <= 400; i = i + 5) {
-    //         const valueStr = i == 0 ? '0' : (i > 0 ? `+${i / 10}` : i / 10)
-    //         diopterOpts.push({e: 'option', p: {key: `diopter-${i}`, value: valueStr}, c: valueStr})
-    //     }
-    //
-    //     const cylinderOpts = [{e: 'option', p: {key: `cylinder-0`, value: '0'}, c: '0'}]
-    //     for (let i = 15; i <= 60; i = i + 5) {
-    //         const valueStr = i == 0 ? '0' : (i > 0 ? `+${i / 10}` : i / 10)
-    //         cylinderOpts.push({e: 'option', p: {key: `cylinder-${i}`, value: valueStr}, c: valueStr})
-    //     }
-    //
-    //     // return new class PropertyRules {
-    //     const propRules =  {
-    //         displayFn(key) {
-    //             const displayValues = {
-    //                 mono: 'Monofocal', bi: 'Bifocal', multi: 'Multifocal', pmma: 'PMMA',
-    //                 hydrophilic: 'Hydrophilic', hydrophobic: 'Hydrophobic', 1: '1-piece', 3: '3-piece',
-    //                 round: 'Round', square: 'Square', true: 'Yes', false: 'No', zero: 'Zero', negative: 'Negative',
-    //                 transparent: 'Transparent', yellow: 'Yellow'
-    //             }
-    //             return displayValues[key] || key
-    //         },
-    //
-    //         elements: [
-    //             {e: 'select', p: {label: 'Optics', name: 'optics', key: 'select-optic'}, c: [
-    //                     {e: 'option',  p: {key: 'optic-null'} },
-    //                     {e: 'option', p: {key: 'optic-mono', value: 'mono'} },
-    //                     {e: 'option', p: {key: 'optic-bi', value: 'bi'} },
-    //                     {e: 'option', p: {key: 'optic-multi', value: 'multi'} }]},
-    //             {e: 'select', p: {label: 'Material', name: 'material', key: 'select-material'}, c: [
-    //                     {e: 'option',  p: {key: 'material-null'} },
-    //                     {e: 'option', p: {key: 'material-pmma', value: 'pmma', default: true} },
-    //                     {e: 'option', p: {key: 'material-hydrophilic', value: 'hydrophilic'} },
-    //                     {e: 'option', p: {key: 'material-hydrophobic', value: 'hydrophobic'} }]},
-    //             {e: 'select', p: {label: 'Pieces', name: 'pieces', key: 'select-pieces'}, c: [
-    //                     {e: 'option',  p: {key: 'pieces-null'} },
-    //                     {e: 'option', p: {key: 'pieces-1', value: '1', default: true} },
-    //                     {e: 'option', p: {key: 'pieces-3', value: '3'} }]},
-    //             {e: 'select', p: {label: 'Edge', name: 'edge', key: 'select-edge'}, c: [
-    //                     {e: 'option', p: {key: 'edge-round', value: 'round', default: true} },
-    //                     {e: 'option', p: {key: 'edge-square', value: 'square'} }]},
-    //
-    //             {e: 'select', p: {label: 'Diopter', name: 'diopter', key: 'select-diopter'}, c: diopterOpts},
-    //
-    //             {e: 'span', p: {label: 'Optic Diameter ⌀', key: 'span-optic-dia'}, c: [{e: 'input',
-    //                 p: {name: 'opticDiameter', type: 'text', key: 'input-optic-dia', size: 3} }, ' mm']},
-    //
-    //             {e: 'span', p: {label: 'Overall Diameter ⌀', key: 'span-overall-dia'}, c: [{e: 'input',
-    //                 p: {name: 'overallDiameter', type: 'text', key: 'input-overall-dia', size: 4} }, ' mm']},
-    //
-    //             {e: 'select', p: {label: 'Aspheric', name: 'aspheric', key: 'select-aspheric'}, c: [
-    //                 {e: 'option', p: {key: 'aspheric-false', value: 'false'} },
-    //                 {e: 'option', p: {key: 'aspheric-zero', value: 'zero'} },
-    //                 {e: 'option', p: {key: 'aspheric-negative', value: 'negative'} }]},
-    //
-    //             {e: 'select', p: {label: 'Chromophore', name: 'chromophore', key: 'select-chromophore'}, c: [
-    //                 {e: 'option', p: {key: 'chromophore-transparent', value: 'transparent'} },
-    //                 {e: 'option', p: {key: 'chromophore-yellow', value: 'yellow'} }]},
-    //
-    //             {e: 'select', p: {label: 'Cylinder', name: 'cylinder', key: 'select-cylinder'}, c: cylinderOpts},
-    //
-    //             {e: 'select', p: {label: 'Scleral fixation', name: 'scleral', key: 'select-scleral'}, c: [
-    //                 {e: 'option', p: {key: 'scleral-false', value: 'false'} },
-    //                 {e: 'option', p: {key: 'scleral-true', value: 'true'} }]},
-    //
-    //             {e: 'select', p: {label: 'Pediatric', name: 'pediatric', key: 'select-pediatric'}, c: [
-    //                 {e: 'option', p: {key: 'pediatric-false', value: 'false'} },
-    //                 {e: 'option', p: {key: 'pediatric-true', value: 'true'} }]}
-    //         ],
-    //
-    //         defaults: {
-    //             diopter: '0', opticDiameter: '6', overallDiameter: '12', aspheric: 'false', chromophore: 'transparent', cylinder: '0',
-    //             scleral: 'false', pediatric: 'false'
-    //         },
-    //
-    //         descriptionFn(commodityProps) {
-    //             const edge = commodityProps.edge == 'square' ? 'square' : ''
-    //             const aspheric = commodityProps.aspheric && commodityProps.aspheric != 'false' ? `Aspheric ${commodityProps.aspheric}` : ''
-    //             const opticDiameter = commodityProps.opticDiameter && commodityProps.opticDiameter != '6' ? `Opt ⌀${commodityProps.opticDiameter} mm` : ''
-    //             const overallDiameter = commodityProps.overallDiameter && commodityProps.overallDiameter != '12' ? `Overall ⌀${commodityProps.overallDiameter}mm` : ''
-    //             const chromophore = commodityProps.chromophore && commodityProps.chromophore == 'yellow' ? 'Yellow' : ''
-    //             const cylinder = commodityProps.cylinder && commodityProps.cylinder == '0' ? '' : `Cylinder ${commodityProps.cylinder}`
-    //             const scleral = commodityProps.scleral && commodityProps.scleral == 'true' ? 'Scleral fixation' : ''
-    //             const pediatric = commodityProps.pediatric && commodityProps.pediatric == 'true' ? 'Pediatric' : ''
-    //             console.log("==== descriptionFn commodityProps = ", commodityProps)
-    //             // console.log("==== propRules.displayFn = ", propRules.displayFn)
-    //             return [commodityProps.commodityName,
-    //                 propRules.displayFn(commodityProps.optics),
-    //                 propRules.displayFn(commodityProps.material),
-    //                 propRules.displayFn(commodityProps.pieces),
-    //                 propRules.displayFn(edge),
-    //                 propRules.displayFn(commodityProps.diopter),
-    //                 propRules.displayFn(opticDiameter),
-    //                 propRules.displayFn(overallDiameter),
-    //                 propRules.displayFn(aspheric),
-    //                 propRules.displayFn(chromophore),
-    //                 propRules.displayFn(cylinder),
-    //                 propRules.displayFn(scleral),
-    //                 propRules.displayFn(pediatric)
-    //             ].filter(str => str).join(' / ')
-    //         }
-    //
-    //     }
-    //     return propRules
-    // }
-
     sharedPropertyElements(property) {
         const elems = {
             container: { elements: {
@@ -242,12 +134,12 @@ class ProductProperties extends React.Component {
 
     buildElems(propertyRules) {
         if (!propertyRules.displayFn) {  // needed for sharedPropertyElements
-            propertyRules.displayFn = (key) => {
+            propertyRules.displayFn = (value) => {
                 const displayValues = {
                     true: 'Yes', false: 'No', any: 'Any', tube: 'Tube', bottle: 'Bottle', vial: 'Vial',
                     ampule: 'Ampule'
                 }
-                return displayValues[key] || key
+                return displayValues[value] || value
             }
         }
 

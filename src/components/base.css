@@ -370,3 +370,7 @@ table.bids td {
     padding: 8px;
     border-radius: 10px;
 }
+
+.status-text {
+    color: red;
+}

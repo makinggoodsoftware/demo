@@ -16,40 +16,40 @@ function mapDispatchToProps(dispatch) {
 class BidRequestsTable extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {bids: {}}  // ie. bids: { bidRequestId: { pricePerUnit: 1.01 } }
+        this.state = {bids: {}}  // ie. bids: { tenderId: { pricePerUnit: 1.01 } }
     }
 
-    handleInputChange(bidReqKey, event) {
+    handleInputChange(tenderId, event) {
         const target = event.target
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
         const bids = this.state.bids
-        if (bids[bidReqKey]) {
-            bids[bidReqKey][name] = value
+        if (bids[tenderId]) {
+            bids[tenderId][name] = value
         } else {
-            bids[bidReqKey] = {[name]: value}
+            bids[tenderId] = {[name]: value}
         }
         // console.log("==== setting state with: ", bids)
         this.setState({ bids })
     }
 
-    handleGeoChange(bidReqKey, name, value) {
+    handleGeoChange(tenderId, name, value) {
         console.log("==== args = ", arguments)
         const bids = this.state.bids
-        if (bids[bidReqKey]) {
-            bids[bidReqKey][name] = value
+        if (bids[tenderId]) {
+            bids[tenderId][name] = value
         } else {
-            bids[bidReqKey] = {[name]: value}
+            bids[tenderId] = {[name]: value}
         }
         console.log("==== geo Change setting state with: ", bids)
         this.setState({ bids })
     }
 
-    createBid(productSpecKey, deliveryCountryCode, bidReqKey) {
-        // console.log("==== looking up bid for bidReq: ", bidReqKey)
-        const bid = this.state.bids[bidReqKey]
+    createBid(productSpecKey, deliveryCountryCode, tenderId) {
+        // console.log("==== looking up bid for tenderId: ", tenderId)
+        const bid = this.state.bids[tenderId]
         // console.log("==== found bid: ", bid)
-        bid.bidRequestIds = [bidReqKey]
+        bid.bidRequestIds = [tenderId]
         bid.deliveryCountryCode = deliveryCountryCode
         this.props.createBid(productSpecKey, bid)
     }
@@ -59,7 +59,7 @@ class BidRequestsTable extends React.Component {
     }
 
     buildTable() {
-        const bidRequests = this.props.bidRequests
+        const tendersByCommId = this.props.bidRequests
         const header = (<thead>
         <tr key='tableHeader'>
             <th className='header'>
@@ -79,38 +79,38 @@ class BidRequestsTable extends React.Component {
         </tr>
         </thead>)
         let rows = []
-        for (let productSpecKey in bidRequests) {
-            const commodity = this.props.commodities.commodities[productSpecKey]
-            const row = (<tr key={ productSpecKey }>
+        for (let commodityId in tendersByCommId) {
+            const commodity = this.props.commodities.commodities[commodityId]
+            const row = (<tr key={ commodityId }>
                 <td colSpan='10' className='commodity'>{ commodity ? commodity['commodity_name'] : 'Unknown' }</td>
             </tr>)
             // console.log("==== productRow = ", row)
             rows.push(row)
-            const bidReqCountries = bidRequests[productSpecKey]
-            // console.log("==== bidReqCountries = ", bidReqCountries)
-            for (let deliveryCountryCode in bidReqCountries) {
+            const tendersByCountry = tendersByCommId[commodityId]
+            // console.log("==== tendersByCountry = ", tendersByCountry)
+            for (let deliveryCountryCode in tendersByCountry) {
                 const deliveryCountryName = window.geoLookup[deliveryCountryCode]['name']
-                const row = (<tr key={ `${productSpecKey}-${deliveryCountryCode}` }>
+                const row = (<tr key={ `${commodityId}-${deliveryCountryCode}` }>
                     <td width='3%'></td>
                     <td className='country' colSpan='9'>{ deliveryCountryName }</td>
                 </tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
-                const bidReqs = bidReqCountries[deliveryCountryCode]
+                const tenders = tendersByCountry[deliveryCountryCode]
                 let rowCount = -1
-                for (let bidReqId in bidReqs) {
+                for (let tenderId in tenders) {
                     rowCount += 1
-                    // console.log("==== bidReq id = ", bidReqId)
-                    const bidReq = bidReqs[bidReqId]
-                    const deliveryRegionName = window.geoLookup[deliveryCountryCode]['regions'][bidReq.deliveryRegionCode]
-                    // console.log("==== bidReq = ", bidReq)
+                    // console.log("==== tender id = ", tenderId)
+                    const tender = tenders[tenderId]
+                    const deliveryRegionName = window.geoLookup[deliveryCountryCode]['regions'][tender.deliveryRegionCode]
+                    // console.log("==== tender = ", tender)
                     let bidColumnValues = [], deliveryPriceDisp = '', totalDisp = '', button = ''
-                    // console.log("==== is array: ", Array.isArray(bidReq.bids ))
-                    if (Array.isArray(bidReq.bids) && bidReq.bids.length > 0) {
-                        // console.log("==== found bids for the request, length = ", bidReq.bids.length)
-                        bidColumnValues = bidReq.bids.map((bid) => {
+                    // console.log("==== is array: ", Array.isArray(tender.bids ))
+                    if (Array.isArray(tender.bids) && tender.bids.length > 0) {
+                        // console.log("==== found bids for the request, length = ", tender.bids.length)
+                        bidColumnValues = tender.bids.map((bid) => {
                             let deliveryPrice
-                            const qty = parseInt(bidReq.qty)
+                            const qty = parseInt(tender.qty)
                             const unitPrice = parseFloat(bid.pricePerUnit)
                             const unitPriceStr = `$${unitPrice}`
                             if (bid.deliveryPrice) {
@@ -131,23 +131,23 @@ class BidRequestsTable extends React.Component {
                             type='text'
                             name='pricePerUnit'
                             size='7'
-                            onChange={this.handleInputChange.bind(this, bidReqId)}
+                            onChange={this.handleInputChange.bind(this, tenderId)}
                         />,
                         <input
                             type='text'
                             name='deliveryPrice'
                             size='7'
-                            onChange={this.handleInputChange.bind(this, bidReqId)}
+                            onChange={this.handleInputChange.bind(this, tenderId)}
                         />,
                         '',
-                            // didn't work: value={ this.state[bidReqId] ? this.state[bidReqId]['originCountryCode'] : '' }
+                            // didn't work: value={ this.state[tenderId] ? this.state[tenderId]['originCountryCode'] : '' }
                         <CountryDropdown
-                                value={ this.state.bids[bidReqId] ? this.state.bids[bidReqId]['originCountryCode'] : '' }
+                                value={ this.state.bids[tenderId] ? this.state.bids[tenderId]['originCountryCode'] : '' }
                                 valueType='short'
-                                onChange={(val) => this.handleGeoChange(bidReqId, 'originCountryCode', val)}
+                                onChange={(val) => this.handleGeoChange(tenderId, 'originCountryCode', val)}
                         />,
                         <button
-                            onClick={this.createBid.bind(this, productSpecKey, deliveryCountryCode, bidReqId)}>
+                            onClick={this.createBid.bind(this, commodityId, deliveryCountryCode, tenderId)}>
                             Bid
                         </button>
                         ]]
@@ -157,7 +157,7 @@ class BidRequestsTable extends React.Component {
                     // even though these column td's are wrapped in a tr with a unique key, React complains since these td's are delivered in an array if they don't have unique keys
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
                         // console.log("==== rowColumns = ", rowColumns)
-                        const key = `${bidReqId}-${rowColumns[0]}`   // bidReqId-bidId, for input fields (ie no saved bid), bidId is 0
+                        const key = `${tenderId}-${rowColumns[0]}`   // tenderId-bidId, for input fields (ie no saved bid), bidId is 0
                         return (
                         [   <td key={ `${key}-unit-price` } className='number'>{ rowColumns[1] }</td>,
                             <td key={ `${key}-del-price` } className='number'>{ rowColumns[2] }</td>,
@@ -179,22 +179,23 @@ class BidRequestsTable extends React.Component {
                     }
 
                     let description = ''
-                    const match = bidReq.description.match(/\/\s*(.*)$/)  // extract description after first /
+                    const match = tender.description.match(/\/\s*(.*)$/)  // extract description after first /
                     if (match) {
                         description = match[1]
                     }
 
                     const style = Math.abs(rowCount % 2) == 1 ? {} : {backgroundColor: '#eafaea'}
+                    // console.log(`==== building row with key tenderId ${tenderId}`)
                     const mainRow = (
-                        <tr key={ bidReqId } style={style}>
+                        <tr key={ tenderId } style={style}>
                             <td></td>
                             <td width='3%'></td>
                             <td className='' style={{width: '100px'}}>{ deliveryRegionName }</td>
-                            <td className='' style={{width: '100px'}}>{ bidReq.deliveryCity }</td>
+                            <td className='' style={{width: '100px'}}>{ tender.deliveryCity }</td>
                             <td className=''>{ description }</td>
-                            <td className=''>{ bidReq.incoterm }</td>
-                            <td className=''>{ bidReq.deliveryDeadline }</td>
-                            <td className='number'>{ bidReq.qty }</td>
+                            <td className=''>{ tender.incoterm }</td>
+                            <td className=''>{ tender.deliveryDeadline }</td>
+                            <td className='number'>{ tender.qty }</td>
                             { partialRowColumns }
                         </tr>
                             )
@@ -203,7 +204,7 @@ class BidRequestsTable extends React.Component {
                     rows.push(mainRow)
                     partialBidRows.forEach(function(partial, idx) {
                         bidRow =
-                            <tr key={ `${bidReqId}-${idx}` }>
+                            <tr key={ `${tenderId}-${idx}` }>
                                 <td colSpan='6'></td>
                                 { partial }
                             </tr>

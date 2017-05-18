@@ -12,7 +12,7 @@ const HELP_MSG = '<-- To Enter a Tender, Select a Product Specification to the L
 
 // see https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 function mapStateToProps(store) { // React calls this whenever the part of the store we're subscribed to has changed
-    return { currentUser: store.currentUser, commodities: store.commodities, bidRequests: store.bidRequests }
+    return { xhrs: store.xhrs, currentUser: store.currentUser, commodities: store.commodities, bidRequests: store.bidRequests }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -55,17 +55,19 @@ class ProductForm extends React.Component {
         })
     }
 
-    requestBid(productKey) {
-        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of product key ${productKey} '${this.state.commodityDescription}' delivered by ${this.deliveryDeadlineInput.value}`)
-        const bidReq = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
-        bidReq.productSpecId = productKey
-        bidReq.description = this.state.commodityDescription
-        bidReq.deliveryDeadline = this.deliveryDeadlineInput.value
-        this.setState({defaultDeliveryDeadline: bidReq.deliveryDeadline})
-        // console.log("==== productForm bidReq = ", bidReq)
-        // this.props.requestBid(this.props.currentUser.id, productKey, this.deliveryDeadlineInput.value, this.state.deliveryCity, this.state.deliveryCountryCode, this.state.deliveryBidRequested, this.state.incoterm)
-        this.props.requestBid(this.props.currentUser.id, bidReq)
-        this.setState({qty: ''})
+    submitTender(commodityId) {
+        const xhrId = `${commodityId}-${Date.now()}`
+
+        console.log(`==== Bid requested by ${this.props.currentUser.fullName} (user ${this.props.currentUser.id}) for qty ${this.state.qty} of commodity id ${commodityId} '${this.state.commodityDescription}' delivered by ${this.deliveryDeadlineInput.value}`)
+        const tender = (({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }) => ({ qty, deliveryCity, deliveryRegionCode, deliveryCountryCode, deliveryBidRequested, incoterm }))(this.state)
+        tender.xhrId = xhrId
+        tender.commodityId = commodityId
+        tender.description = this.state.commodityDescription  // #TODO: include in the larger assignment from state
+        tender.deliveryDeadline = this.deliveryDeadlineInput.value
+        this.setState({ xhrId, defaultDeliveryDeadline: tender.deliveryDeadline })
+        // console.log("==== productForm tender = ", tender)
+        this.props.requestBid(this.props.currentUser.id, tender)
+        this.setState({qty: ''}) // #TODO: combine with other setState
     }
 
     bindPikaday(elem) {
@@ -94,14 +96,14 @@ class ProductForm extends React.Component {
 
         // return new class PropertyRules {
         const propRules =  {
-            displayFn(key) {
+            displayFn(value) {
                 const displayValues = {
                     mono: 'Monofocal', bi: 'Bifocal', multi: 'Multifocal', pmma: 'PMMA',
                     hydrophilic: 'Hydrophilic', hydrophobic: 'Hydrophobic', 1: '1-piece', 3: '3-piece',
                     round: 'Round', square: 'Square', true: 'Yes', false: 'No', zero: 'Zero', negative: 'Negative',
                     transparent: 'Transparent', yellow: 'Yellow'
                 }
-                return displayValues[key] || key
+                return displayValues[value] || value
             },
 
             elements: [
@@ -220,25 +222,40 @@ class ProductForm extends React.Component {
         let form = ''
         let bidReq
         let qty = 0
-        let productSpecId
+        let commodityId  // #TODO: move this to state, set in constructor and cWRP ?
         let node_type = null
         let productSpecDescription
         if (this.props.node) {
             node_type = 'category'
             if (this.props.node.id.slice(-2) != '00') {
                 node_type = 'commodity'
-                productSpecId = this.props.node.id
+                commodityId = this.props.node.id
             }
         }
-        // if (this.props.bidRequests[productSpecId]) console.log(`==== br for prod `, this.props.bidRequests[productSpecId])
-        // if (this.props.bidRequests[productSpecId] && this.props.bidRequests[productSpecId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[productSpecId][userId])
-        // console.log(`==== userId = ${userId}, productSpecId = ${productSpecId}`)
+        let statusText = null
+        if (this.state.xhrId) {
+            const xhrStatus = this.props.xhrs[this.state.xhrId]
+            statusText = xhrStatus ? xhrStatus.statusText : ''
+            if (typeof xhrStatus.errors == 'string') {
+                statusText += `: ${xhrStatus.errors}`
+            } else if (xhrStatus.errors) {  // if it exists, assume it's an object of format {field_name: error_text}
+                const res = Object.keys(xhrStatus.errors).reduce((result, key) => {
+                    return result + `${key}: ${xhrStatus.errors[key]}\r\n`
+                }, '')
+                console.log("==== res = ", res)
+                statusText = statusText + ":\r\n" + res
+            }
+        }
+
+        // if (this.props.bidRequests[commodityId]) console.log(`==== br for prod `, this.props.bidRequests[commodityId])
+        // if (this.props.bidRequests[commodityId] && this.props.bidRequests[commodityId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[commodityId][userId])
+        // console.log(`==== userId = ${userId}, commodityId = ${commodityId}`)
         if (false) {
-        // if (this.props.bidRequests[productSpecId]) {
+        // if (this.props.bidRequests[commodityId]) {
             // console.log("==== br qty: ", qty)
 
-            const deliveryCountryCode = Object.keys(this.props.bidRequests[productSpecId])[0] // assumes buyer can only place one bid request per product
-            const bidReqsByCountry = this.props.bidRequests[productSpecId][deliveryCountryCode]
+            const deliveryCountryCode = Object.keys(this.props.bidRequests[commodityId])[0] // assumes buyer can only place one bid request per product
+            const bidReqsByCountry = this.props.bidRequests[commodityId][deliveryCountryCode]
             // console.log("==== bidReqsByCountry = ", bidReqsByCountry)
             const bidReqId = Object.keys(bidReqsByCountry)[0] // assumes buyer can only place one bid request per product
             const bidReq = bidReqsByCountry[bidReqId]
@@ -355,9 +372,16 @@ class ProductForm extends React.Component {
                             />
                         </div>
                         <div>
-                            <button className='submitTenderBtn' onClick={this.requestBid.bind(this, productSpecId)}>Submit Tender</button>
+                            <span className='required-symbol'>*</span>required fields
                         </div>
-                        <span className='required-symbol'>*</span>required fields
+                        <div>
+                            <button className='submitTenderBtn' onClick={this.submitTender.bind(this, commodityId)}>Submit Tender</button>
+                        </div>
+                        <div>
+                            <span className='status-text'>
+                                { statusText }
+                            </span>
+                        </div>
                     </div>
                     )
         }

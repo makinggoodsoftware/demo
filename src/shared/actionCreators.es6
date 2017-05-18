@@ -62,30 +62,39 @@ export function logOutUser() {
     return { type: 'LOG_OUT_USER' }
 }
 
-export function requestBid(userKey, bidReq) {
-    // console.log("==== requestBid fn, bidReq = ", bidReq)
+export function requestBid(userKey, tender) {
+    // console.log("==== requestBid fn, tender = ", tender)
 
     return (dispatch) => {
+        dispatch(updateXhrStatus(tender.xhrId, 'Saving...'))
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
         const url = baseApiUrl + '/bid_requests/create'
         // console.log("==== url = ", url)
         const idToken = localStorage.getItem('idToken')
-        let requestId
-        // #TODO: handle api error (update Redux store accordingly)
         request
             .post(url)
             .set('Authorization', 'Bearer ' + idToken)
-            .send(bidReq)
+            .send(tender)
             .end(function (err, res) {
                 console.log("res = ", res)
                 console.log("res.text = ", res.text)
                 const payload = JSON.parse(res.text)
-                requestId = payload.bid_request_id
-                console.log("==== new bidRequestId = ", requestId)
-                // #TODO: include requestId when setting up tender in store:
-                dispatch(setBidRequest(userKey, bidReq))
+                let statusText = null, errors = null
+                if (res.statusCode == 201) {
+                    tender.id = payload.bid_request_id
+                    dispatch(setTender(userKey, tender))
+                } else {
+                    statusText = 'Error'
+                    errors = payload.error
+                }
+                dispatch(updateXhrStatus(tender.xhrId, statusText, errors))
             })
     }
+}
+
+function updateXhrStatus(xhrId, statusText, errors) {
+    console.log(`==== action uXhrStatus got id ${xhrId} with status ${statusText}, errors ${errors}`)
+    return ({type: 'UPDATE_XHR_STATUS', xhrId, statusText, errors })
 }
 
 export function fetchBidRequests() {
@@ -133,8 +142,8 @@ export function createBid(productSpecKey, bid) {
     }
 }
 
-export function setBidRequest(userKey, bidReq) {
-    return { type: 'SET_BID_REQUEST', userKey, bidReq }
+export function setTender(userKey, tender) {
+    return { type: 'SET_TENDER', userKey, tender }
 }
 
 export function setBidRequests(bidRequests) {
