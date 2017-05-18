@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 class ProductForm extends React.Component {
     constructor(props){
         super(props)
-        this.state = {commodityProps: {}, commodityDescription: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: '', defaultDeliveryDeadline: ''}
+        this.state = {commodityProps: {}, commodityDescription: '', qty: '', deliveryCity: '', deliveryRegionCode: '',deliveryCountryCode: '', deliveryBidRequested: false, incoterm: 'CIP', defaultDeliveryDeadline: ''}
     }
 
     handleInputChange(event) {
@@ -333,14 +333,14 @@ class ProductForm extends React.Component {
                                     name='incoterm'
                                     value={this.state.incoterm}
                                     onChange={this.handleInputChange.bind(this)}>
-                                    <option>CIP</option>
-                                    <option>CPT</option>
-                                    <option>DAP</option>
-                                    <option>DAT</option>
-                                    <option>DDP</option>
-                                    <option>EXW</option>
-                                    <option>FCA</option>
-                                    <option>FOB</option>
+                                    <option value='CIP'>CIP</option>
+                                    <option value='CPT'>CPT</option>
+                                    <option value='DAP'>DAP</option>
+                                    <option value='DAT'>DAT</option>
+                                    <option value='DDP'>DDP</option>
+                                    <option value='EXW'>EXW</option>
+                                    <option value='FCA'>FCA</option>
+                                    <option value='FOB'>FOB</option>
                                 </select>
                             </span>
                         </div>
