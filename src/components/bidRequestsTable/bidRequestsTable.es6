@@ -58,8 +58,14 @@ class BidRequestsTable extends React.Component {
         this.props.fetchBidRequests()
     }
 
+    calcRowBackground(rowNum) {
+        return Math.abs(rowNum % 2) == 1 ? {} : {backgroundColor: '#eafaea'}
+    }
+
     buildTable() {
         const tendersByCommId = this.props.bidRequests
+        const tenderColumnCount = 8
+        const bidColumnCount = 7
         const header = (<thead>
         <tr key='tableHeader'>
             <th className='header'>
@@ -90,6 +96,7 @@ class BidRequestsTable extends React.Component {
             rows.push(row)
             const tendersByCountry = tendersByCommId[commodityId]
             // console.log("==== tendersByCountry = ", tendersByCountry)
+            let rowCount = -1
             for (let deliveryCountryCode in tendersByCountry) {
                 const deliveryCountryName = window.geoLookup[deliveryCountryCode]['name']
                 const row = (<tr key={ `${commodityId}-${deliveryCountryCode}` }>
@@ -99,7 +106,6 @@ class BidRequestsTable extends React.Component {
                 // console.log("==== country row = ", row)
                 rows.push(row)
                 const tenders = tendersByCountry[deliveryCountryCode]
-                let rowCount = -1
                 for (let tenderId in tenders) {
                     rowCount += 1
                     // console.log("==== tender id = ", tenderId)
@@ -190,11 +196,16 @@ class BidRequestsTable extends React.Component {
                     let partialRowColumns = ''
                     let partialBidRows = []
 
-                    if (bidColumnElems.length == 1) {
+                    const bidCount = bidColumnElems.length
+                    // console.log(`==== tender ${tenderId} has ${bidCount} bids`)
+                    if (bidCount > 0) { // there is only one bid for this tender
                         partialRowColumns = bidColumnElems[0]
+                        if (bidCount > 1) {
+                            partialBidRows = bidColumnElems.slice(1, bidCount)
+                            // console.log("==== partialBidRows length = ", partialBidRows.length)
+                        }
                     } else {
-                        partialRowColumns = (<td colSpan='5'></td>)
-                        partialBidRows = bidColumnElems
+                        partialRowColumns = (<td colSpan={bidColumnCount}></td>)  // leave columns to right of tender empty when multiple bids
                     }
 
                     let description = ''
@@ -203,7 +214,7 @@ class BidRequestsTable extends React.Component {
                         description = match[1]
                     }
 
-                    const style = Math.abs(rowCount % 2) == 1 ? {} : {backgroundColor: '#eafaea'}
+                    const style = this.calcRowBackground(rowCount)
                     // console.log(`==== building row with key tenderId ${tenderId}`)
                     const mainRow = (
                         <tr key={ tenderId } style={style}>
@@ -219,15 +230,13 @@ class BidRequestsTable extends React.Component {
                         </tr>
                             )
                     // console.log("==== bid request mainrow = ", mainRow)
-                    let bidRow
                     rows.push(mainRow)
                     partialBidRows.forEach(function(partial, idx) {
-                        bidRow =
-                            <tr key={ `${tenderId}-${idx}` }>
-                                <td colSpan='6'></td>
+                        const bidRow =
+                            <tr key={ `${tenderId}-${idx}` } style={style}>
+                                <td colSpan={tenderColumnCount}></td>
                                 { partial }
                             </tr>
-
                         rows.push(bidRow)
                     })
                 }

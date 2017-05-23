@@ -19,6 +19,7 @@ time, mark, audio, video {
     vertical-align: baseline;
     box-sizing: border-box;
     -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
     /*border: 1px solid red;*/
 }
 
@@ -87,7 +88,7 @@ a.headerLinkActive {
 #header .nav-desktop {
     height: 79px;
     width: 50%;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     text-align: center;
 }
 
