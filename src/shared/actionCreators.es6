@@ -1,4 +1,5 @@
 import request from 'superagent';
+const msgDuration = 5000
 
 export function logInUser(userName) {
     return { type: 'LOG_IN_USER', userName }
@@ -62,8 +63,8 @@ export function logOutUser() {
     return { type: 'LOG_OUT_USER' }
 }
 
-export function requestBid(userKey, tender) {
-    // console.log("==== requestBid fn, tender = ", tender)
+export function submitTender(userKey, tender) {
+    // console.log("==== submitTender fn, tender = ", tender)
 
     return (dispatch) => {
         dispatch(updateXhrStatus(tender.xhrId, 'Saving...'))
@@ -83,6 +84,10 @@ export function requestBid(userKey, tender) {
                 if (res.statusCode == 201) {
                     tender.id = payload.bid_request_id
                     dispatch(setTender(userKey, tender))
+                    statusText = 'Saved.'
+                    setTimeout(() => {
+                        dispatch(updateXhrStatus(tender.xhrId), '')
+                    }, msgDuration)
                 } else {
                     statusText = 'Error'
                     errors = payload.error

@@ -4,7 +4,7 @@ import React from 'react'
 import styles from '../client/styles.es6'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { requestBid } from '../shared/actionCreators.es6'
+import { submitTender } from '../shared/actionCreators.es6'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector'
 import ProductProperties from './productProperties/productProperties.es6'
 
@@ -16,7 +16,7 @@ function mapStateToProps(store) { // React calls this whenever the part of the s
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ requestBid }, dispatch)
+    return bindActionCreators({ submitTender }, dispatch)
 }
 
 class ProductForm extends React.Component {
@@ -66,7 +66,7 @@ class ProductForm extends React.Component {
         tender.deliveryDeadline = this.deliveryDeadlineInput.value
         this.setState({ xhrId, defaultDeliveryDeadline: tender.deliveryDeadline })
         // console.log("==== productForm tender = ", tender)
-        this.props.requestBid(this.props.currentUser.id, tender)
+        this.props.submitTender(this.props.currentUser.id, tender)
         this.setState({qty: ''}) // #TODO: combine with other setState
     }
 

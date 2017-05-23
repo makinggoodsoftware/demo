@@ -74,6 +74,8 @@ class BidRequestsTable extends React.Component {
             <th className='header right' style={{width: '75px'}}>Unit Price</th>
             <th className='header right' style={{width: '75px'}}>Delivery Price</th>
             <th className='header' style={{width: '75px'}}>Total</th>
+            <th className='header' style={{width: '75px'}}>Mfr</th>
+            <th className='header' style={{width: '75px'}}>Mfr Code</th>
             <th className='header' style={{width: '75px'}}>Origin</th>
             <th></th>
         </tr>
@@ -120,8 +122,10 @@ class BidRequestsTable extends React.Component {
                             }
                             deliveryPriceDisp = `$${deliveryPrice}`
                             totalDisp = `$${(qty * unitPrice) + deliveryPrice}`
+                            const mfrName = bid.mfrName
+                            const productCode = bid.productCode
                             const originCountryName = window.geoLookup[bid.originCountryCode]['name']
-                            return [ bid.id, unitPriceStr, deliveryPriceDisp, totalDisp, originCountryName, button ]
+                            return [ bid.id, unitPriceStr, deliveryPriceDisp, totalDisp, mfrName, productCode, originCountryName, button ]
                         })
                     } else if (!this.props.readOnly) {
                         // console.log("==== found no bids, building input elems")
@@ -141,10 +145,23 @@ class BidRequestsTable extends React.Component {
                         />,
                         '',
                             // didn't work: value={ this.state[tenderId] ? this.state[tenderId]['originCountryCode'] : '' }
+                        <input
+                            type='text'
+                            name='mfrName'
+                            size='7'
+                            onChange={this.handleInputChange.bind(this, tenderId)}
+                        />,
+                        <input
+                            type='text'
+                            name='productCode'
+                            size='7'
+                            onChange={this.handleInputChange.bind(this, tenderId)}
+                        />,
                         <CountryDropdown
                                 value={ this.state.bids[tenderId] ? this.state.bids[tenderId]['originCountryCode'] : '' }
                                 valueType='short'
                                 onChange={(val) => this.handleGeoChange(tenderId, 'originCountryCode', val)}
+                                defaultOptionLabel='Country of Manufacture'
                         />,
                         <button
                             onClick={this.createBid.bind(this, commodityId, deliveryCountryCode, tenderId)}>
@@ -153,7 +170,7 @@ class BidRequestsTable extends React.Component {
                         ]]
                     }
 
-                    // console.log("==== bidColumnValues = ", bidColumnValues)
+                    console.log("==== bidColumnValues = ", bidColumnValues)
                     // even though these column td's are wrapped in a tr with a unique key, React complains since these td's are delivered in an array if they don't have unique keys
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
                         // console.log("==== rowColumns = ", rowColumns)
@@ -162,8 +179,10 @@ class BidRequestsTable extends React.Component {
                         [   <td key={ `${key}-unit-price` } className='number'>{ rowColumns[1] }</td>,
                             <td key={ `${key}-del-price` } className='number'>{ rowColumns[2] }</td>,
                             <td key={ `${key}-total` } className='number'>{ rowColumns[3] }</td>,
-                            <td key={ `${key}-orig-cc` } className=''>{ rowColumns[4] }</td>,
-                            <td key={ `${key}-button` } >{ rowColumns[5] }</td>
+                            <td key={ `${key}-mfr` } className='number'>{ rowColumns[4] }</td>,
+                            <td key={ `${key}-mfr-code` } className=''>{ rowColumns[5] }</td>,
+                            <td key={ `${key}-orig-cc` } className=''>{ rowColumns[6] }</td>,
+                            <td key={ `${key}-button` } >{ rowColumns[7] }</td>
                         ] )
                     })
                     // console.log("==== bidColumnElems = ", bidColumnElems)
