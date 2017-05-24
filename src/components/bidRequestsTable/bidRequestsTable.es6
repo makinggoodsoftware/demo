@@ -65,7 +65,7 @@ class BidRequestsTable extends React.Component {
     buildTable() {
         const tendersByCommId = this.props.bidRequests
         const tenderColumnCount = 8
-        const bidColumnCount = 7
+        const bidColumnCount = 9
         const header = (<thead>
         <tr key='tableHeader'>
             <th className='header'>
@@ -80,9 +80,11 @@ class BidRequestsTable extends React.Component {
             <th className='header right' style={{width: '75px'}}>Unit Price</th>
             <th className='header right' style={{width: '75px'}}>Delivery Price</th>
             <th className='header' style={{width: '75px'}}>Total</th>
+            <th className='header' style={{width: '75px'}}>Prepay %</th>
+            <th className='header' style={{width: '75px'}}>Payment Terms</th>
             <th className='header' style={{width: '75px'}}>Mfr</th>
             <th className='header' style={{width: '75px'}}>Mfr Code</th>
-            <th className='header' style={{width: '75px'}}>Origin</th>
+            <th className='header' style={{width: '75px'}}>Country of Manufacture</th>
             <th></th>
         </tr>
         </thead>)
@@ -128,10 +130,10 @@ class BidRequestsTable extends React.Component {
                             }
                             deliveryPriceDisp = `$${deliveryPrice}`
                             totalDisp = `$${(qty * unitPrice) + deliveryPrice}`
+                            const prepayPercent = !bid.prepayPercent || bid.prepayPercent == '' ? '' : `${bid.prepayPercent}%`
                             const mfrName = bid.mfrName
-                            const productCode = bid.productCode
                             const originCountryName = window.geoLookup[bid.originCountryCode]['name']
-                            return [ bid.id, unitPriceStr, deliveryPriceDisp, totalDisp, mfrName, productCode, originCountryName, button ]
+                            return [ bid.id, unitPriceStr, deliveryPriceDisp, totalDisp, prepayPercent, bid.paymentTerms, mfrName, bid.productCode, originCountryName, button ]
                         })
                     } else if (!this.props.readOnly) {
                         // console.log("==== found no bids, building input elems")
@@ -151,6 +153,23 @@ class BidRequestsTable extends React.Component {
                         />,
                         '',
                             // didn't work: value={ this.state[tenderId] ? this.state[tenderId]['originCountryCode'] : '' }
+                        <input
+                            type='text'
+                            name='prepayPercent'
+                            size='3'
+                            onChange={this.handleInputChange.bind(this, tenderId)}
+                        />,
+                        <select
+                            name='paymentTerms'
+                            onChange={this.handleInputChange.bind(this, tenderId)}>
+                            <option value=''></option>
+                            <option value='Net 7'>Net 7</option>
+                            <option value='Net 10'>Net 10</option>
+                            <option value='Net 30'>Net 30</option>
+                            <option value='Net 45'>Net 45</option>
+                            <option value='Net 60'>Net 60</option>
+                            <option value='Net 90'>Net 90</option>
+                        </select>,
                         <input
                             type='text'
                             name='mfrName'
@@ -185,10 +204,12 @@ class BidRequestsTable extends React.Component {
                         [   <td key={ `${key}-unit-price` } className='number'>{ rowColumns[1] }</td>,
                             <td key={ `${key}-del-price` } className='number'>{ rowColumns[2] }</td>,
                             <td key={ `${key}-total` } className='number'>{ rowColumns[3] }</td>,
-                            <td key={ `${key}-mfr` } className='number'>{ rowColumns[4] }</td>,
-                            <td key={ `${key}-mfr-code` } className=''>{ rowColumns[5] }</td>,
-                            <td key={ `${key}-orig-cc` } className=''>{ rowColumns[6] }</td>,
-                            <td key={ `${key}-button` } >{ rowColumns[7] }</td>
+                            <td key={ `${key}-prepay-percent` } className='number'>{ rowColumns[4] }</td>,
+                            <td key={ `${key}-payment-terms` } className='number'>{ rowColumns[5] }</td>,
+                            <td key={ `${key}-mfr` } className='number'>{ rowColumns[6] }</td>,
+                            <td key={ `${key}-mfr-code` } className=''>{ rowColumns[7] }</td>,
+                            <td key={ `${key}-orig-cc` } className=''>{ rowColumns[8] }</td>,
+                            <td key={ `${key}-button` } >{ rowColumns[9] }</td>
                         ] )
                     })
                     // console.log("==== bidColumnElems = ", bidColumnElems)
