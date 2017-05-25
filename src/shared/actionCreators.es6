@@ -168,3 +168,18 @@ export function setTenders(tenders) {
 export function setBid(productSpecKey, bid) {
     return { type: 'SET_BID', productSpecKey, bid }
 }
+
+export function getAgGridModule() {
+    console.log("==== action getAgGridModule called")
+    return (dispatch) => {
+        // webpackChunkName is optional:
+        import(/* webpackChunkName: "ag-grid-react" */ 'ag-grid-react').then(TopModule => {
+            console.log("==== import of ag-grid-react has returned TopModule: ", TopModule)
+            dispatch(setAgGridModule(TopModule.AgGridReact))
+        }).catch(err => console.log('In actionCreators, Failed to load ag-grid-react', err))
+    }
+}
+
+function setAgGridModule(module) {
+    return { type: 'SET_AG_GRID_MODULE', module }
+}

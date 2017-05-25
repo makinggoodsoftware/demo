@@ -18,7 +18,13 @@ var config = {
         rules : [
             {
                 test : /\.es6|\.jsx?$/,
-                loader : 'babel-loader'
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [['es2015']],
+                        plugins: ['syntax-dynamic-import']
+                    }
+                }]
             },
             {
                 test: /\.css$/,

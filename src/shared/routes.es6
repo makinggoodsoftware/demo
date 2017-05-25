@@ -5,6 +5,7 @@ import Catalog from '../components/catalog.es6';
 import Home from '../components/home/home.es6';
 import BidRequests from '../components/bidRequests.es6';
 import Bids from '../components/bids.es6';
+import Grid from '../components/grid/grid.es6';
 import Login from '../components/login.es6';
 
 function requireAuth (nextState, replace, callback) {       // validate authentication for private routes
@@ -24,6 +25,7 @@ const routes = (
         <Route path="catalog" component={Catalog} onEnter={requireAuth} />
         <Route path="bidRequests" component={BidRequests} />
         <Route path="bids" component={Bids} />
+        <Route path="grid" component={Grid} />
     </Route>
 )
 

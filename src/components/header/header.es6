@@ -67,6 +67,11 @@ class Header extends React.Component {
                     key = "bidRequests"
                     activeClassName='headerLinkActive'>Tenders</Link>
                     );
+                    links.push( < Link
+                    to = "/grid"
+                    key = "grid"
+                    activeClassName='headerLinkActive'>Grid</Link>
+                    );
                     break;
                 case 'supplier':
                     links.push( < Link

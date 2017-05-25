@@ -117,6 +117,15 @@ function productSpecs(state = {}, action) {
     return state
 }
 
+function agGridModule(state = null, action) {
+    switch (action.type) {
+        case 'SET_AG_GRID_MODULE':
+            return Object.assign({}, state, action.module)
+        default:
+            return state
+    }
+}
+
 // these reducers will be called with first argument set to the value of the top-level key in store
 // so, passing 'currentUser' to combineReducers will cause the currentUser reducer to be called with the value at the currentUser key of the store object
 const reducers = combineReducers({
@@ -126,7 +135,8 @@ const reducers = combineReducers({
     tenderTree,
     rawCatalog,
     productSpecs,
-    commodities
+    commodities,
+    agGridModule
 })
 
 export default reducers

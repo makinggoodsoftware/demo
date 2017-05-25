@@ -10,6 +10,7 @@ var config = {
     entry: SRC_DIR + '/client/index.es6',
     output: {
         path: BUILD_DIR,
+        publicPath: '/assets/',  // needed so webpack can generate correct url to any bundle it generates other than main bundle
         filename: 'bundle.js'
     },
     module : {
@@ -17,7 +18,13 @@ var config = {
             {
                 test : /\.es6?/,
                 include : SRC_DIR,
-                loader : 'babel-loader'
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [['es2015']],
+                        plugins: ['syntax-dynamic-import']  // required to call import() from within code vs. import at top of file
+                    }
+                }]
             },
             // {
             //     test: /\.css$/,
