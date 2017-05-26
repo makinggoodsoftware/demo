@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
-import { logInUser, getUserAuth0, setCurrentUser, getUser, fetchBidRequests, logOutUser } from '../../shared/actionCreators.es6'
+import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '../../shared/actionCreators.es6'
 import imgLogo from './assets/Logomakr_9976sI.png'
 
 function mapStateToProps(store) {
@@ -10,7 +10,7 @@ function mapStateToProps(store) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ logInUser, getUserAuth0, setCurrentUser, getUser, fetchBidRequests, logOutUser }, dispatch)
+    return bindActionCreators({ logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser }, dispatch)
 }
 
 class Header extends React.Component {

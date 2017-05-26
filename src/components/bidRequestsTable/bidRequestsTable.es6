@@ -1,16 +1,16 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { createBid, fetchBidRequests } from '../../shared/actionCreators.es6'
+import { createBid, fetchTenders } from '../../shared/actionCreators.es6'
 import { CountryDropdown } from 'react-country-region-selector'
 import refreshIcon from './assets/Reload-icon.png'
 
 function mapStateToProps(store) {
-    return { currentUser: store.currentUser, bidRequests: store.bidRequests, productSpecs: store.productSpecs, commodities: store.commodities }
+    return { currentUser: store.currentUser, tenders: store.tenders, tenderTree: store.tenderTree, productSpecs: store.productSpecs, commodities: store.commodities }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createBid, fetchBidRequests }, dispatch)
+    return bindActionCreators({ createBid, fetchTenders }, dispatch)
 }
 
 class BidRequestsTable extends React.Component {
@@ -55,7 +55,7 @@ class BidRequestsTable extends React.Component {
     }
 
     refresh() {
-        this.props.fetchBidRequests()
+        this.props.fetchTenders()
     }
 
     calcRowBackground(rowNum) {
@@ -63,7 +63,7 @@ class BidRequestsTable extends React.Component {
     }
 
     buildTable() {
-        const tendersByCommId = this.props.bidRequests
+        const tendersByCommId = this.props.tenderTree
         const tenderColumnCount = 8
         const bidColumnCount = 9
         const header = (<thead>
@@ -107,11 +107,11 @@ class BidRequestsTable extends React.Component {
                 </tr>)
                 // console.log("==== country row = ", row)
                 rows.push(row)
-                const tenders = tendersByCountry[deliveryCountryCode]
-                for (let tenderId in tenders) {
+                const tenderIds = tendersByCountry[deliveryCountryCode]
+                for (let tenderId of tenderIds) {
                     rowCount += 1
                     // console.log("==== tender id = ", tenderId)
-                    const tender = tenders[tenderId]
+                    const tender = this.props.tenders[tenderId]
                     const deliveryRegionName = window.geoLookup[deliveryCountryCode]['regions'][tender.deliveryRegionCode]
                     // console.log("==== tender = ", tender)
                     let bidColumnValues = [], deliveryPriceDisp = '', totalDisp = '', button = ''
@@ -195,7 +195,7 @@ class BidRequestsTable extends React.Component {
                         ]]
                     }
 
-                    console.log("==== bidColumnValues = ", bidColumnValues)
+                    // console.log("==== bidColumnValues = ", bidColumnValues)
                     // even though these column td's are wrapped in a tr with a unique key, React complains since these td's are delivered in an array if they don't have unique keys
                     const bidColumnElems = bidColumnValues.map((rowColumns) => {
                         // console.log("==== rowColumns = ", rowColumns)

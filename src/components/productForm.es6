@@ -12,7 +12,7 @@ const HELP_MSG = '<-- To Enter a Tender, Select a Product Specification to the L
 
 // see https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 function mapStateToProps(store) { // React calls this whenever the part of the store we're subscribed to has changed
-    return { xhrs: store.xhrs, currentUser: store.currentUser, commodities: store.commodities, bidRequests: store.bidRequests }
+    return { xhrs: store.xhrs, currentUser: store.currentUser, commodities: store.commodities }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -247,29 +247,7 @@ class ProductForm extends React.Component {
             }
         }
 
-        // if (this.props.bidRequests[commodityId]) console.log(`==== br for prod `, this.props.bidRequests[commodityId])
-        // if (this.props.bidRequests[commodityId] && this.props.bidRequests[commodityId][userId]) console.log(`==== br for user for prod `, this.props.bidRequests[commodityId][userId])
-        // console.log(`==== userId = ${userId}, commodityId = ${commodityId}`)
-        if (false) {
-        // if (this.props.bidRequests[commodityId]) {
-            // console.log("==== br qty: ", qty)
-
-            const deliveryCountryCode = Object.keys(this.props.bidRequests[commodityId])[0] // assumes buyer can only place one bid request per product
-            const bidReqsByCountry = this.props.bidRequests[commodityId][deliveryCountryCode]
-            // console.log("==== bidReqsByCountry = ", bidReqsByCountry)
-            const bidReqId = Object.keys(bidReqsByCountry)[0] // assumes buyer can only place one bid request per product
-            const bidReq = bidReqsByCountry[bidReqId]
-            // console.log("==== found bidReq = ", bidReq)
-            const deliveryDeadline = bidReq.deliveryDeadline ? `by ${bidReq.deliveryDeadline}` : ''
-            const deliveryBid = bidReq.deliveryBidRequested ? `and delivery costs via ${bidReq.incoterm} ` : ''
-            const deliveryCountry = window.geoLookup[deliveryCountryCode]
-            // console.log("==== deliCoun", deliveryCountry)
-            const deliveryCountryName = deliveryCountry['name']
-            // console.log("==== countr name ", deliveryCountryName)
-            const deliveryRegionName = deliveryCountry['regions'][bidReq.deliveryRegionCode]
-            // console.log("==== region name ", deliveryRegionName)
-            requestStatus = `Requested bid for ${bidReq.qty} of '${bidReq.description}' ${deliveryBid}delivered to ${bidReq.deliveryCity}, ${deliveryRegionName}, ${deliveryCountryName} ${deliveryDeadline}`
-        } else if (node_type != 'commodity') {
+        if (node_type != 'commodity') {
             requestStatus = HELP_MSG
         } else {
             form = (<div>

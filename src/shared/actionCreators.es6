@@ -29,7 +29,7 @@ export function getUser(token) {
                 user.orgName = payload.orgName
                 user.email = payload.email
                 console.log("==== user.fullName = ", user.fullName)
-                dispatch(fetchBidRequests(user.orgType))
+                dispatch(fetchTenders(user.orgType))
                 dispatch(setCurrentUser(user))
             });
     }
@@ -83,7 +83,8 @@ export function submitTender(userKey, tender) {
                 let statusText = null, errors = null
                 if (res.statusCode == 201) {
                     tender.id = payload.bid_request_id
-                    dispatch(setTender(userKey, tender))
+                    dispatch(setTender(tender))
+                    dispatch(setInTenderTree(tender))
                     statusText = 'Saved.'
                     setTimeout(() => {
                         dispatch(updateXhrStatus(tender.xhrId), '')
@@ -102,7 +103,7 @@ function updateXhrStatus(xhrId, statusText, errors) {
     return ({type: 'UPDATE_XHR_STATUS', xhrId, statusText, errors })
 }
 
-export function fetchBidRequests() {
+export function fetchTenders() {
     return (dispatch) => {
         const baseApiUrl = location.hostname == 'www.tonicmart.com' ? 'https://tonicapi.herokuapp.com' : 'http://localhost:3001'
         const url = baseApiUrl + '/bid_requests'
@@ -116,7 +117,8 @@ export function fetchBidRequests() {
                 console.log("fetch bidRequests res = ", res)
                 console.log("fetch bidRequests res.text = ", res.text)
                 const payload = JSON.parse(res.text)
-                dispatch(setBidRequests(payload))
+                dispatch(setTenders(payload.tenders))
+                dispatch(setTenderTree(payload.tenderTree))
             })
     }
 }
@@ -147,12 +149,20 @@ export function createBid(productSpecKey, bid) {
     }
 }
 
-export function setTender(userKey, tender) {
-    return { type: 'SET_TENDER', userKey, tender }
+export function setTender(tender) {
+    return { type: 'SET_TENDER', tender }
 }
 
-export function setBidRequests(bidRequests) {
-    return { type: 'BID_REQUESTS', bidRequests }
+export function setTenderTree(tenderTree) {
+    return { type: 'SET_TENDER_TREE', tenderTree }
+}
+
+export function setInTenderTree(tender) {
+    return { type: 'SET_IN_TENDER_TREE', tender }
+}
+
+export function setTenders(tenders) {
+    return { type: 'SET_TENDERS', tenders }
 }
 
 export function setBid(productSpecKey, bid) {

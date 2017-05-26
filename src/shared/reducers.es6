@@ -49,32 +49,48 @@ function currentUser(state = null, action) {
     }
 }
 
-function bidRequests(state = {}, action) {
+function tenders(state = {}, action) {
     switch (action.type) {
         case 'SET_TENDER':  // when user submits a new one
+            const tender = action.tender
+            console.log("==== setting tender: ", tender)
+            state[tender.id] = tender
+            let newState = Object.assign({}, state)
+            console.log("==== set tender returning newState, ", newState)
+            return newState
+        case 'SET_TENDERS':  // when they're fetched from server
+            return Object.assign({}, state, action.tenders)
+        case 'SET_BID': // suppliers
+            console.log(`==== SET_BID reducer, action.productSpecKey = ${action.productSpecKey}, action.bid = `, action.bid)
+            // #TODO: handle multiple bidRequestIds:
+            // set the whole array of bids because only suppliers can bid, and they only ever get to see their own bids
+            state[action.bid.bidRequestIds[0].toString()]['bids'] = [action.bid]
+            newState = Object.assign({}, state)
+            console.log("==== SET_BID new state = ", newState)
+            return newState
+        default:
+            return state
+    }
+}
+
+function tenderTree(state = {}, action) {
+    switch (action.type) {
+        case 'SET_TENDER_TREE':
+            return Object.assign({}, state, action.tenderTree)
+        case 'SET_IN_TENDER_TREE':  // when user submits a new one
             // all of this simpler with Immutable.js ?
             const tender = action.tender
             // the var tendersByCountry means tenders keyed by deliveryCountryCode, then tender.id
             // other vars holding sub-objects have analogous names
             // console.log("==== setting tender: ", tender)
             let tendersByCountry = state[tender.commodityId] || {}
-            const tendersById = tendersByCountry[tender.deliveryCountryCode] || {}
-            tendersById[tender.id] = tender
-            tendersByCountry[tender.deliveryCountryCode] = tendersById
+            const tenderIds = tendersByCountry[tender.deliveryCountryCode] || []
+            tenderIds.push(tender.id)
+            // console.log("==== tenderIds now = ", tenderIds)
+            tendersByCountry[tender.deliveryCountryCode] = tenderIds
+            // console.log("==== tenders by country now = ", tendersByCountry)
             let newState = Object.assign({}, state, { [tender.commodityId]: tendersByCountry })
-            // console.log("==== tenders returning newState, ", newState)
-            return newState
-        case 'BID_REQUESTS':  // when they're fetched from server
-            return Object.assign({}, state, action.bidRequests)
-        case 'SET_BID': // suppliers
-            console.log(`==== SET_BID reducer, action.productSpecKey = ${action.productSpecKey}, action.bid = `, action.bid)
-            // #TODO: handle multiple bidRequestIds:
-            // const keyPath = [action.productSpecKey.toString(), action.bid.deliveryCountryCode, action.bid.bidRequestIds[0].toString(), 'bid']
-            // const newState = state.setIn(keyPath, action.bid)
-            // set the whole array of bids because only suppliers can bid, and they only ever get to see their own bids
-            state[action.productSpecKey.toString()][action.bid.deliveryCountryCode][action.bid.bidRequestIds[0].toString()]['bids'] = [action.bid]
-            newState = Object.assign({}, state)
-            console.log("==== SET_BID new state = ", newState)
+            // console.log("==== set in tender tree returning newState, ", newState)
             return newState
         default:
             return state
@@ -106,7 +122,8 @@ function productSpecs(state = {}, action) {
 const reducers = combineReducers({
     xhrs,
     currentUser,
-    bidRequests,
+    tenders,
+    tenderTree,
     rawCatalog,
     productSpecs,
     commodities
