@@ -6,8 +6,9 @@ import { Provider } from 'react-redux';
 import App from '../components/app.es6';
 import reducers from '../shared/reducers.es6';
 import { browserHistory } from 'react-router'
-import Immutable from 'immutable'
-import AuthService from '../shared/authService.es6';
+// import Immutable from 'immutable'
+import AuthService from '../shared/authService.es6'  // not loaded in any server files since it requires window
+import { AgGridReact } from 'ag-grid-react'  // not loaded in any server files since it requires window
 import { CountryRegionData } from 'react-country-region-selector'
 
 console.log('Hello From Index.es6!');
@@ -15,9 +16,11 @@ console.log('Hello From Index.es6!');
 // http://stackoverflow.com/questions/29223071/how-do-i-require-from-the-console-using-webpack
 window['i'] = require('immutable'); // for use in console
 
+// Share libraries that cannot be loaded in files run on the server:
 // #TODO: make this async, and logIn button dependent on it completing:
 // or would it be possible to load this during webpack bundling, if it's not a session that expires?
 window.authSvc = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com')
+window.agGridReact = AgGridReact  //#TODO: see about loading this lazily as it adds ~1Mb to size, see ag-grid branch for some work in this direction
 
 // Grab the state from a global variable injected into the server-generated HTML
 let preloadedState = window.__PRELOADED_STATE__

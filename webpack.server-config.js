@@ -48,7 +48,12 @@ var config = {
     plugins: [
         new ExtractTextPlugin("public/assets/styles.css")
         // new ExtractTextPlugin("styles.css")
-    ]
-};
+    ],
+    resolve: {
+        alias: {
+            'ag-grid-root': path.join(__dirname, 'node_modules', 'ag-grid')
+        }
+    }
+}
 
-module.exports = config;
+module.exports = config

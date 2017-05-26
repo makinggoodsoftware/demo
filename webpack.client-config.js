@@ -26,10 +26,10 @@ var config = {
                     }
                 }]
             },
-            // {
-            //     test: /\.css$/,
-            //     loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"})
-            // },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({fallback: "style-loader", use: "css-loader"})
+            },
             // this now outputs all the same files as webpack.server-config.js,
             // except the .jpg referenced by css has its path calculated by server-config
             // there shouldn't be a need to duplicate this output
@@ -48,9 +48,10 @@ var config = {
     // not sure why the build was getting two versions of radium (in the github issue, the problem was in a library consumed by another app that also depended on radium)
     resolve: {
         alias: {
-            radium: path.join(__dirname, 'node_modules', 'radium')
+            radium: path.join(__dirname, 'node_modules', 'radium'),
+            'ag-grid-root': path.join(__dirname, 'node_modules', 'ag-grid')
         }
     }
-};
+}
 
-module.exports = config;
+module.exports = config
