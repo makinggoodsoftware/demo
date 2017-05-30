@@ -9,6 +9,7 @@ import { browserHistory } from 'react-router'
 // import Immutable from 'immutable'
 import AuthService from '../shared/authService.es6'  // not loaded in any server files since it requires window
 import { AgGridReact } from 'ag-grid-react'  // not loaded in any server files since it requires window
+import { LicenseManager } from "ag-grid-enterprise/main"
 import { CountryRegionData } from 'react-country-region-selector'
 
 console.log('Hello From Index.es6!');
@@ -20,6 +21,8 @@ window['i'] = require('immutable'); // for use in console
 // #TODO: make this async, and logIn button dependent on it completing:
 // or would it be possible to load this during webpack bundling, if it's not a session that expires?
 window.authSvc = new AuthService('Io86q40MwZlf0XcN6kc8pR5TJ2lqP8xB', 'tonicmart.auth0.com')
+
+LicenseManager.setLicenseKey('ag-Grid_Evaluation_License_Not_for_Production_100Devs26_July_2017__MTUwMTAyMzYwMDAwMA==d8b073e5adc2a2e1debe4e10d508e42c')
 window.agGridReact = AgGridReact  //#TODO: see about loading this lazily as it adds ~1Mb to size, see ag-grid branch for some work in this direction
 
 // Grab the state from a global variable injected into the server-generated HTML

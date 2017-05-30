@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "ag-grid": "10.0.1",
+    "ag-grid-enterprise": "10.0.1",
     "ag-grid-react": "10.0.0",
     "auth0-lock": "10.11.0",
     "babel-core": "6.23.1",
