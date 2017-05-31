@@ -31,6 +31,7 @@ class ProductProperties extends React.Component {
         } else {
             this.setState({commodityProps: commProps})
         }
+        // console.log("==== just set state commodityProps, state: ", this.state)
         this.commDescription = this.buildDescription(props, commProps)
         console.log("==== just built description: ", this.commDescription)
         if (!constructor) {
@@ -69,7 +70,13 @@ class ProductProperties extends React.Component {
         if (elemName != 'option') {
             const value = this.state.commodityProps ? this.state.commodityProps[props.name] : undefined
             // console.log(`==== in buildElement state value of ${props.name} = `, value)
-            props = Object.assign(props ? props : {}, {onChange: this.changeEvtHandler.bind(this), value: this.state.commodityProps[props.name]})
+            props = Object.assign(props ? props : {}, {onChange: this.changeEvtHandler.bind(this) })
+            if (elemName == 'input' && props.type == 'radio') {
+                // console.log("==== prodProperties comp, radio element found with value: ", props.value)
+                props.checked = (value == props.value)
+            } else {
+                props.value = value
+            }
         } else if (props && props.value) {
             // console.log("==== displayFn = ", displayFn)
             children = [displayFn(props.value)]  // lookup display value
@@ -149,11 +156,17 @@ class ProductProperties extends React.Component {
                 // this.commodityPropertyRules.describeFns[elemName] = elemParams.describeFn
             }
             const label = elemParams.p ? elemParams.p.label : ''
+            const trailingLabel = elemParams.p ? elemParams.p['data-trailingLabel'] : ''
+            let requiredSymbol = '*'
+            if (elemParams.p && elemParams.p['data-required'] == false) {
+                requiredSymbol = ''
+            }
             const children = Array.isArray(elemParams.c) ? elemParams.c : [elemParams.c]
             return this.buildElement({e: 'div', p: {key: `commodity-${idx}`}}, null,
-                this.buildElement({e: 'span', p: {className: 'required-symbol', key: `${elemParams.p.key}-req`}}, null, '*'),
+                this.buildElement({e: 'span', p: {className: 'required-symbol', key: `${elemParams.p.key}-req`}}, null, requiredSymbol),
                 this.buildElement({e: 'label', p: {key: `${elemParams.p.key}-label`}}, null, label),
-                this.buildElement({e: elemParams.e, p: elemParams.p}, propertyRules.displayFn, ...children))
+                this.buildElement({e: elemParams.e, p: elemParams.p}, propertyRules.displayFn, ...children),
+                this.buildElement({e: 'label', p: {key: `${elemParams.p.key}-trailingLabel`}}, null, trailingLabel))
         })
     }
 

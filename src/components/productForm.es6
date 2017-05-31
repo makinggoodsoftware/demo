@@ -156,24 +156,24 @@ class ProductForm extends React.Component {
                 scleral: 'false', positionHoles: '0', edge: 'round'
             },
 
-            descriptionFn(commodityName, commodityProps) {
-                const positionHoles = commodityProps.positionHoles && commodityProps.positionHoles == '0' ? '' : `${commodityProps.positionHoles} Holes`
-                const edge = commodityProps.edge == 'square' ? 'square' : ''
-                const aspheric = commodityProps.aspheric && commodityProps.aspheric != 'false' ? `Aspheric ${commodityProps.aspheric}` : ''
-                const opticDiameter = commodityProps.opticDiameter ? `Opt ⌀${commodityProps.opticDiameter} mm` : ''
-                const overallDiameter = commodityProps.overallDiameter ? `Overall ⌀${commodityProps.overallDiameter}mm` : ''
-                const chromophore = commodityProps.chromophore && commodityProps.chromophore == 'yellow' ? 'Yellow' : ''
-                const cylinder = commodityProps.cylinder && commodityProps.cylinder == '+0' ? '' : `Cylinder ${commodityProps.cylinder}`
-                const scleral = commodityProps.scleral && commodityProps.scleral == 'true' ? 'Scleral fixation' : ''
-                console.log("==== descriptionFn commodityProps = ", commodityProps)
+            descriptionFn(commodityName, commProps) {
+                const positionHoles = commProps.positionHoles && commProps.positionHoles == '0' ? '' : `${commProps.positionHoles} Holes`
+                const edge = commProps.edge == 'square' ? 'square' : ''
+                const aspheric = commProps.aspheric && commProps.aspheric != 'false' ? `Aspheric ${commProps.aspheric}` : ''
+                const opticDiameter = commProps.opticDiameter ? `Opt ⌀${commProps.opticDiameter} mm` : ''
+                const overallDiameter = commProps.overallDiameter ? `Overall ⌀${commProps.overallDiameter}mm` : ''
+                const chromophore = commProps.chromophore && commProps.chromophore == 'yellow' ? 'Yellow' : ''
+                const cylinder = commProps.cylinder && commProps.cylinder == '+0' ? '' : `Cylinder ${commProps.cylinder}`
+                const scleral = commProps.scleral && commProps.scleral == 'true' ? 'Scleral fixation' : ''
+                console.log("==== descriptionFn commProps = ", commProps)
                 // console.log("==== propRules.displayFn = ", propRules.displayFn)
                 return [commodityName,
-                    propRules.displayFn(commodityProps.optics),
-                    propRules.displayFn(commodityProps.material),
-                    propRules.displayFn(commodityProps.pieces),
+                    propRules.displayFn(commProps.optics),
+                    propRules.displayFn(commProps.material),
+                    propRules.displayFn(commProps.pieces),
                     propRules.displayFn(positionHoles),
                     propRules.displayFn(edge),
-                    propRules.displayFn(commodityProps.diopter),
+                    propRules.displayFn(commProps.diopter),
                     propRules.displayFn(opticDiameter),
                     propRules.displayFn(overallDiameter),
                     propRules.displayFn(aspheric),
@@ -187,19 +187,181 @@ class ProductForm extends React.Component {
         return propRules
     }
 
+    getSuturePropRules() {
+        const propRules = {
+            displayFn(value) {
+                const displayValues = {
+                    suture: 'Suture',
+                    caprolactone: 'Caprolactone',
+                    catgut: 'Catgut',
+                    nylon: 'Nylon',
+                    poliglecaprone: 'Poliglecaprone 25',
+                    polyactic: 'Polyactic acid',
+                    polydioxanone: 'Polydioxanone',
+                    polyester: 'Polyester',
+                    polyglactin: 'Polyglactin 910',
+                    polyglycolic: 'Polyglycolic acid',
+                    polypropylene: 'Polypropylene',
+                    polyvinylidene: 'Polyvinylidene fluoride (PVDF)',
+                    silk: 'Silk',
+                    'silk-virgin': 'Silk-virgin',
+                    monofilament: 'Monofilament',
+                    braided: 'Braided',
+                    any: 'Any',
+                    clear: 'Clear',
+                    blue: 'Blue',
+                    violet: 'Violet',
+                    single: 'Single',
+                    double: 'Double',
+                    blunt: 'Blunt point',
+                    'cutting-conventional': 'Cutting conventional',
+                    'cutting-reverse': 'Cutting reverse',
+                    spatula: 'Spatula point (side cutting)',
+                    taper: 'Taper',
+                    trocar: 'Trocar point (tapercut)',
+                    true: 'Yes',
+                    false: 'No',
+                    zero: 'Zero',
+                    negative: 'Negative'
+                }
+                return displayValues[value] || value
+            },
+
+            elements: [
+                {
+                    e: 'select', p: {label: 'Type', name: 'type', key: 'select-type'}, c: [
+                        {e: 'option', p: {key: 'type-suture', value: 'suture'}}]
+                },
+                {
+                    e: 'select', p: {label: 'Material', name: 'material', key: 'select-material'}, c: [
+                        {e: 'option', p: {key: 'material-null'}},
+                        {e: 'option', p: {key: 'material-caprolactone', value: 'caprolactone'}},
+                        {e: 'option', p: {key: 'material-catgut', value: 'catgut'}},
+                        {e: 'option', p: {key: 'material-nylon', value: 'nylon'}},
+                        {e: 'option', p: {key: 'material-poliglecaprone', value: 'poliglecaprone'}},
+                        {e: 'option', p: {key: 'material-polyactic', value: 'polyactic'}},
+                        {e: 'option', p: {key: 'material-polydioxanone', value: 'polydioxanone'}},
+                        {e: 'option', p: {key: 'material-polyester', value: 'polyester'}},
+                        {e: 'option', p: {key: 'material-polyglactin', value: 'polyglactin'}},
+                        {e: 'option', p: {key: 'material-polyglycolic', value: 'polyglycolic'}},
+                        {e: 'option', p: {key: 'material-polypropylene', value: 'polypropylene'}},
+                        {e: 'option', p: {key: 'material-polyvinylidene', value: 'polyvinylidene'}},
+                        {e: 'option', p: {key: 'material-silk', value: 'silk'}},
+                        {e: 'option', p: {key: 'material-silk-virgin', value: 'silk-virgin'}}]
+                },
+                {
+                    e: 'select', p: {label: 'Filament', name: 'filament', key: 'select-filament'}, c: [
+                        {e: 'option', p: {key: 'filament-null'}},
+                        {e: 'option', p: {key: 'filament-monofilament', value: 'monofilament'}},
+                        {e: 'option', p: {key: 'filament-braided', value: 'braided'}}]
+                },
+                {
+                    e: 'select', p: {label: 'Color', name: 'color', key: 'select-color'}, c: [
+                        {e: 'option', p: {key: 'color-any', value: 'any'}},
+                        {e: 'option', p: {key: 'color-clear', value: 'clear'}},
+                        {e: 'option', p: {key: 'color-blue', value: 'blue'}},
+                        {e: 'option', p: {key: 'color-violet', value: 'violet'}}]
+                },
+                {e: 'span', p: {label: 'Suture length', key: 'span-suture-length'}, c: [{e: 'input',
+                    p: {name: 'sutureLength', type: 'text', key: 'input-suture-length', size: 3} }, ' cm']},
+                {
+                    e: 'select', p: {label: 'Suture size', name: 'sutureSize', key: 'select-suture-size'}, c: [
+                        {e: 'option', p: {key: 'size-null'}},
+                        {e: 'option', p: {key: 'size-11-0', value: '11-0'}, c: '11-0'},
+                        {e: 'option', p: {key: 'size-10-0', value: '10-0'}, c: '10-0'},
+                        {e: 'option', p: {key: 'size-9-0', value: '9-0'}, c: '9-0'},
+                        {e: 'option', p: {key: 'size-8-0', value: '8-0'}, c: '8-0'},
+                        {e: 'option', p: {key: 'size-7-0', value: '7-0'}, c: '7-0'},
+                        {e: 'option', p: {key: 'size-6-0', value: '6-0'}, c: '6-0'},
+                        {e: 'option', p: {key: 'size-5-0', value: '5-0'}, c: '5-0'},
+                        {e: 'option', p: {key: 'size-4-0', value: '4-0'}, c: '4-0'},
+                        {e: 'option', p: {key: 'size-3-0', value: '3-0'}, c: '3-0'},
+                        {e: 'option', p: {key: 'size-2-0', value: '2-0'}, c: '2-0'},
+                        {e: 'option', p: {key: 'size-0', value: '0'}, c: '0'},
+                        {e: 'option', p: {key: 'size-1', value: '1'}, c: '1'},
+                        {e: 'option', p: {key: 'size-2', value: '2'}, c: '2'},
+                        {e: 'option', p: {key: 'size-3', value: '3'}, c: '3'},
+                        {e: 'option', p: {key: 'size-4', value: '4'}, c: '4'},
+                        {e: 'option', p: {key: 'size-5', value: '5'}, c: '5'}]
+                },
+                {e: 'input', p: {name: 'needleIncluded', value: 'true', type: 'radio', 'data-trailingLabel': 'Needle included', key: 'input-needle-included'} },
+                {e: 'input', p: {name: 'needleIncluded', value: 'false', type: 'radio', 'data-trailingLabel': 'Needle not included', 'data-required': false, key: 'input-needle-excluded'} },
+                {
+                    e: 'select', p: {label: 'Needle curvature (deg.)', name: 'needleCurvature', key: 'select-needle-curvature', 'data-required': false}, c: [
+                        {e: 'option', p: {key: 'curvature-null'}},
+                        {e: 'option', p: {key: 'curvature-0', value: '0'}, c: 'Straight'},
+                        {e: 'option', p: {key: 'curvature-90', value: '90'}, c: '90'},
+                        {e: 'option', p: {key: 'curvature-135', value: '135'}, c: '135'},
+                        {e: 'option', p: {key: 'curvature-140', value: '140'}, c: '140'},
+                        {e: 'option', p: {key: 'curvature-160', value: '160'}, c: '160'}]
+                },
+                {e: 'span', p: {label: 'Needle diameter ⌀', 'data-required': false, key: 'span-needle-diameter'}, c: [{e: 'input',
+                    p: {name: 'needleDiameter', type: 'text', key: 'input-needle-diameter', size: 3} }, ' μm (microns)']},
+                {e: 'select', p: {label: 'Needle arm', name: 'needleArm', 'data-required': false, key: 'select-needle-arm'}, c: [
+                    {e: 'option', p: {key: 'needle-arm-null'}},
+                    {e: 'option', p: {key: 'needle-arm-single', value: 'single'}},
+                    {e: 'option', p: {key: 'needle-arm-double', value: 'double'}}]
+                },
+                {e: 'select', p: {label: 'Needle point', 'data-required': false, name: 'needlePoint', key: 'select-needle-point'}, c: [
+                    {e: 'option', p: {key: 'needle-point-null'}},
+                    {e: 'option', p: {key: 'needle-point-blunt', value: 'blunt'}},
+                    {e: 'option', p: {key: 'needle-point-cutting-conventional', value: 'cutting-conventional'}},
+                    {e: 'option', p: {key: 'needle-point-cutting-reverse', value: 'cutting-reverse'}},
+                    {e: 'option', p: {key: 'needle-point-spatula', value: 'spatula'}},
+                    {e: 'option', p: {key: 'needle-point-taper', value: 'taper'}},
+                    {e: 'option', p: {key: 'needle-point-trocar', value: 'trocar'}}]
+                }
+            ],
+
+            // empty string defaults force the HTML element to be built with a value property, which tells React it's a controlled element
+            defaults: {
+                type: 'suture', sutureLength: '', needleIncluded: 'true', needleDiameter: ''
+            },
+
+            //#TODO: make displayFn available within this function, so we can convert 0 needleCurvature to 'straight' display text
+            descriptionFn(_, commProps) {
+                const color = commProps.color == 'any' ? '' : commProps.color
+                const sutureLength = commProps.sutureLength ? `${commProps.sutureLength} cm` : ''
+                const needleIncluded = commProps.needleIncluded != 'true' ? 'No needle' : ''
+                const needleCurvature = commProps.needleCurvature ? (commProps.needleCurvature == '0' ? 'Needle: straight' : `Needle: ${commProps.needleCurvature}°`) : ''
+                const needleDiameter = commProps.needleDiameter ? `⌀${commProps.needleDiameter}μm` : ''
+                const needleArm = commProps.needleArm ? `${propRules.displayFn(commProps.needleArm)} arm` : ''
+                // console.log("==== descriptionFn commProps = ", commProps)
+                // console.log("==== propRules.displayFn = ", propRules.displayFn)
+                const desc = [
+                    propRules.displayFn(commProps.type),
+                    propRules.displayFn(commProps.material),
+                    propRules.displayFn(commProps.filament),
+                    propRules.displayFn(color),
+                    sutureLength,
+                    propRules.displayFn(commProps.sutureSize),
+                    needleIncluded
+                ]
+                if (needleIncluded == '') {
+                    desc.push(
+                        needleCurvature,
+                        needleDiameter,
+                        needleArm,
+                        propRules.displayFn(commProps.needlePoint)
+                    )
+                }
+                return desc.filter(str => str).join(' / ')
+            }
+        }
+        return propRules
+    }
+
     getPropertyRules() {
         const commodityId = this.props.node.id
         let propertyRules
         if (commodityId == '42295524') {
             propertyRules = this.getIolPropRules()
+        } else if (commodityId == '42292904') {
+            propertyRules = this.getSuturePropRules()
         }
         else {
             // elements in order of display, defaults keys must match the 'name' of the HTML element returned by sharedPropertyElements()
             console.log("==== productForm, PRESET PROPERTY!!!!")
-            // propertyRules = {
-            //     elements: ['solution', 'volume'],
-            //     defaults: {solution: 1, volume: 5},
-            // }
             propertyRules = this.props.commodities.commodities[commodityId].property_rules
             console.log("==== found property_rules: ", propertyRules)
         }
