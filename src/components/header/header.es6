@@ -6,7 +6,7 @@ import { logInUser, getUserAuth0, setCurrentUser, getUser, logOutUser } from '..
 import imgLogo from './assets/Logomakr_9976sI.png'
 
 function mapStateToProps(store) {
-    return { currentUser: store.currentUser }
+    return { currentUser: {orgType: 'buyer', fullName: 'Sample Name'} }
 }
 
 function mapDispatchToProps(dispatch) {
