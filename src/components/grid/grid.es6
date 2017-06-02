@@ -36,16 +36,22 @@ class Grid extends React.Component {
 
     gridGetCountryName(gridParams) {
         console.log("==== gridParams getCountryName = ", gridParams)
+        if (gridParams.data == null) return '';
+        
         return this.getCountryName(gridParams.data.deliveryCountryCode)
     }
 
     gridGetRegionName(gridParams) {
         console.log("==== gridParams getRegionName = ", gridParams)
+        if (gridParams.data == null) return '';
+        
         return this.getRegionName(gridParams.data.deliveryCountryCode, gridParams.data.deliveryRegionCode)
     }
 
     gridGetCommodityName(gridParams) {
         console.log("==== gridParams getCommodityName = ", gridParams)
+        if (gridParams.data == null) return '';
+
         return this.getCommodityName(gridParams.data.commodityId)
     }
 
